@@ -10,8 +10,8 @@ interface FormProps {
   round?: IRound
 }
 
-const roundForm = ({round}: FormProps) => {
-
+const RoundForm = ({round}: FormProps) => {
+  const router = useRouter();
   const action = round ? editRound : createRound;
   const [state, formAction] = useFormState(action, undefined);
   const [formRound, setFromRound] = useState(round || {
@@ -28,17 +28,17 @@ const roundForm = ({round}: FormProps) => {
       }
     })
   };
-  const router = useRouter();
+
 
   useEffect(() => {
     state?.success && router.push("/admin/rounds");
   }, [state?.success, router]);
 
   return (
-    <form className="space-y-4 md:space-y-6" action={formAction}>
+    <form className="max-w-sm mx-auto" action={formAction}>
       {state?.error && <p className="text-red-500 text-xs italic">{state.error}</p>}
       {round && <input type="hidden" name="id" value={round.id}/>}
-      <div>
+      <div className="mb-5">
         <label htmlFor="name"
                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           Name
@@ -52,7 +52,7 @@ const roundForm = ({round}: FormProps) => {
                onChange={handleFormChange}
                required/>
       </div>
-      <div>
+      <div className="mb-5">
         <label htmlFor="order"
                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           Order
@@ -69,7 +69,7 @@ const roundForm = ({round}: FormProps) => {
                onChange={handleFormChange}
                required/>
       </div>
-      <div>
+      <div className="mb-5">
         <label htmlFor="stage"
                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           Stage
@@ -86,7 +86,7 @@ const roundForm = ({round}: FormProps) => {
                onChange={handleFormChange}
                required/>
       </div>
-      <div>
+      <div className="mb-5">
         <label htmlFor="scoreFactor"
                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
           Factor
@@ -111,4 +111,4 @@ const roundForm = ({round}: FormProps) => {
   )
 }
 
-export default roundForm;
+export default RoundForm;

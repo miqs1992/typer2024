@@ -13,6 +13,12 @@ const roundSchema = new mongoose.Schema<IRound>({
   order: { type: Number, required: true, unique: true },
   scoreFactor: { type: Number, default: 1 },
   stage: { type: Number, default: 1 },
-}, { timestamps: true });
+}, { timestamps: true, toJSON: { virtuals: true } });
+
+roundSchema.virtual('matchDays', {
+  ref: 'MatchDay',
+  localField: '_id',
+  foreignField: 'round'
+})
 
 export const Round = mongoose.models?.Round || mongoose.model("Round", roundSchema);

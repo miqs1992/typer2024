@@ -7,7 +7,7 @@ import {revalidatePath} from "next/cache";
 
 export const getRounds = async () => {
   try {
-    connectDB();
+    await connectDB();
     return Round.find().sort({ order: 1 });
   } catch (error) {
     console.log(error);
