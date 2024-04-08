@@ -1,4 +1,5 @@
 import {auth} from "@/lib/auth";
+import FlagIcon from "@/components/flagIcon/flagIcon";
 
 const Home = async () => {
   const session = await auth();
@@ -7,6 +8,7 @@ const Home = async () => {
     <div>
       <p>main page</p>
       <p>Hello {session?.user?.email}</p>
+      <FlagIcon country={"de"} />
     </div>
   );
 }

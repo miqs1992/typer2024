@@ -11,7 +11,7 @@ export const getRounds = async () => {
     return Round.find().sort({ order: 1 });
   } catch (error) {
     console.log(error);
-    throw new Error("failed to fetch posts");
+    throw new Error("failed to fetch rounds");
   }
 }
 
