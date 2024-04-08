@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Navigation from "@/components/navigation/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,8 +18,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <main>{children}</main>
+        <Navigation />
+        <main>
+          <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            {children}
+          </div>
+        </main>
       </body>
     </html>
-  );
+);
 }

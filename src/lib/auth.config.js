@@ -25,18 +25,23 @@ export const authConfig = {
       const isOnLoginPage = request.nextUrl?.pathname.startsWith("/login");
       const isOnRegisterPage = request.nextUrl?.pathname.startsWith("/register");
 
-      // ONLY ADMIN CAN REACH THE ADMIN DASHBOARD
+      if (!user && !(isOnLoginPage || isOnRegisterPage)) {
+        return Response.redirect(new URL("/login", request.nextUrl));
+      }
 
+
+      // ONLY ADMIN CAN REACH THE ADMIN DASHBOARD
       if (isOnAdminPanel && !user?.isAdmin) {
         console.log(user);
         return false;
       }
 
       // ONLY UNAUTHENTICATED USERS CAN REACH THE LOGIN PAGE
-
       if (user && (isOnLoginPage || isOnRegisterPage)) {
         return Response.redirect(new URL("/", request.nextUrl));
       }
+
+
 
       return true
     },

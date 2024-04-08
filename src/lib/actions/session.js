@@ -1,7 +1,7 @@
 "use server";
 
 import connectDB from "../../../config/database";
-import { signIn } from "@/lib/auth";
+import {signIn, signOut} from "@/lib/auth";
 import {User} from "@/lib/models/user";
 import bcrypt from "bcryptjs";
 
@@ -50,4 +50,8 @@ export const handleRegistration = async (previousState, formData) => {
     console.log(error);
     return { error: "Something went wrong!" };
   }
+}
+
+export const handleLogout = async () => {
+  await signOut();
 }
