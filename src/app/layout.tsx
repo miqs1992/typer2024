@@ -1,30 +1,34 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { ReactNode } from "react";
 import Navigation from "@/components/navigation/navigation";
+import { auth } from "@/lib/auth";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], weight: ["300", "400", "500"] });
 
 export const metadata: Metadata = {
   title: "Typer 2024",
   description: "Application for Euro 2024",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
+  const session = await auth();
+
   return (
     <html lang="en">
-      <body>
-        <Navigation />
-        <main>
-          <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-            {children}
-          </div>
-        </main>
+      <body className={inter.className}>
+        <div className="min-w-screen min-h-screen bg-gray-900">
+          {session ? <Navigation /> : null}
+          <main className="align-center flex w-full justify-center">
+            <div className="w-full max-w-[1200px]">{children}</div>
+          </main>
+        </div>
       </body>
     </html>
-);
+  );
 }
