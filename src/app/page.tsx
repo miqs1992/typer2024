@@ -1,4 +1,4 @@
-import {auth} from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import FlagIcon from "@/components/flagIcon/flagIcon";
 
 const Home = async () => {
@@ -7,9 +7,8 @@ const Home = async () => {
   return (
     <div>
       <p>main page</p>
-      <p>Hello {session?.user?.email}</p>
       <FlagIcon country={"de"} />
     </div>
   );
-}
+};
 export default Home;

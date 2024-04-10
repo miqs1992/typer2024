@@ -5,7 +5,7 @@ import { ReactNode } from "react";
 import Navigation from "@/components/navigation/navigation";
 import { auth } from "@/lib/auth";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], weight: ["300", "400", "500"] });
 
 export const metadata: Metadata = {
   title: "Typer 2024",
@@ -21,9 +21,13 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className="min-h-screen min-w-screen bg-gray-900">
-        {session ? <Navigation /> : null}
-        <main>{children}</main>
+      <body className={inter.className}>
+        <div className="min-w-screen min-h-screen bg-gray-900">
+          {session ? <Navigation /> : null}
+          <main className="align-center flex w-full justify-center">
+            <div className="w-full max-w-[1200px]">{children}</div>
+          </main>
+        </div>
       </body>
     </html>
   );

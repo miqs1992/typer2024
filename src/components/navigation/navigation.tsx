@@ -9,8 +9,17 @@ const Navigation = async () => {
   return (
     <nav className="border-gray-200 bg-white shadow-[rgba(0,_0,_0,_0.24)_0px_0px_15px] shadow-gray-600 dark:bg-gray-800">
       <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-4">
-        <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-          <Image src="/ball.png" alt="Typer Logo" height="35" width="35" />
+        <a href="/" className="flex items-center rtl:space-x-reverse">
+          <Image
+            src="/ball.png"
+            alt="Typer Logo"
+            height="35"
+            width="35"
+            style={{
+              position: "relative",
+              top: "1px",
+            }}
+          />
           <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
             Typer 2024
           </span>
@@ -45,9 +54,10 @@ const Navigation = async () => {
             {session?.user?.isAdmin && (
               <NavLink to="/admin/rounds" label="Admin" />
             )}
+            <NavLink to="/ranking" label="Ranking" />
 
             <form action={handleLogout}>
-              <button className="block rounded px-3 py-2 text-gray-900 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-blue-700 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent md:dark:hover:text-blue-500">
+              <button className="block rounded px-3 py-2 font-light text-gray-900 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-blue-300 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent md:dark:hover:text-blue-300">
                 Logout
               </button>
             </form>

@@ -4,15 +4,15 @@ interface FlagIconProps {
   country: string;
 }
 
-const FlagIcon = ({ country }:FlagIconProps) => {
+const FlagIcon = ({ country }: FlagIconProps) => {
   return (
     <Image
       alt={country}
-      src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${country.toUpperCase()}.svg`}
+      src={`https://flagicons.lipis.dev/flags/4x3/${country}.svg`}
       height="10"
       width="15"
     />
   );
-}
+};
 
 export default FlagIcon;
