@@ -3,6 +3,7 @@ export const mockedRanking = [
     name: "Wojtałke",
     points: 210,
     exactBets: 50,
+    leagueRank: 1,
     topScorer: {
       name: "Maksymilian Dziag",
       country: "pl",
@@ -13,6 +14,7 @@ export const mockedRanking = [
     name: "Kamil Kusy",
     points: 0,
     exactBets: 0,
+    leagueRank: 4,
     topScorer: {
       name: "Tymoteusz Puchacz",
       country: "pl",
@@ -23,6 +25,7 @@ export const mockedRanking = [
     name: "Andrzej",
     points: 13,
     exactBets: 3,
+    leagueRank: 4,
     topScorer: {
       name: "Harry Kane",
       country: "gb-eng",
@@ -32,6 +35,7 @@ export const mockedRanking = [
   {
     name: "Maciek",
     points: 32,
+    leagueRank: 2,
     exactBets: 4,
     topScorer: {
       name: "Ronaldinho",
@@ -43,6 +47,7 @@ export const mockedRanking = [
     name: "Jola",
     points: 30,
     exactBets: 4,
+    leagueRank: 3,
     topScorer: {
       name: "Olisadebe",
       country: "pl",
@@ -52,6 +57,7 @@ export const mockedRanking = [
   {
     name: "Mariola",
     points: 0,
+    leagueRank: 5,
     exactBets: 0,
     topScorer: {
       name: "Tymoteusz Puchacz",
@@ -64,31 +70,31 @@ export const mockedRanking = [
 export const mockedTopScorers = [
   {
     name: "Harry Kane",
-    country: "gb-eng",
+    team: "gb-eng",
     goals: 5,
     assists: 1,
   },
   {
     name: "Cristiano Ronaldo",
-    country: "pt",
+    team: "pt",
     goals: 5,
     assists: 0,
   },
   {
     name: "Patrik Schick",
-    country: "cz",
+    team: "cz",
     goals: 4,
     assists: 2,
   },
   {
     name: "Romelu Lukaku",
-    country: "be",
+    team: "be",
     goals: 3,
     assists: 0,
   },
   {
     name: "Emil Forsberg",
-    country: "se",
+    team: "se",
     goals: 3,
     assists: 0,
   },

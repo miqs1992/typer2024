@@ -1,9 +1,8 @@
 import FlagIcon from "@/components/flagIcon/flagIcon";
-import { COUNTRIES_MAPPER } from "@/constants/countries-mapper";
 
 interface TopScorers {
   name: string;
-  country: string;
+  team: string;
   goals: number;
   assists: number;
 }
@@ -35,7 +34,7 @@ export const TopScorers = ({
         <tbody>
           {topScorersData
             .sort((a, b) => b.goals - a.goals)
-            .map(({ name, country, goals, assists }, index) => {
+            .map(({ name, team, goals, assists }, index) => {
               const textColor = () => {
                 if (index === 0) return "text-yellow-400";
                 if (index === 1) return "text-gray-200";
@@ -55,7 +54,7 @@ export const TopScorers = ({
                     {name}
                   </th>
                   <td className={`px-6 py-4 ${textColor()}`}>
-                    {<FlagIcon country={country} />}
+                    {<FlagIcon country={team} />}
                   </td>
                   <td className={`px-6 py-4 ${textColor()}`}>{goals}</td>
                   <td className={`px-6 py-4 ${textColor()}`}>{assists}</td>
