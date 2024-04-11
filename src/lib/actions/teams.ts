@@ -5,16 +5,6 @@ import { ITeam, Team } from "@/lib/models/team";
 import { RequestState } from "@/lib/actions/state";
 import { revalidatePath } from "next/cache";
 
-export const getTeams = async (): Promise<ITeam[]> => {
-  try {
-    await connectDB();
-    return Team.find().sort({ name: 1 });
-  } catch (error) {
-    console.log(error);
-    throw new Error("failed to fetch teams");
-  }
-};
-
 export const createTeam = async (
   previousState: RequestState | undefined,
   formData: FormData,
@@ -68,5 +58,21 @@ export const getTeam = async (id: string): Promise<ITeam> => {
   } catch (error) {
     console.log(error);
     throw new Error("failed to fetch team");
+  }
+};
+
+export const getTeams = async (): Promise<ITeam[]> => {
+  try {
+    await connectDB();
+    const team = await Team.find().sort({ name: 1 });
+    return team.map((team) => ({
+      id: team.id,
+      name: team.name,
+      flag: team.flag,
+      winner: team.winner,
+    }));
+  } catch (error) {
+    console.log(error);
+    throw new Error("failed to fetch teams");
   }
 };

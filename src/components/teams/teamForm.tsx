@@ -21,6 +21,7 @@ const TeamForm = ({ team }: FormProps) => {
       winner: false,
     },
   );
+
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormTeam((prevState) => {
       return {

@@ -6,9 +6,8 @@ const NewMatchDayPage = async ({ params }: Params) => {
   return (
     <div>
       <h1>New Match Day</h1>
-      <Link href={`/admin/rounds/${params.id}`}>Back to round</Link>
-
-      <MatchDayForm roundId={params.id} />
+      <Link href={`/admin/rounds/${params.roundId}`}>Back to round</Link>
+      <MatchDayForm roundId={params.roundId} />
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { getRound } from "@/lib/actions/rounds";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 
 const EditRoundPage = async ({ params }: Params) => {
-  const round = await getRound(params.id);
+  const round = await getRound(params.roundId);
 
   return (
     <div>

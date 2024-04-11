@@ -4,12 +4,12 @@ import { getRound } from "@/lib/actions/rounds";
 import Link from "next/link";
 
 const RoundPage = async ({ params }: Params) => {
-  const round = await getRound(params.id);
-  const matchDays = await getMatchDays(params.id);
+  const round = await getRound(params.roundId);
+  const matchDays = await getMatchDays(params.roundId);
 
   return (
     <div>
-      <Link href={`/admin/rounds/${params.id}/matchDays/new`}>
+      <Link href={`/admin/rounds/${params.roundId}/matchDays/new`}>
         Add new match day
       </Link>
       <h1>{round.name}</h1>

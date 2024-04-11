@@ -3,6 +3,7 @@ import Link from "next/link";
 
 const RoundsPage = async () => {
   const rounds = await getRounds();
+
   return (
     <div className="relative flex w-full max-w-screen-xl flex-wrap items-center justify-between overflow-x-auto sm:rounded-lg">
       <div className="relative w-full overflow-hidden bg-white shadow-md dark:bg-gray-800">
