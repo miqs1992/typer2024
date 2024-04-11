@@ -7,10 +7,18 @@ export interface IMatchDay {
   round: mongoose.Types.ObjectId;
 }
 
-const matchDaySchema = new mongoose.Schema<IMatchDay>({
-  dayNumber: { type: Number, unique: true, required: true },
-  stopBetTime: { type: Date, unique: true, required: true },
-  round: { type: mongoose.Schema.Types.ObjectId, ref: "Round", required: true }
-}, { timestamps: true });
+const matchDaySchema = new mongoose.Schema<IMatchDay>(
+  {
+    dayNumber: { type: Number, unique: true, required: true },
+    stopBetTime: { type: Date, unique: true, required: true },
+    round: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Round",
+      required: true,
+    },
+  },
+  { timestamps: true },
+);
 
-export const MatchDay = mongoose.models?.MatchDay || mongoose.model("MatchDay", matchDaySchema);
+export const MatchDay =
+  mongoose.models?.MatchDay || mongoose.model("MatchDay", matchDaySchema);

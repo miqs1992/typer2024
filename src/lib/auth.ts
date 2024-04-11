@@ -1,8 +1,8 @@
-import NextAuth, {DefaultSession} from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
-import {User} from "@/lib/models/user";
+import NextAuth, { DefaultSession } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { User } from "@/lib/models/user";
 import bcrypt from "bcryptjs";
-import {authConfig} from "@/lib/auth.config";
+import { authConfig } from "@/lib/auth.config";
 import connectDB from "../../config/database";
 
 // @ts-ignore
@@ -15,7 +15,7 @@ const login = async (credentials) => {
 
     const isPasswordCorrect = await bcrypt.compare(
       credentials.password,
-      user.encryptedPassword
+      user.encryptedPassword,
     );
 
     if (!isPasswordCorrect) throw new Error("Wrong credentials!");
@@ -34,21 +34,21 @@ export const credentialsProvider = CredentialsProvider({
     } catch (err) {
       return null;
     }
-  }
-})
+  },
+});
 
-declare module '@auth/core/types' {
+declare module "@auth/core/types" {
   interface User {
     // @ts-ignore
-    id: string
-    isAdmin: boolean
+    id: string;
+    isAdmin: boolean;
   }
 
   interface Session {
     user: {
-      id: string
-      isAdmin: boolean
-    } & DefaultSession['user']
+      id: string;
+      isAdmin: boolean;
+    } & DefaultSession["user"];
   }
 }
 
@@ -58,7 +58,12 @@ export const authOptions = {
   providers: [credentialsProvider],
   callbacks: {
     ...authConfig.callbacks,
-  }
-}
+  },
+};
 
-export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth(authOptions)
+export const {
+  handlers: { GET, POST },
+  auth,
+  signIn,
+  signOut,
+} = NextAuth(authOptions);

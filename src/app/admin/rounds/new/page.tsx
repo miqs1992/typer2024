@@ -7,9 +7,9 @@ const NewRoundPage = async () => {
       <h1>New Round</h1>
       <Link href="/admin/rounds">Back to rounds</Link>
 
-      <RoundForm/>
+      <RoundForm />
     </div>
-  )
-}
+  );
+};
 
 export default NewRoundPage;

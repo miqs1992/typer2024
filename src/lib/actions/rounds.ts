@@ -1,9 +1,9 @@
 "use server";
 
 import connectDB from "../../../config/database";
-import {IRound, Round} from "@/lib/models/round";
-import {RequestState} from "@/lib/actions/state";
-import {revalidatePath} from "next/cache";
+import { IRound, Round } from "@/lib/models/round";
+import { RequestState } from "@/lib/actions/state";
+import { revalidatePath } from "next/cache";
 
 export const getRounds = async () => {
   try {
@@ -13,14 +13,17 @@ export const getRounds = async () => {
     console.log(error);
     throw new Error("failed to fetch rounds");
   }
-}
+};
 
-export const createRound = async (previousState: RequestState | undefined, formData: FormData): Promise<RequestState> => {
+export const createRound = async (
+  previousState: RequestState | undefined,
+  formData: FormData,
+): Promise<RequestState> => {
   const { name, stage, scoreFactor, order } = Object.fromEntries(formData);
 
   try {
     await connectDB();
-    const newRound =  new Round({ name, stage, scoreFactor, order });
+    const newRound = new Round({ name, stage, scoreFactor, order });
     await newRound.save();
     revalidatePath("/admin/rounds");
     return { success: true };
@@ -28,14 +31,22 @@ export const createRound = async (previousState: RequestState | undefined, formD
     console.log(error);
     throw new Error("failed to create round");
   }
-}
+};
 
-export const editRound = async (previousState: RequestState | undefined, formData: FormData): Promise<RequestState> => {
+export const editRound = async (
+  previousState: RequestState | undefined,
+  formData: FormData,
+): Promise<RequestState> => {
   const { id, name, stage, scoreFactor, order } = Object.fromEntries(formData);
 
   try {
     await connectDB();
-    const round = await Round.findByIdAndUpdate(id, { name, stage, scoreFactor, order });
+    const round = await Round.findByIdAndUpdate(id, {
+      name,
+      stage,
+      scoreFactor,
+      order,
+    });
     await round.save();
     revalidatePath("/admin/rounds");
     return { success: true };
@@ -43,7 +54,7 @@ export const editRound = async (previousState: RequestState | undefined, formDat
     console.log(error);
     throw new Error("failed to update round");
   }
-}
+};
 
 export const getRound = async (id: string): Promise<IRound> => {
   try {
@@ -55,9 +66,9 @@ export const getRound = async (id: string): Promise<IRound> => {
       order: round.order,
       scoreFactor: round.scoreFactor,
       stage: round.stage,
-    }
+    };
   } catch (error) {
     console.log(error);
     throw new Error("failed to fetch round");
   }
-}
+};

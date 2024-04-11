@@ -13,7 +13,7 @@ const Home = async () => {
           <Ranking rankingData={mockedRanking} showExtended={false} />
         </div>
         <div className="grow">
-          <h3 className="my-10 text-center text-3xl font-bold text-white">
+          <h3 className="my-10 text-center  text-3xl font-bold text-white">
             Top scorers
           </h3>
           <TopScorers topScorersData={mockedTopScorers} />

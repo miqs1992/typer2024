@@ -9,6 +9,6 @@ const NewTeamPage: React.FC = () => {
       <TeamForm />
     </div>
   );
-}
+};
 
 export default NewTeamPage;

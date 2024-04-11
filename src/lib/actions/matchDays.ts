@@ -1,9 +1,9 @@
 "use server";
 
 import connectDB from "../../../config/database";
-import {MatchDay} from "@/lib/models/matchDay";
-import {RequestState} from "@/lib/actions/state";
-import {revalidatePath} from "next/cache";
+import { MatchDay } from "@/lib/models/matchDay";
+import { RequestState } from "@/lib/actions/state";
+import { revalidatePath } from "next/cache";
 
 export const getMatchDays = async (roundId: string) => {
   try {
@@ -13,14 +13,21 @@ export const getMatchDays = async (roundId: string) => {
     console.log(error);
     throw new Error("failed to fetch posts");
   }
-}
+};
 
-export const createMatchDay = async (previousState: RequestState | undefined, formData: FormData): Promise<RequestState> => {
+export const createMatchDay = async (
+  previousState: RequestState | undefined,
+  formData: FormData,
+): Promise<RequestState> => {
   const { roundId, dayNumber, stopBetTime } = Object.fromEntries(formData);
 
   try {
     await connectDB();
-    const newMatchDay =  new MatchDay({ round: roundId, dayNumber, stopBetTime });
+    const newMatchDay = new MatchDay({
+      round: roundId,
+      dayNumber,
+      stopBetTime,
+    });
     await newMatchDay.save();
     revalidatePath(`/admin/rounds/${roundId}`);
     return { success: true };
@@ -28,4 +35,4 @@ export const createMatchDay = async (previousState: RequestState | undefined, fo
     console.log(error);
     return { error: "failed to create match day" };
   }
-}
+};
