@@ -15,4 +15,4 @@ const playerSchema = new mongoose.Schema<IPlayer>({
   team: { type: mongoose.Schema.Types.ObjectId, ref: "Team", required: true }
 }, { timestamps: true });
 
-export const MatchDay = mongoose.models?.Player || mongoose.model("Player", playerSchema);
+export const Player = mongoose.models?.Player || mongoose.model("Player", playerSchema);

@@ -14,13 +14,13 @@ const TeamForm = ({team}: FormProps) => {
   const router = useRouter();
   const action = team ? editTeam : createTeam;
   const [state, formAction] = useFormState(action, undefined);
-  const [formTeam, setFromRound] = useState(team || {
+  const [formTeam, setFormTeam] = useState(team || {
     name: "",
     flag: "",
     winner: false,
   });
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFromRound((prevState) => {
+    setFormTeam((prevState) => {
       return {
         ...prevState,
         [e.target.name]: e.target.value
@@ -29,7 +29,7 @@ const TeamForm = ({team}: FormProps) => {
   };
 
   const handleWinnerChange = () => {
-    setFromRound((prevState) => {
+    setFormTeam((prevState) => {
       return {
         ...prevState,
         winner: !prevState.winner
