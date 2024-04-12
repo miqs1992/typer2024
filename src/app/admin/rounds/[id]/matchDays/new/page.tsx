@@ -1,6 +1,6 @@
 import Link from "next/link";
 import {Params} from "next/dist/shared/lib/router/utils/route-matcher";
-import MatchDayForm from "@/components/matchDays/matchDayForm";
+import MatchDayForm from "@/components/rounds/matchDays/matchDayForm";
 
 const NewMatchDayPage = async ({params}: Params) => {
   return (
