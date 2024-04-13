@@ -23,5 +23,4 @@ export const COUNTRIES_MAPPER = {
   ge: "Gruzja",
   pt: "Portugalia",
   cz: "Czechy",
-  va: "Watykan",
 };

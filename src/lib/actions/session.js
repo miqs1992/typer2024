@@ -1,8 +1,8 @@
 "use server";
 
 import connectDB from "../../../config/database";
-import {signIn, signOut} from "@/lib/auth";
-import {User} from "@/lib/models/user";
+import { signIn, signOut } from "@/lib/auth";
+import { User } from "@/lib/models/user";
 import bcrypt from "bcryptjs";
 
 export const handleLogin = async (previousState, formData) => {
@@ -13,15 +13,19 @@ export const handleLogin = async (previousState, formData) => {
     await signIn("credentials", { email, password });
     return { success: true };
   } catch (error) {
-    if (error.message.includes("CredentialsSignin") || error.type === "CredentialsSignin") {
+    if (
+      error.message.includes("CredentialsSignin") ||
+      error.type === "CredentialsSignin"
+    ) {
       return { error: "Invalid username or password" };
     }
     throw error;
   }
-}
+};
 
 export const handleRegistration = async (previousState, formData) => {
-  const { username, email, password, passwordConfirmation } = Object.fromEntries(formData);
+  const { username, email, password, passwordConfirmation } =
+    Object.fromEntries(formData);
 
   if (password !== passwordConfirmation) {
     return { error: "Passwords do not match!" };
@@ -50,8 +54,8 @@ export const handleRegistration = async (previousState, formData) => {
     console.log(error);
     return { error: "Something went wrong!" };
   }
-}
+};
 
 export const handleLogout = async () => {
   await signOut();
-}
+};
