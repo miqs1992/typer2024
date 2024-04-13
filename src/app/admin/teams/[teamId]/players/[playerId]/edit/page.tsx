@@ -1,11 +1,11 @@
-import {Params} from "next/dist/shared/lib/router/utils/route-matcher";
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import Link from "next/link";
 import PlayerForm from "@/components/teams/players/playerForm";
-import {getPlayer} from "@/lib/actions/players";
+import { getPlayer } from "@/lib/actions/players";
 
-const EditPlayerPage = async ({params}: Params) => {
+const EditPlayerPage = async ({ params }: Params) => {
   const teamId = params.teamId;
-  const player = await getPlayer(params.playerId)
+  const player = await getPlayer(params.playerId);
   return (
     <div>
       <h1>Edit {player.name}</h1>
@@ -13,6 +13,6 @@ const EditPlayerPage = async ({params}: Params) => {
       <PlayerForm teamId={teamId} player={player} />
     </div>
   );
-}
+};
 
 export default EditPlayerPage;

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
-import { MatchForm } from "@/components/match-form/match-form";
+import { AddMatchForm } from "@/components/add-match-form/add-match-form";
 import { getTeams } from "@/lib/actions/teams";
 import { getMatches } from "@/lib/actions/match";
 import FlagIcon from "@/components/flagIcon/flagIcon";
@@ -28,8 +28,14 @@ const EditMatchDayPage = async ({ params }: Params) => {
       <h1 className="my-10 text-center text-3xl font-bold text-white">
         {header}
       </h1>
-      {matches.length ? <Results matches={matches} /> : null}
-      <MatchForm
+      {matches.length ? (
+        <Results
+          matches={JSON.parse(JSON.stringify(matches))}
+          roundId={params.roundId}
+          matchDayId={params.matchDayId}
+        />
+      ) : null}
+      <AddMatchForm
         teams={teams}
         matchDayId={params.matchDayId}
         roundId={params.roundId}

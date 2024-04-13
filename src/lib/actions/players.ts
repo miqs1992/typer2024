@@ -1,43 +1,46 @@
 "use server";
 
 import connectDB from "../../../config/database";
-import {IPlayer, Player} from "@/lib/models/player";
-import {RequestState} from "@/lib/actions/state";
-import {revalidatePath} from "next/cache";
+import { IPlayer, Player } from "@/lib/models/player";
+import { RequestState } from "@/lib/actions/state";
+import { revalidatePath } from "next/cache";
 
 export const getPlayers = async (teamId: string): Promise<IPlayer[]> => {
   try {
     await connectDB();
-    return Player.find({team: teamId})
+    return Player.find({ team: teamId });
   } catch (error) {
     console.log(error);
     throw new Error("failed to fetch players");
   }
-}
+};
 
 export const getPlayer = async (playerId: string): Promise<IPlayer> => {
   try {
     await connectDB();
-    const player = await Player.findById(playerId)
+    const player = await Player.findById(playerId);
     return {
       id: player.id,
       name: player.name,
       goals: player.goals,
       assists: player.assists,
-      team: player.team
-    }
+      team: player.team,
+    };
   } catch (error) {
     console.log(error);
     throw new Error("failed to fetch players");
   }
-}
+};
 
-export const createPlayer = async (previousState: RequestState | undefined, formData: FormData): Promise<RequestState> => {
+export const createPlayer = async (
+  previousState: RequestState | undefined,
+  formData: FormData,
+): Promise<RequestState> => {
   const { name, teamId } = Object.fromEntries(formData);
 
   try {
     await connectDB();
-    const newPlayer =  new Player({ name, team: teamId });
+    const newPlayer = new Player({ name, team: teamId });
     await newPlayer.save();
     revalidatePath(`/admin/teams/${teamId}`);
     return { success: true };
@@ -45,9 +48,12 @@ export const createPlayer = async (previousState: RequestState | undefined, form
     console.log(error);
     throw new Error("failed to create player");
   }
-}
+};
 
-export const editPlayer = async (previousState: RequestState | undefined, formData: FormData): Promise<RequestState> => {
+export const editPlayer = async (
+  previousState: RequestState | undefined,
+  formData: FormData,
+): Promise<RequestState> => {
   const { id, name, goals, assists } = Object.fromEntries(formData);
 
   try {
@@ -60,10 +66,10 @@ export const editPlayer = async (previousState: RequestState | undefined, formDa
     console.log(error);
     throw new Error("failed to update player");
   }
-}
+};
 
 export const removePlayer = async (formData: FormData): Promise<void> => {
-  const { playerId, teamId  } = Object.fromEntries(formData);
+  const { playerId, teamId } = Object.fromEntries(formData);
 
   try {
     await connectDB();
@@ -73,4 +79,4 @@ export const removePlayer = async (formData: FormData): Promise<void> => {
     console.log(error);
     throw new Error("failed to delete player");
   }
-}
+};

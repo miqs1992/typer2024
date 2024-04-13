@@ -15,6 +15,16 @@ export const getMatchDays = async (roundId: string) => {
   }
 };
 
+export const getMatchDay = async (matchDayId: string) => {
+  try {
+    await connectDB();
+    return MatchDay.findById(matchDayId);
+  } catch (error) {
+    console.log(error);
+    throw new Error("failed to fetch match day");
+  }
+};
+
 export const createMatchDay = async (
   previousState: RequestState | undefined,
   formData: FormData,
