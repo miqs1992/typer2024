@@ -1,22 +1,29 @@
 "use client";
 
-import { createMatch, editMatch } from "@/lib/actions/match";
+import { editMatch } from "@/lib/actions/match";
 import { IMatch } from "@/lib/models/match";
-import { ITeam } from "@/lib/models/team";
+import { revalidatePath } from "next/cache";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useFormState } from "react-dom";
 
 interface FormProps {
   match: IMatch;
+  matchDayId: string;
+  roundId: string;
 }
 
-export const EditMatchForm = ({ match }: FormProps) => {
+export const EditMatchForm = ({ match, matchDayId, roundId }: FormProps) => {
+  const router = useRouter();
   const [state, formAction] = useFormState(editMatch, undefined);
+
+  useEffect(() => {
+    state?.success &&
+      router.push(`/admin/rounds/${roundId}/matchDays/${matchDayId}`);
+  }, [state?.success, matchDayId, roundId, router]);
 
   return (
     <>
-      <h2 className="text-center text-2xl font-bold text-white">Edit match</h2>
       <form className="mx-auto max-w-sm" action={formAction}>
         {state?.error && (
           <p className="text-xs italic text-red-500">{state.error}</p>
@@ -32,7 +39,7 @@ export const EditMatchForm = ({ match }: FormProps) => {
           <input
             id="firstTeamResult"
             name="firstTeamResult"
-            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            className="block w-full rounded-lg border-2 border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
           ></input>
         </div>
         <div className="mb-5">
@@ -45,7 +52,7 @@ export const EditMatchForm = ({ match }: FormProps) => {
           <input
             id="secondTeamResult"
             name="secondTeamResult"
-            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            className="block w-full rounded-lg border-2 border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 outline-none focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
           ></input>
         </div>
 

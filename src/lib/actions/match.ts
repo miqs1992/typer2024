@@ -74,6 +74,7 @@ export const editMatch = async (
       finalResult: { firstTeamResult, secondTeamResult },
     });
     await match.save();
+    revalidatePath("/admin/rounds/[roundId]/matchDays/[matchDayId]");
     return { success: true };
   } catch (error) {
     console.log(error);

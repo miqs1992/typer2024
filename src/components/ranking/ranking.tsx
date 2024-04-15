@@ -43,7 +43,7 @@ export const Ranking = ({
               Exact bets
             </th>
             <th scope="col" className="px-6 py-3">
-              Top scorer
+              Top Scorer
             </th>
             <th scope="col" className="px-6 py-3">
               Winner

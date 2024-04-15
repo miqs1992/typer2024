@@ -1,32 +1,25 @@
 "use client";
 
 import { createMatch } from "@/lib/actions/match";
-import { IMatch } from "@/lib/models/match";
 import { ITeam } from "@/lib/models/team";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useFormState } from "react-dom";
 
 interface FormProps {
-  match?: IMatch;
   teams: ITeam[];
   matchDayId: string;
   roundId: string;
 }
 
-export const AddMatchForm = ({
-  match,
-  teams,
-  matchDayId,
-  roundId,
-}: FormProps) => {
+export const AddMatchForm = ({ teams, matchDayId, roundId }: FormProps) => {
   const router = useRouter();
   const [state, formAction] = useFormState(createMatch, undefined);
 
   useEffect(() => {
     state?.success &&
       router.push(`/admin/rounds/${roundId}/matchDays/${matchDayId}`);
-  }, [state?.success, router, matchDayId]);
+  }, [state?.success, router, matchDayId, roundId]);
 
   return (
     <>

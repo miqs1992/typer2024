@@ -35,7 +35,7 @@ const MatchDayForm = ({ roundId }: FormProps) => {
           type="number"
           name="dayNumber"
           id="dayNumber"
-          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-primary-600 focus:ring-primary-600 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+          className="block w-full rounded-lg border-2 border-gray-300 bg-gray-50 p-2.5 text-gray-900 outline-none focus:border-primary-600 focus:ring-primary-600 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
           placeholder="1"
           step="1"
           min="0"
@@ -55,7 +55,7 @@ const MatchDayForm = ({ roundId }: FormProps) => {
           type="datetime-local"
           name="stopBetTime"
           id="stopBetTime"
-          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-primary-600 focus:ring-primary-600 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+          className="block w-full rounded-lg border-2 border-gray-300 bg-gray-50 p-2.5 text-gray-900 outline-none focus:border-primary-600 focus:ring-primary-600 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
           required
         />
       </div>
