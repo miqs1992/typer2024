@@ -1,12 +1,19 @@
 import Link from "next/link";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
-import MatchDayForm from "@/components/matchDays/matchDayForm";
+import MatchDayForm from "@/components/rounds/matchDays/matchDayForm";
 
 const NewMatchDayPage = async ({ params }: Params) => {
   return (
     <div>
-      <h1>New Match Day</h1>
-      <Link href={`/admin/rounds/${params.roundId}`}>Back to round</Link>
+      <div className="relative my-4 mb-12 text-center text-3xl text-white">
+        <Link
+          href="/admin/rounds"
+          className="absolute left-0 top-[7px] m-0 inline-block text-lg text-white underline"
+        >
+          Back to Rounds
+        </Link>
+        <h1 className="inline-block">New Match Day</h1>
+      </div>
       <MatchDayForm roundId={params.roundId} />
     </div>
   );

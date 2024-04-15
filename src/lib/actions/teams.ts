@@ -4,6 +4,7 @@ import connectDB from "../../../config/database";
 import { ITeam, Team } from "@/lib/models/team";
 import { RequestState } from "@/lib/actions/state";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export const createTeam = async (
   previousState: RequestState | undefined,

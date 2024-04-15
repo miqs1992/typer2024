@@ -13,7 +13,7 @@ interface FormProps {
 const TeamForm = ({ team }: FormProps) => {
   const router = useRouter();
   const action = team ? editTeam : createTeam;
-  const [state, formAction] = useFormState(action, undefined);
+  const [creationState, creationAction] = useFormState(action, undefined);
   const [formTeam, setFormTeam] = useState(
     team || {
       name: "",
@@ -41,13 +41,13 @@ const TeamForm = ({ team }: FormProps) => {
   };
 
   useEffect(() => {
-    state?.success && router.push("/admin/teams");
-  }, [state?.success, router]);
+    creationState?.success && router.push("/admin/teams");
+  }, [creationState?.success, router]);
 
   return (
-    <form className="mx-auto max-w-sm" action={formAction}>
-      {state?.error && (
-        <p className="text-xs italic text-red-500">{state.error}</p>
+    <form className="mx-auto max-w-sm" action={creationAction}>
+      {creationState?.error && (
+        <p className="text-xs italic text-red-500">{creationState.error}</p>
       )}
       {team && <input type="hidden" name="id" value={team.id} />}
       <div className="mb-5">

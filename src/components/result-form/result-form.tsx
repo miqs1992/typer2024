@@ -27,7 +27,6 @@ export const MatchForm = ({ match, teams, matchDayId, roundId }: FormProps) => {
 
   return (
     <>
-      <h2 className="text-center text-2xl font-bold text-white">Add match</h2>
       <form className="mx-auto max-w-sm" action={formAction}>
         {state?.error && (
           <p className="text-xs italic text-red-500">{state.error}</p>

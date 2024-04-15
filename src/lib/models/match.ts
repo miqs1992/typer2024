@@ -42,7 +42,5 @@ const matchSchema = new mongoose.Schema<IMatch>({
   },
 });
 
-matchSchema.virtual("");
-
 export const Match =
   mongoose.models?.Match || mongoose.model("Match", matchSchema);
