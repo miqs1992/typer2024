@@ -1,7 +1,7 @@
 "use server";
 
 import connectDB from "../../../config/database";
-import { MatchDay } from "@/lib/models/matchDay";
+import { IMatchDay, MatchDay } from "@/lib/models/matchDay";
 import { RequestState } from "@/lib/actions/state";
 import { revalidatePath } from "next/cache";
 
@@ -15,10 +15,16 @@ export const getMatchDays = async (roundId: string) => {
   }
 };
 
-export const getMatchDay = async (matchDayId: string) => {
+export const getMatchDay = async (matchDayId: string): Promise<IMatchDay> => {
   try {
     await connectDB();
-    return MatchDay.findById(matchDayId);
+    const day = await MatchDay.findById(matchDayId);
+    return {
+      id: day.id,
+      dayNumber: day.dayNumber,
+      stopBetTime: day.stopBetTime,
+      round: day.round.toString(),
+    };
   } catch (error) {
     console.log(error);
     throw new Error("failed to fetch match day");
@@ -44,5 +50,28 @@ export const createMatchDay = async (
   } catch (error) {
     console.log(error);
     return { error: "failed to create match day" };
+  }
+};
+
+export const editMatchDay = async (
+  previousState: RequestState | undefined,
+  formData: FormData,
+): Promise<RequestState> => {
+  const { id, roundId, dayNumber, stopBetTime } = Object.fromEntries(formData);
+
+  console.log(id, roundId, dayNumber, stopBetTime);
+
+  try {
+    await connectDB();
+    const day = await MatchDay.findByIdAndUpdate(id, {
+      dayNumber,
+      stopBetTime,
+    });
+    await day.save();
+    revalidatePath(`/admin/rounds/${roundId}`);
+    return { success: true };
+  } catch (error) {
+    console.log(error);
+    throw new Error("failed to update match day");
   }
 };

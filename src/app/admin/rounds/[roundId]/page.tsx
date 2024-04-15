@@ -78,7 +78,9 @@ const RoundPage = async ({ params }: Params) => {
                 <td className="px-6 py-4">{day.stopBetTime.toISOString()}</td>
                 <td className="px-6 py-4">TBD</td>
                 <td className="px-6 py-4">
-                  <Link href={`/admin/rounds/${round.id}/matchDays/${day.id}`}>
+                  <Link
+                    href={`/admin/rounds/${round.id}/matchDays/${day.id}/edit`}
+                  >
                     Edit
                   </Link>
                 </td>
