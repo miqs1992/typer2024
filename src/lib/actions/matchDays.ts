@@ -18,12 +18,12 @@ export const getMatchDays = async (roundId: string) => {
 export const getMatchDay = async (matchDayId: string): Promise<IMatchDay> => {
   try {
     await connectDB();
-    const day = await MatchDay.findById(matchDayId);
+    const matchDay = await MatchDay.findById(matchDayId);
     return {
-      id: day.id,
-      dayNumber: day.dayNumber,
-      stopBetTime: day.stopBetTime,
-      round: day.round.toString(),
+      id: matchDay.id,
+      round: matchDay.round,
+      dayNumber: matchDay.dayNumber,
+      stopBetTime: matchDay.stopBetTime,
     };
   } catch (error) {
     console.log(error);
@@ -59,8 +59,6 @@ export const editMatchDay = async (
 ): Promise<RequestState> => {
   const { id, roundId, dayNumber, stopBetTime } = Object.fromEntries(formData);
 
-  console.log(id, roundId, dayNumber, stopBetTime);
-
   try {
     await connectDB();
     const day = await MatchDay.findByIdAndUpdate(id, {
@@ -73,5 +71,34 @@ export const editMatchDay = async (
   } catch (error) {
     console.log(error);
     throw new Error("failed to update match day");
+  }
+};
+
+export const getMatchDayByTimeframe = async (
+  type: "current" | "previous" | "past",
+) => {
+  try {
+    await connectDB();
+    const now = new Date();
+
+    switch (type) {
+      case "current":
+        return MatchDay.findOne({ stopBetTime: { $gte: now } }).sort({
+          stopBetTime: 1,
+        });
+      case "previous":
+        return MatchDay.findOne({ stopBetTime: { $lt: now } }).sort({
+          stopBetTime: -1,
+        });
+      case "past":
+        return MatchDay.find({ stopBetTime: { $lt: now } }).sort({
+          stopBetTime: -1,
+        });
+      default:
+        throw new Error(`Invalid type: ${type}`);
+    }
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Failed to fetch ${type} match day`);
   }
 };

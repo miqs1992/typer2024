@@ -36,7 +36,7 @@ export const Results = ({
                 new Date(b.start).getTime() - new Date(a.start).getTime(),
             )
             .map(
-              ({ firstTeam, secondTeam, finalResult, _id: matchId }, index) => (
+              ({ firstTeam, secondTeam, finalResult, id: matchId }, index) => (
                 <tr
                   className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
                   key={firstTeam.name}
