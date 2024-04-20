@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { IMatch } from "./match";
 import { IUser } from "./user";
+import { IMatchDay } from "./matchDay";
 
 export interface IResult {
   firstTeamResult: number;
@@ -9,8 +10,9 @@ export interface IResult {
 }
 
 export interface IBet {
-  id: string;
+  _id: string;
   match: IMatch;
+  matchDay: IMatchDay;
   user: IUser;
   result: IResult;
   points: number;
@@ -18,6 +20,11 @@ export interface IBet {
 }
 
 const betSchema = new mongoose.Schema<IBet>({
+  matchDay: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "MatchDay",
+    required: true,
+  },
   match: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Match",

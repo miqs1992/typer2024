@@ -30,7 +30,6 @@ const MatchDayForm = ({ roundId, matchDay }: FormProps) => {
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormMatchDay((prevState) => {
-      console.log(e.target.value);
       return {
         ...prevState,
         [e.target.name]: e.target.value,

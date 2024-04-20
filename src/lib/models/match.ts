@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { ITeam } from "./team";
-import { IMatchDay } from "./matchDay";
+import { ITeam, Team } from "./team";
+import { IMatchDay, MatchDay } from "./matchDay";
 
 export interface IFinalResult {
   firstTeamResult: number;
@@ -8,7 +8,7 @@ export interface IFinalResult {
 }
 
 export interface IMatch {
-  _id: string;
+  id: string;
   firstTeam: ITeam;
   secondTeam: ITeam;
   matchDay: IMatchDay;
@@ -19,12 +19,12 @@ export interface IMatch {
 const matchSchema = new mongoose.Schema<IMatch>({
   firstTeam: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Team",
+    ref: Team,
     required: true,
   },
   secondTeam: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Team",
+    ref: Team,
     required: true,
   },
   start: {
@@ -33,7 +33,7 @@ const matchSchema = new mongoose.Schema<IMatch>({
   },
   matchDay: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "MatchDay",
+    ref: MatchDay,
     required: true,
   },
   finalResult: {
