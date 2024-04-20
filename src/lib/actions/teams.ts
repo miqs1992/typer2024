@@ -77,3 +77,21 @@ export const getTeams = async (): Promise<ITeam[]> => {
     throw new Error("failed to fetch teams");
   }
 };
+
+export const searchTeams = async (search: string): Promise<ITeam[]> => {
+  try {
+    await connectDB();
+    const teams = await Team.find({
+      name: { $regex: search, $options: "i" },
+    }).limit(5);
+    return teams.map((team) => ({
+      id: team.id,
+      name: team.name,
+      flag: team.flag,
+      winner: team.winner,
+    }));
+  } catch (error) {
+    console.log(error);
+    throw new Error("failed to search teams");
+  }
+};

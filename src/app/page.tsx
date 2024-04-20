@@ -1,19 +1,38 @@
-import { Ranking } from "../components/ranking/ranking";
+import { Ranking } from "@/components/ranking/ranking";
 import { mockedRanking, mockedTopScorers } from "../../mocks/data";
 import { TopScorers } from "@/components/top-scorers/top-scorers";
 import { getMatchDayByTimeframe } from "@/lib/actions/matchDays";
 import { MatchDay } from "@/components/bet/bet";
 import { getBets } from "@/lib/actions/bet";
-import { auth } from "@/lib/auth";
+import Alert from "@/components/alert/alert";
+import Link from "next/link";
+import { isBeforeFirstMatch } from "../../config/firstMatchStart";
+import { getCurrentProfile } from "@/lib/actions/profile";
 
 const Home = async () => {
-  const session = await auth();
-  const userId = session?.user.id;
+  const profile = await getCurrentProfile();
+  const showAlert =
+    isBeforeFirstMatch() &&
+    (profile.winner === null || profile.topScorer === null);
+
   const currentMatchDay = await getMatchDayByTimeframe("current");
-  const bets = await getBets(currentMatchDay?._id, userId!);
+  const bets = await getBets(currentMatchDay?.id, profile.id);
 
   return (
     <div className="flex w-full flex-col gap-20">
+      {showAlert && (
+        <Alert>
+          <span className="font-medium">
+            You have not yet selected a winner or top scorer!
+          </span>
+          <Link
+            className="ml-1 text-blue-600 underline dark:text-blue-600"
+            href={"profile"}
+          >
+            Select now here
+          </Link>
+        </Alert>
+      )}
       {currentMatchDay ? (
         <MatchDay
           matchDayNumber={currentMatchDay.dayNumber}
