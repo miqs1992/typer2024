@@ -47,6 +47,7 @@ const TeamForm = ({ team }: FormProps) => {
       formAction={formAction}
       update={Boolean(team)}
       successRoute="/admin/teams"
+      fullWidthSubmitButton
     >
       {team && <input type="hidden" name="id" value={team.id} />}
       <TextInput

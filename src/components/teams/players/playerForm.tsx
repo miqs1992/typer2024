@@ -39,6 +39,7 @@ const PlayerForm = ({ player, teamId }: PlayerFormProps) => {
       formAction={formAction}
       update={Boolean(player)}
       successRoute={`/admin/teams/${teamId}`}
+      fullWidthSubmitButton
     >
       {player && <input type="hidden" name="id" value={player.id} />}
       <input type="hidden" name="teamId" value={teamId} />

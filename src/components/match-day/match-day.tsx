@@ -1,11 +1,12 @@
 "use client";
 
 import FlagIcon from "../flagIcon/flagIcon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IBet } from "@/lib/models/bet";
 import { updateBets } from "@/lib/actions/bet";
-import { useFormState } from "react-dom";
-import Link from "next/link";
+import { useFormState, useFormStatus } from "react-dom";
+import { SubmitButton } from "../submit-button/submit-button";
+import { SuccessToast } from "../success-toast/success-toast";
 
 export const MatchDay = ({
   previous,
@@ -16,9 +17,10 @@ export const MatchDay = ({
   matchDayNumber: number;
   bets: IBet[];
 }) => {
-  const [state, formAction] = useFormState(updateBets, undefined);
-
   const headingLabel = `Match Day ${matchDayNumber}`;
+  const [state, formAction] = useFormState(updateBets, undefined);
+  const [statusMessage, setStatusMessage] = useState<string | undefined>("");
+
   const [betList, setBetList] = useState<any>(
     bets.map((bet) => ({
       betId: bet._id,
@@ -39,6 +41,15 @@ export const MatchDay = ({
     })),
   );
 
+  useEffect(() => {
+    setStatusMessage(state?.message);
+    const timeout = setTimeout(() => {
+      setStatusMessage("");
+    }, 3000);
+
+    return () => clearTimeout(timeout);
+  }, [state]);
+
   const onInputChange = (
     value: string | "",
     index: number,
@@ -55,7 +66,8 @@ export const MatchDay = ({
   };
 
   return (
-    <div className="flex w-full flex-col gap-10">
+    <div className="flex w-[50%] flex-col gap-10">
+      {statusMessage ? <SuccessToast customMessage={statusMessage} /> : null}
       <div className="grow">
         <h3 className="text-center text-3xl font-bold text-white">
           {headingLabel}
@@ -152,12 +164,7 @@ export const MatchDay = ({
         >
           <div></div>
           <input type="hidden" name="betList" value={JSON.stringify(betList)} />
-          <button
-            type="submit"
-            className="flex items-center justify-center rounded-lg bg-primary-700 px-4 py-2 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-          >
-            Save
-          </button>
+          <SubmitButton />
         </form>
       </div>
     </div>

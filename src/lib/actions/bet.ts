@@ -32,10 +32,9 @@ export const updateBets = async (
       }),
     );
     revalidatePath("/");
-    return { success: true };
+    return { message: "Bets updated correctly." };
   } catch (error) {
-    console.log(error);
-    throw new Error("failed to update bet");
+    throw new Error("Failed to update bet");
   }
 };
 
@@ -88,7 +87,6 @@ export const getBets = async (
 
     return bets;
   } catch (error) {
-    console.log(error);
     throw new Error("failed to fetch bets");
   }
 };

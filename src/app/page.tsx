@@ -2,7 +2,7 @@ import { Ranking } from "@/components/ranking/ranking";
 import { mockedRanking, mockedTopScorers } from "../../mocks/data";
 import { TopScorers } from "@/components/top-scorers/top-scorers";
 import { getMatchDayByTimeframe } from "@/lib/actions/matchDays";
-import { MatchDay } from "@/components/bet/bet";
+import { MatchDay } from "@/components/match-day/match-day";
 import { getBets } from "@/lib/actions/bet";
 import Alert from "@/components/alert/alert";
 import Link from "next/link";
@@ -34,10 +34,13 @@ const Home = async () => {
         </Alert>
       )}
       {currentMatchDay ? (
-        <MatchDay
-          matchDayNumber={currentMatchDay.dayNumber}
-          bets={JSON.parse(JSON.stringify(bets))}
-        />
+        <div className="flex">
+          <div className="flex-1"></div>
+          <MatchDay
+            matchDayNumber={currentMatchDay.dayNumber}
+            bets={JSON.parse(JSON.stringify(bets))}
+          />
+        </div>
       ) : null}
       <div className="flex gap-20">
         <div className="grow">
