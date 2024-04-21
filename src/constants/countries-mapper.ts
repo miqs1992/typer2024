@@ -1,4 +1,4 @@
-export const COUNTRIES_MAPPER = {
+export const COUNTRIES_MAPPER: { [key: string]: string } = {
   de: "Niemcy",
   "gb-sct": "Szkocja",
   hu: "Węgry",
@@ -23,4 +23,13 @@ export const COUNTRIES_MAPPER = {
   ge: "Gruzja",
   pt: "Portugalia",
   cz: "Czechy",
+};
+
+export const getIsoFromCountryName = (value: string) => {
+  for (let key in COUNTRIES_MAPPER) {
+    if (COUNTRIES_MAPPER[key] === value) {
+      return key;
+    }
+  }
+  return "";
 };

@@ -1,12 +1,11 @@
 "use client";
 
 import AsyncSelect from "react-select/async";
-import React from "react";
-import FlagIcon from "@/components/flagIcon/flagIcon";
+import React, { ReactNode } from "react";
 
 export type SelectOption = {
   readonly value: string;
-  readonly label: string;
+  readonly label: ReactNode | string;
 };
 
 interface AsyncSelectInputProps {
@@ -42,6 +41,9 @@ const AsyncSelectInput = ({
           singleValue: () => "text-white",
           placeholder: () => "text-white",
           input: () => "text-white",
+          option: () =>
+            "bg-gray-800 font-thin text-white dark:hover:bg-gray-600 cursor-pointer",
+          menuList: () => "bg-gray-800",
         }}
         required
       />

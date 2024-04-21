@@ -9,6 +9,11 @@ import AsyncSelectInput, {
   SelectOption,
 } from "@/components/form/inputs/asyncSelectInput";
 import { searchPlayers } from "@/lib/actions/players";
+import FlagIcon from "@/components/flagIcon/flagIcon";
+import {
+  COUNTRIES_MAPPER,
+  getIsoFromCountryName,
+} from "@/constants/countries-mapper";
 
 interface FormProps {
   profile: Profile;
@@ -25,7 +30,11 @@ const ProfileForm = ({ profile }: FormProps) => {
       return teams.map((team) => {
         return {
           value: team.id,
-          label: team.name,
+          label: (
+            <div className="flex gap-2">
+              <FlagIcon country={team.flag} /> {team.name}
+            </div>
+          ),
         };
       });
     });
@@ -41,13 +50,29 @@ const ProfileForm = ({ profile }: FormProps) => {
     });
 
   return (
-    <Form state={formState} formAction={formAction} update successRoute="/">
+    <Form
+      state={formState}
+      formAction={formAction}
+      update
+      successRoute="/"
+      fullWidthSubmitButton
+    >
       <AsyncSelectInput
         field="winnerId"
         label="Winner"
         defaultValue={
           profile.winner
-            ? { value: profile.winner.id, label: profile.winner.name }
+            ? {
+                value: profile.winner.id,
+                label: (
+                  <div className="flex gap-2">
+                    <FlagIcon
+                      country={getIsoFromCountryName(profile.winner.name)}
+                    />
+                    {profile.winner.name}
+                  </div>
+                ),
+              }
             : undefined
         }
         loadFunction={loadTeams}
