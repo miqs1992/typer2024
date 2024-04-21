@@ -1,12 +1,12 @@
 "use client";
 
-import FlagIcon from "../flagIcon/flagIcon";
+import FlagIcon from "../../flagIcon/flagIcon";
 import { useEffect, useState } from "react";
 import { IBet } from "@/lib/models/bet";
 import { updateBets } from "@/lib/actions/bet";
-import { useFormState, useFormStatus } from "react-dom";
-import { SubmitButton } from "../submit-button/submit-button";
-import { SuccessToast } from "../success-toast/success-toast";
+import { useFormState } from "react-dom";
+import { SubmitButton } from "../../submit-button/submit-button";
+import { SuccessToast } from "../../success-toast/success-toast";
 
 export const MatchDay = ({
   previous,

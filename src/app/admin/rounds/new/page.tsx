@@ -1,4 +1,4 @@
-import RoundForm from "@/components/rounds/roundForm";
+import RoundForm from "@/components/admin/rounds/round-form";
 import Link from "next/link";
 
 const NewRoundPage = async () => {

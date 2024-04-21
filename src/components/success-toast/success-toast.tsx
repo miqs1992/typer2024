@@ -9,7 +9,7 @@ export const SuccessToast = ({ customMessage }: { customMessage?: string }) => {
     <div
       ref={toastRef}
       id="toast-success"
-      className="0 absolute left-1/2 flex w-full max-w-xs animate-toastSlide items-center rounded-lg bg-white p-4 text-gray-500 dark:bg-gray-800 dark:text-gray-400"
+      className="0 fixed left-1/2 top-[50px] flex w-full max-w-xs -translate-x-1/2 transform animate-toastSlide items-center rounded-lg bg-white p-4 text-gray-500 dark:bg-gray-800 dark:text-gray-400"
       role="alert"
     >
       <div className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">

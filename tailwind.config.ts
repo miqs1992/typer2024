@@ -31,15 +31,15 @@ const config: Config = {
       keyframes: {
         slideInOut: {
           "0%": {
-            transform: "translateY(-100%) translateX(-50%)",
+            transform: "translateX(-50%)",
             opacity: "0",
           },
           "20%": {
-            transform: "translateY(0) translateX(-50%)",
+            transform: "translateX(-50%)",
             opacity: "1",
           },
           "80%": {
-            transform: "translateY(0) translateX(-50%)",
+            transform: "translateX(-50%)",
             opacity: "1",
           },
           "100%": {

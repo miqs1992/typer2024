@@ -1,13 +1,13 @@
-import { Ranking } from "@/components/ranking/ranking";
 import { mockedRanking, mockedTopScorers } from "../../mocks/data";
-import { TopScorers } from "@/components/top-scorers/top-scorers";
+import { TopScorers } from "@/components/main/top-scorers/top-scorers";
 import { getMatchDayByTimeframe } from "@/lib/actions/matchDays";
-import { MatchDay } from "@/components/match-day/match-day";
+import { MatchDay } from "@/components/main/match-day/match-day";
 import { getBets } from "@/lib/actions/bet";
 import Alert from "@/components/alert/alert";
 import Link from "next/link";
 import { isBeforeFirstMatch } from "../../config/firstMatchStart";
 import { getCurrentProfile } from "@/lib/actions/profile";
+import { Ranking } from "@/components/main/ranking/ranking";
 
 const Home = async () => {
   const profile = await getCurrentProfile();
@@ -19,7 +19,7 @@ const Home = async () => {
   const bets = await getBets(currentMatchDay?.id, profile.id);
 
   return (
-    <div className="flex w-full flex-col gap-20">
+    <>
       {showAlert && (
         <Alert>
           <span className="font-medium">
@@ -33,30 +33,32 @@ const Home = async () => {
           </Link>
         </Alert>
       )}
-      {currentMatchDay ? (
-        <div className="flex">
-          <div className="flex-1"></div>
-          <MatchDay
-            matchDayNumber={currentMatchDay.dayNumber}
-            bets={JSON.parse(JSON.stringify(bets))}
-          />
-        </div>
-      ) : null}
-      <div className="flex gap-20">
-        <div className="grow">
-          <h3 className="my-10 text-center text-3xl font-bold text-white">
-            Current Top 5
-          </h3>
-          <Ranking rankingData={mockedRanking} showExtended={false} />
-        </div>
-        <div className="grow">
-          <h3 className="my-10 text-center text-3xl font-bold text-white">
-            Top Scorers
-          </h3>
-          <TopScorers topScorersData={mockedTopScorers} />
+      <div className="flex w-full flex-col gap-20">
+        {currentMatchDay ? (
+          <div className="flex">
+            <div className="flex-1"></div>
+            <MatchDay
+              matchDayNumber={currentMatchDay.dayNumber}
+              bets={JSON.parse(JSON.stringify(bets))}
+            />
+          </div>
+        ) : null}
+        <div className="flex gap-20">
+          <div className="grow">
+            <h3 className="my-10 text-center text-3xl font-bold text-white">
+              Current Top 5
+            </h3>
+            <Ranking rankingData={mockedRanking} showExtended={false} />
+          </div>
+          <div className="grow">
+            <h3 className="my-10 text-center text-3xl font-bold text-white">
+              Top Scorers
+            </h3>
+            <TopScorers topScorersData={mockedTopScorers} />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 export default Home;

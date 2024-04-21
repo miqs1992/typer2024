@@ -3,7 +3,7 @@
 import { editMatch } from "@/lib/actions/match";
 import { IMatch } from "@/lib/models/match";
 import { useFormState } from "react-dom";
-import Form from "../form/form";
+import Form from "../../../../form/form";
 
 interface FormProps {
   match: IMatch & { _id: string };
@@ -13,8 +13,6 @@ interface FormProps {
 
 export const EditMatchForm = ({ match, matchDayId, roundId }: FormProps) => {
   const [state, formAction] = useFormState(editMatch, undefined);
-
-  console.log(match);
 
   return (
     <Form

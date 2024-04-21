@@ -1,6 +1,6 @@
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import Link from "next/link";
-import PlayerForm from "@/components/teams/players/playerForm";
+import PlayerForm from "@/components/admin/teams/players/playerForm";
 import { getPlayer } from "@/lib/actions/players";
 
 const EditPlayerPage = async ({ params }: Params) => {
