@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { Player } from "@/lib/models/player";
+import { Team } from "@/lib/models/team";
 
 export interface IUser {
   id: string;
@@ -9,6 +11,8 @@ export interface IUser {
   points: number;
   leagueRank: number;
   exactBetCount: number;
+  winner: mongoose.Types.ObjectId | null;
+  topScorer: mongoose.Types.ObjectId | null;
 }
 
 const userSchema = new mongoose.Schema<IUser>(
@@ -21,6 +25,13 @@ const userSchema = new mongoose.Schema<IUser>(
     points: { type: Number, default: 0 },
     leagueRank: { type: Number, default: 0 },
     exactBetCount: { type: Number, default: 0 },
+
+    winner: { type: mongoose.Schema.Types.ObjectId, ref: Team },
+    topScorer: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: Player,
+      required: true,
+    },
   },
   { timestamps: true },
 );

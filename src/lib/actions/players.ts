@@ -80,3 +80,22 @@ export const removePlayer = async (formData: FormData): Promise<void> => {
     throw new Error("failed to delete player");
   }
 };
+
+export const searchPlayers = async (inputValue: string): Promise<IPlayer[]> => {
+  try {
+    await connectDB();
+    const players = await Player.find({
+      name: { $regex: inputValue, $options: "i" },
+    }).limit(5);
+    return players.map((player) => ({
+      id: player.id,
+      name: player.name,
+      goals: player.goals,
+      assists: player.assists,
+      team: player.team.toString(),
+    }));
+  } catch (error) {
+    console.log(error);
+    throw new Error("failed to search players");
+  }
+};
