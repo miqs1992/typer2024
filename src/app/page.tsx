@@ -2,7 +2,7 @@ import { mockedRanking, mockedTopScorers } from "../../mocks/data";
 import { TopScorers } from "@/components/main/top-scorers/top-scorers";
 import { getMatchDayByTimeframe } from "@/lib/actions/matchDays";
 import { MatchDay } from "@/components/main/match-day/match-day";
-import { getBets } from "@/lib/actions/bet";
+import { getBets, hasUserSetBonusInThisRound } from "@/lib/actions/bet";
 import Alert from "@/components/alert/alert";
 import Link from "next/link";
 import { isBeforeFirstMatch } from "../../config/firstMatchStart";
@@ -16,13 +16,21 @@ const Home = async () => {
     (profile.winner === null || profile.topScorer === null);
 
   const currentMatchDay = await getMatchDayByTimeframe("current");
-  const bets = await getBets(currentMatchDay?.id, profile.id);
+  const previousMatchDay = await getMatchDayByTimeframe("previous");
+  const currentBets = await getBets(currentMatchDay?.id, profile.id);
+  const previousBets = await getBets(previousMatchDay?.id, profile.id);
+  const hasUserSetBonus = await hasUserSetBonusInThisRound(
+    currentMatchDay,
+    profile.id,
+  );
+
+  console.log(hasUserSetBonus);
 
   return (
     <>
       {showAlert && (
         <Alert>
-          <span className="font-medium">
+          <span className="text-md">
             You have not yet selected a winner or top scorer!
           </span>
           <Link
@@ -34,15 +42,22 @@ const Home = async () => {
         </Alert>
       )}
       <div className="flex w-full flex-col gap-20">
-        {currentMatchDay ? (
-          <div className="flex">
-            <div className="flex-1"></div>
+        <div className="flex gap-20">
+          {previousMatchDay ? (
+            <MatchDay
+              matchDayNumber={previousMatchDay.dayNumber}
+              bets={JSON.parse(JSON.stringify(previousBets))}
+              previous
+            />
+          ) : null}
+          {currentMatchDay ? (
             <MatchDay
               matchDayNumber={currentMatchDay.dayNumber}
-              bets={JSON.parse(JSON.stringify(bets))}
+              bets={JSON.parse(JSON.stringify(currentBets))}
+              disabledBonus={hasUserSetBonus}
             />
-          </div>
-        ) : null}
+          ) : null}
+        </div>
         <div className="flex gap-20">
           <div className="grow">
             <h3 className="my-10 text-center text-3xl font-bold text-white">
@@ -50,7 +65,7 @@ const Home = async () => {
             </h3>
             <Ranking rankingData={mockedRanking} showExtended={false} />
           </div>
-          <div className="grow">
+          <div>
             <h3 className="my-10 text-center text-3xl font-bold text-white">
               Top Scorers
             </h3>
