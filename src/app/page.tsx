@@ -8,6 +8,7 @@ import Link from "next/link";
 import { isBeforeFirstMatch } from "../../config/firstMatchStart";
 import { getCurrentProfile } from "@/lib/actions/profile";
 import { Ranking } from "@/components/main/ranking/ranking";
+import { EmptyMatchDay } from "@/components/main/match-day/empty-match.day";
 
 const Home = async () => {
   const profile = await getCurrentProfile();
@@ -23,8 +24,6 @@ const Home = async () => {
     currentMatchDay,
     profile.id,
   );
-
-  console.log(hasUserSetBonus);
 
   return (
     <>
@@ -49,14 +48,18 @@ const Home = async () => {
               bets={JSON.parse(JSON.stringify(previousBets))}
               previous
             />
-          ) : null}
+          ) : (
+            <EmptyMatchDay previous />
+          )}
           {currentMatchDay ? (
             <MatchDay
               matchDayNumber={currentMatchDay.dayNumber}
               bets={JSON.parse(JSON.stringify(currentBets))}
               disabledBonus={hasUserSetBonus}
             />
-          ) : null}
+          ) : (
+            <EmptyMatchDay />
+          )}
         </div>
         <div className="flex gap-20">
           <div className="grow">
