@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-interface NavLinkProps {
+export interface NavLinkProps {
   to: string;
   label: string;
 }
@@ -12,7 +12,7 @@ const defaultClassName =
 const activeClassName =
   "block py-2 px-3 text-white bg-blue-700  font-bold rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500";
 
-const NavLink = ({ to, label }: NavLinkProps) => {
+export const NavLink = ({ to, label }: NavLinkProps) => {
   const pathName = usePathname();
 
   return (
@@ -26,5 +26,3 @@ const NavLink = ({ to, label }: NavLinkProps) => {
     </li>
   );
 };
-
-export default NavLink;

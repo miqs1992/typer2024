@@ -1,4 +1,4 @@
-import ProfileForm from "@/components/profile/profileForm/profileForm";
+import ProfileForm from "@/components/profile/profileForm/profile-form";
 import { getCurrentProfile } from "@/lib/actions/profile";
 import { isBeforeFirstMatch } from "../../../config/firstMatchStart";
 

@@ -1,11 +1,11 @@
-import { getMatchDays } from "@/lib/actions/matchDays";
+import { getMatchDaysInRound } from "@/lib/actions/matchDays";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { getRound } from "@/lib/actions/rounds";
 import Link from "next/link";
 
 const RoundPage = async ({ params }: Params) => {
   const round = await getRound(params.roundId);
-  const matchDays = await getMatchDays(params.roundId);
+  const matchDays = await getMatchDaysInRound(params.roundId);
 
   return (
     <div>

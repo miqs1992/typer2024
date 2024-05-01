@@ -5,8 +5,8 @@ import { createMatchDay, editMatchDay } from "@/lib/actions/matchDays";
 import Form from "@/components/form/form";
 import { IMatchDay } from "@/lib/models/matchDay";
 import React, { useState } from "react";
-import NumberInput from "@/components/form/inputs/numberInput";
-import DateTimeInput from "@/components/form/inputs/dateTimeInput";
+import NumberInput from "@/components/form/inputs/number-input";
+import DateTimeInput from "@/components/form/inputs/date-time-input";
 
 interface FormProps {
   roundId: string;

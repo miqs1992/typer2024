@@ -5,8 +5,8 @@ import React, { useState } from "react";
 import { ITeam } from "@/lib/models/team";
 import { createTeam, editTeam } from "@/lib/actions/teams";
 import Form from "@/components/form/form";
-import TextInput from "@/components/form/inputs/textInput";
-import BooleanInput from "@/components/form/inputs/booleanInput";
+import TextInput from "@/components/form/inputs/text-input";
+import BooleanInput from "@/components/form/inputs/boolean-input";
 
 interface FormProps {
   team?: ITeam;

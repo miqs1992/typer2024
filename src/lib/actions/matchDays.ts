@@ -5,13 +5,29 @@ import { IMatchDay, MatchDay } from "@/lib/models/matchDay";
 import { RequestState } from "@/lib/actions/state";
 import { revalidatePath } from "next/cache";
 
-export const getMatchDays = async (roundId: string) => {
+export const getMatchDaysInRound = async (roundId: string) => {
   try {
     await connectDB();
     return MatchDay.find({ round: roundId }).sort({ dayNumber: 1 });
   } catch (error) {
     console.log(error);
-    throw new Error("failed to fetch posts");
+    throw new Error("failed to fetch match days for round");
+  }
+};
+
+export const getAllMatchDays = async (): Promise<
+  Pick<IMatchDay, "id" | "dayNumber">[]
+> => {
+  try {
+    await connectDB();
+    const data = (await MatchDay.find().sort({ dayNumber: 1 })) as IMatchDay[];
+    return data.map((matchDay) => ({
+      id: matchDay.id,
+      dayNumber: matchDay.dayNumber,
+    }));
+  } catch (error) {
+    console.log(error);
+    throw new Error("failed to fetch all match days");
   }
 };
 

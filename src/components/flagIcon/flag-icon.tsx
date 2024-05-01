@@ -9,8 +9,8 @@ const FlagIcon = ({ country }: FlagIconProps) => {
     <Image
       alt={country}
       src={`https://flagicons.lipis.dev/flags/4x3/${country}.svg`}
-      height="10"
-      width="15"
+      height="12"
+      width="16"
     />
   );
 };

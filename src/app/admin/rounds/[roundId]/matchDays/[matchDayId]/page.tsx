@@ -1,11 +1,11 @@
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { getMatches } from "@/lib/actions/match";
 import { Results } from "@/components/admin/rounds/match-days/results";
-import { getMatchDays } from "@/lib/actions/matchDays";
+import { getMatchDaysInRound } from "@/lib/actions/matchDays";
 import Link from "next/link";
 
 const EditMatchDayPage = async ({ params }: Params) => {
-  const matchDays = await getMatchDays(params.roundId);
+  const matchDays = await getMatchDaysInRound(params.roundId);
   const matches = await getMatches(params.matchDayId);
 
   const matchDayNumber = matchDays.find(
