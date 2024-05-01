@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
-import { EditMatchForm } from "@/components/edit-match-form/edit-match-form";
+import { EditMatchForm } from "@/components/admin/rounds/match-days/match/edit-match-form";
 import { getMatch } from "@/lib/actions/match";
 
 const EditMatchPage = async ({ params }: Params) => {

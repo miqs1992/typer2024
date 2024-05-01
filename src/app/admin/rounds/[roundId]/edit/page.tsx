@@ -1,5 +1,5 @@
 import Link from "next/link";
-import RoundForm from "@/components/rounds/roundForm";
+import RoundForm from "@/components/admin/rounds/round-form";
 import { getRound } from "@/lib/actions/rounds";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 

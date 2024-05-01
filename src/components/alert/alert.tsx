@@ -9,7 +9,7 @@ const Alert = ({
 }>) => {
   return (
     <div
-      className="mb-4 flex items-center rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
+      className="mb-10 flex items-center rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
       role="alert"
     >
       <svg

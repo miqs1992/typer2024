@@ -1,5 +1,5 @@
 import Link from "next/link";
-import TeamForm from "@/components/teams/teamForm";
+import TeamForm from "@/components/admin/teams/teamForm";
 
 const NewTeamPage: React.FC = () => {
   return (

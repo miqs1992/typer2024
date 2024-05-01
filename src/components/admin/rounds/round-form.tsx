@@ -38,6 +38,7 @@ const RoundForm = ({ round }: FormProps) => {
       formAction={formAction}
       update={Boolean(round)}
       successRoute="/admin/rounds"
+      fullWidthSubmitButton
     >
       {round && <input type="hidden" name="id" value={round.id} />}
       <TextInput

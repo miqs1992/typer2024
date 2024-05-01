@@ -1,5 +1,5 @@
 import { IMatch } from "@/lib/models/match";
-import FlagIcon from "../flagIcon/flagIcon";
+import FlagIcon from "../../../flagIcon/flagIcon";
 import Link from "next/link";
 
 export const Results = ({

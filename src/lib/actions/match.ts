@@ -13,6 +13,11 @@ const calculatePointsAndUpdateUser = async (
 ) => {
   let points = 0;
   // TODO z dupy do zmiany
+
+  const { bonus } = bet.result;
+
+  const ratio = bonus ? 2 : 1;
+
   if (
     (bet.result.firstTeamResult > bet.result.secondTeamResult &&
       firstTeamResult > secondTeamResult) ||
@@ -21,7 +26,7 @@ const calculatePointsAndUpdateUser = async (
     (bet.result.firstTeamResult === bet.result.secondTeamResult &&
       firstTeamResult === secondTeamResult)
   ) {
-    points = 1;
+    points = 1 * ratio;
   }
 
   bet.points = points;

@@ -43,6 +43,7 @@ const MatchDayForm = ({ roundId, matchDay }: FormProps) => {
       formAction={formAction}
       update={Boolean(matchDay)}
       successRoute={`/admin/rounds/${roundId}`}
+      fullWidthSubmitButton
     >
       {matchDay && <input type="hidden" name="id" value={matchDay.id} />}
       <input type="hidden" name="roundId" value={roundId} />

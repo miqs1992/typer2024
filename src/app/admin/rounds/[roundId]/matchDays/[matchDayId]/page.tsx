@@ -1,6 +1,6 @@
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { getMatches } from "@/lib/actions/match";
-import { Results } from "@/components/results/results";
+import { Results } from "@/components/admin/rounds/match-days/results";
 import { getMatchDays } from "@/lib/actions/matchDays";
 import Link from "next/link";
 

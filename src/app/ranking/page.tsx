@@ -1,5 +1,5 @@
 import { mockedRanking } from "../../../mocks/data";
-import { Ranking } from "../../components/ranking/ranking";
+import { Ranking } from "../../components/main/ranking/ranking";
 
 const RankingPage = async () => {
   return (

@@ -28,6 +28,29 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      keyframes: {
+        slideInOut: {
+          "0%": {
+            transform: "translateX(-50%)",
+            opacity: "0",
+          },
+          "20%": {
+            transform: "translateX(-50%)",
+            opacity: "1",
+          },
+          "80%": {
+            transform: "translateX(-50%)",
+            opacity: "1",
+          },
+          "100%": {
+            transform: "translateX(-50%)",
+            opacity: "0",
+          },
+        },
+      },
+      animation: {
+        toastSlide: "slideInOut 3s ease-out forwards",
+      },
     },
   },
   plugins: [],

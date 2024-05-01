@@ -5,6 +5,7 @@ import connectDB from "../../../config/database";
 import { Bet, IBet } from "../models/bet";
 import { Match, IMatch } from "../models/match";
 import { RequestState } from "./state";
+import { IMatchDay } from "../models/matchDay";
 
 export const updateBets = async (
   previousState: RequestState | undefined,
@@ -32,10 +33,9 @@ export const updateBets = async (
       }),
     );
     revalidatePath("/");
-    return { success: true };
+    return { message: "Bets updated correctly." };
   } catch (error) {
-    console.log(error);
-    throw new Error("failed to update bet");
+    throw new Error("Failed to update bet");
   }
 };
 
@@ -88,7 +88,32 @@ export const getBets = async (
 
     return bets;
   } catch (error) {
-    console.log(error);
     throw new Error("failed to fetch bets");
+  }
+};
+
+export const hasUserSetBonusInThisRound = async (
+  currentMatchDay: IMatchDay,
+  userId: string,
+): Promise<boolean> => {
+  try {
+    await connectDB();
+
+    if (!currentMatchDay) return false;
+
+    const bets = await Bet.find({ user: userId });
+    const matches = await Match.find({ round: currentMatchDay.round });
+
+    const matchIds = matches.map((match) => match.id);
+    const betsForRound = bets.filter((bet) =>
+      matchIds.includes(bet.match.toString()),
+    );
+
+    return betsForRound.some(
+      (bet) =>
+        bet.result.bonus && bet.matchDay.toString() !== currentMatchDay.id,
+    );
+  } catch (error) {
+    throw new Error("failed to fetch bonus");
   }
 };
