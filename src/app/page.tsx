@@ -40,38 +40,36 @@ const Home = async () => {
           </Link>
         </Alert>
       )}
-      <div className="flex w-full flex-col gap-20">
-        <div className="flex gap-20">
-          {previousMatchDay ? (
-            <MatchDay
-              matchDayNumber={previousMatchDay.dayNumber}
-              bets={JSON.parse(JSON.stringify(previousBets))}
-              previous
-            />
-          ) : (
-            <EmptyMatchDay previous />
-          )}
-          {currentMatchDay ? (
-            <MatchDay
-              matchDayNumber={currentMatchDay.dayNumber}
-              bets={JSON.parse(JSON.stringify(currentBets))}
-              disabledBonus={hasUserSetBonus}
-            />
-          ) : (
-            <EmptyMatchDay />
-          )}
+      <div className="flex w-full flex-col gap-10 lg:gap-20">
+        <div className="flex flex-col gap-10 lg:flex-row lg:gap-20">
+          <div className="w-full lg:w-[50%]">
+            {previousMatchDay ? (
+              <MatchDay
+                matchDayNumber={previousMatchDay.dayNumber}
+                bets={JSON.parse(JSON.stringify(previousBets))}
+                previous
+              />
+            ) : (
+              <EmptyMatchDay previous />
+            )}
+          </div>
+          <div className="w-full lg:w-[50%]">
+            {currentMatchDay ? (
+              <MatchDay
+                matchDayNumber={currentMatchDay.dayNumber}
+                bets={JSON.parse(JSON.stringify(currentBets))}
+                disabledBonus={hasUserSetBonus}
+              />
+            ) : (
+              <EmptyMatchDay />
+            )}
+          </div>
         </div>
-        <div className="flex gap-20">
-          <div className="grow">
-            <h3 className="my-10 text-center text-3xl font-bold text-white">
-              Current Top 5
-            </h3>
+        <div className="flex flex-col gap-10 lg:flex-row lg:gap-20">
+          <div className="w-full lg:w-[50%]">
             <Ranking rankingData={mockedRanking} showExtended={false} />
           </div>
-          <div>
-            <h3 className="my-10 text-center text-3xl font-bold text-white">
-              Top Scorers
-            </h3>
+          <div className="w-full lg:w-[50%]">
             <TopScorers topScorersData={mockedTopScorers} />
           </div>
         </div>

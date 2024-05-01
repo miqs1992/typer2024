@@ -75,10 +75,10 @@ export const MatchDay = ({
   };
 
   return (
-    <div className="flex w-[50%] flex-col gap-10">
+    <>
       {statusMessage ? <SuccessToast customMessage={statusMessage} /> : null}
       <div>
-        <h3 className="text-center text-3xl font-bold text-white">
+        <h3 className="mb-10 text-center text-3xl font-bold text-white">
           {headingLabel}
         </h3>
       </div>
@@ -242,6 +242,6 @@ export const MatchDay = ({
           </form>
         ) : null}
       </div>
-    </div>
+    </>
   );
 };
