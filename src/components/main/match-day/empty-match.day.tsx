@@ -3,9 +3,9 @@ import exclamationIcon from "./exclamation-diamond-fill-svgrepo-com.svg";
 
 export const EmptyMatchDay = ({ previous }: { previous?: boolean }) => {
   return (
-    <div className="flex w-[50%] flex-col gap-10">
+    <>
       <div>
-        <h3 className="text-center text-3xl font-bold text-white">
+        <h3 className="mb-10 text-center text-3xl font-bold text-white">
           {previous ? "Previous Match Day" : "Current Match Day"}
         </h3>
       </div>
@@ -22,6 +22,6 @@ export const EmptyMatchDay = ({ previous }: { previous?: boolean }) => {
           </span>
         </div>
       </div>
-    </div>
+    </>
   );
 };
