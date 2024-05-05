@@ -1,4 +1,7 @@
-import FlagIcon from "@/components/flagIcon/flagIcon";
+"use client";
+
+import FlagIcon from "@/components/flagIcon/flag-icon";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 interface TopScorers {
   name: string;
@@ -12,6 +15,8 @@ export const TopScorers = ({
 }: {
   topScorersData: TopScorers[];
 }) => {
+  const { isMobile } = useMediaQuery();
+
   return (
     <>
       <h3 className="mb-10 text-center text-3xl font-bold text-white">
@@ -25,10 +30,10 @@ export const TopScorers = ({
                 Name
               </th>
               <th scope="col" className="px-6 py-3">
-                G.
+                {isMobile ? "G." : "Goals"}
               </th>
               <th scope="col" className="px-6 py-3">
-                A.
+                {isMobile ? "A." : "Assists"}
               </th>
             </tr>
           </thead>

@@ -7,9 +7,9 @@ import Form from "@/components/form/form";
 import { searchTeams } from "@/lib/actions/teams";
 import AsyncSelectInput, {
   SelectOption,
-} from "@/components/form/inputs/asyncSelectInput";
+} from "@/components/form/inputs/async-select-input";
 import { searchPlayers } from "@/lib/actions/players";
-import FlagIcon from "@/components/flagIcon/flagIcon";
+import FlagIcon from "@/components/flagIcon/flag-icon";
 import {
   COUNTRIES_MAPPER,
   getIsoFromCountryName,

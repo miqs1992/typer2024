@@ -5,8 +5,8 @@ import { createPlayer, editPlayer } from "@/lib/actions/players";
 import { useFormState } from "react-dom";
 import React, { useState } from "react";
 import Form from "@/components/form/form";
-import TextInput from "@/components/form/inputs/textInput";
-import NumberInput from "@/components/form/inputs/numberInput";
+import TextInput from "@/components/form/inputs/text-input";
+import NumberInput from "@/components/form/inputs/number-input";
 
 interface PlayerFormProps {
   teamId: string;

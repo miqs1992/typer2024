@@ -1,7 +1,7 @@
 import { getTeam } from "@/lib/actions/teams";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import Link from "next/link";
-import FlagIcon from "@/components/flagIcon/flagIcon";
+import FlagIcon from "@/components/flagIcon/flag-icon";
 import { getPlayers, removePlayer } from "@/lib/actions/players";
 
 const TeamPage = async ({ params }: Params) => {

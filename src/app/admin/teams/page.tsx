@@ -1,6 +1,6 @@
 import { getTeams } from "@/lib/actions/teams";
 import Link from "next/link";
-import FlagIcon from "@/components/flagIcon/flagIcon";
+import FlagIcon from "@/components/flagIcon/flag-icon";
 
 const TeamsPage = async () => {
   const teams = await getTeams();
@@ -8,12 +8,6 @@ const TeamsPage = async () => {
   return (
     <>
       <div className="relative my-4 mb-12 text-center text-3xl text-white">
-        <Link
-          href="/admin"
-          className="absolute left-0 top-[7px] m-0 inline-block text-lg text-white underline"
-        >
-          Back to Admin
-        </Link>
         <h1 className="inline-block">Teams</h1>
       </div>
       <div className="relative flex w-full max-w-screen-xl flex-wrap items-center justify-between overflow-x-auto sm:rounded-lg">

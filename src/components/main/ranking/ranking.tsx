@@ -1,4 +1,4 @@
-import FlagIcon from "@/components/flagIcon/flagIcon";
+import FlagIcon from "@/components/flagIcon/flag-icon";
 import { COUNTRIES_MAPPER } from "@/constants/countries-mapper";
 
 interface TopScorer {

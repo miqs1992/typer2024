@@ -1,6 +1,6 @@
 "use client";
 
-import FlagIcon from "../../flagIcon/flagIcon";
+import FlagIcon from "../../flagIcon/flag-icon";
 import { useEffect, useState } from "react";
 import { IBet } from "@/lib/models/bet";
 import { updateBets } from "@/lib/actions/bet";

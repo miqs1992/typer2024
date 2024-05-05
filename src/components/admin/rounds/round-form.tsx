@@ -5,8 +5,8 @@ import React, { useState } from "react";
 import { createRound, editRound } from "@/lib/actions/rounds";
 import { IRound } from "@/lib/models/round";
 import Form from "@/components/form/form";
-import TextInput from "@/components/form/inputs/textInput";
-import NumberInput from "@/components/form/inputs/numberInput";
+import TextInput from "@/components/form/inputs/text-input";
+import NumberInput from "@/components/form/inputs/number-input";
 
 interface FormProps {
   round?: IRound;
