@@ -4,6 +4,7 @@ import { NavLinkProps } from "@/components/navigation/parts/nav-link";
 import Link from "next/link";
 import React, { useRef, useState } from "react";
 import { useClickOutside } from "@/hooks/use-click-outside";
+import { usePathname } from "next/navigation";
 
 interface NavDropdownProps {
   id: string;
@@ -12,9 +13,11 @@ interface NavDropdownProps {
 }
 
 export const NavDropdown = ({ id, label, links }: NavDropdownProps) => {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+
   useClickOutside(navRef, () => {
     open && setOpen(false);
   });
@@ -70,7 +73,7 @@ export const NavDropdown = ({ id, label, links }: NavDropdownProps) => {
               <Link
                 href={to}
                 onClick={() => setOpen(false)}
-                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                className={`block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white ${pathname === to ? "dark:text-blue-400" : ""}`}
               >
                 {label}
               </Link>

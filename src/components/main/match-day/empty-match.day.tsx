@@ -9,7 +9,7 @@ export const EmptyMatchDay = ({ previous }: { previous?: boolean }) => {
           {previous ? "Previous Match Day" : "Current Match Day"}
         </h3>
       </div>
-      <div className="relative w-full overflow-x-auto shadow-[rgba(0,_0,_0,_0.24)_0px_0px_8px] shadow-gray-600 sm:rounded-lg">
+      <div className="relative w-full overflow-x-auto rounded-lg shadow-[rgba(0,_0,_0,_0.24)_0px_0px_8px] shadow-gray-600">
         <div className="flex w-full items-center justify-center rounded-lg bg-gray-800">
           <span className="my-8 flex gap-3 text-xl font-semibold text-white">
             <Image
