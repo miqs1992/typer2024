@@ -3,7 +3,7 @@ import { handleLogout } from "@/lib/actions/session";
 import { NavLink } from "@/components/navigation/parts/nav-link";
 import { auth } from "@/lib/auth";
 import { NavDropdown } from "@/components/navigation/parts/nav-dropdown";
-import { getAllMatchDays, getMatchDaysInRound } from "@/lib/actions/matchDays";
+import { getAllMatchDays } from "@/modules/matches/match-day.actions";
 
 const Navigation = async () => {
   const matchDays = await getAllMatchDays();
@@ -60,7 +60,7 @@ const Navigation = async () => {
               id="match-days"
               label="Match Days"
               links={matchDays.map((matchDay) => ({
-                to: `/matchDay/${matchDay.id}`,
+                to: `/match-day/${matchDay.id}`,
                 label: `Match Day ${matchDay.dayNumber}`,
               }))}
             />

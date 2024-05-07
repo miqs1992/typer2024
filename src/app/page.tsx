@@ -1,6 +1,6 @@
 import { mockedRanking, mockedTopScorers } from "../../mocks/data";
 import { TopScorers } from "@/components/main/top-scorers/top-scorers";
-import { getMatchDayByTimeframe } from "@/lib/actions/matchDays";
+import { getMatchDayByTimeframe } from "@/modules/matches/match-day.actions";
 import { MatchDay } from "@/components/main/match-day/match-day";
 import { getBets, hasUserSetBonusInThisRound } from "@/lib/actions/bet";
 import Alert from "@/components/alert/alert";
@@ -9,6 +9,7 @@ import { isBeforeFirstMatch } from "../../config/firstMatchStart";
 import { getCurrentProfile } from "@/lib/actions/profile";
 import { Ranking } from "@/components/main/ranking/ranking";
 import { EmptyMatchDay } from "@/components/main/match-day/empty-match.day";
+import { MatchDayTimeframe } from "@/modules/matches/match-day.service";
 
 const Home = async () => {
   const profile = await getCurrentProfile();
@@ -16,14 +17,25 @@ const Home = async () => {
     isBeforeFirstMatch() &&
     (profile.winner === null || profile.topScorer === null);
 
-  const currentMatchDay = await getMatchDayByTimeframe("current");
-  const previousMatchDay = await getMatchDayByTimeframe("previous");
-  const currentBets = await getBets(currentMatchDay?.id, profile.id);
-  const previousBets = await getBets(previousMatchDay?.id, profile.id);
-  const hasUserSetBonus = await hasUserSetBonusInThisRound(
-    currentMatchDay,
-    profile.id,
+  const currentMatchDay = await getMatchDayByTimeframe(
+    MatchDayTimeframe.Current,
   );
+  const previousMatchDay = await getMatchDayByTimeframe(
+    MatchDayTimeframe.Previous,
+  );
+  const currentBets = currentMatchDay
+    ? await getBets(currentMatchDay.id, profile.id)
+    : [];
+  const previousBets = previousMatchDay
+    ? await getBets(previousMatchDay.id, profile.id)
+    : [];
+  const hasUserSetBonus = currentMatchDay
+    ? await hasUserSetBonusInThisRound(
+        currentMatchDay.id,
+        currentMatchDay.roundId,
+        profile.id,
+      )
+    : false;
 
   return (
     <>

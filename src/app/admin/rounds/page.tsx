@@ -1,5 +1,8 @@
-import { getRounds } from "@/lib/actions/rounds";
 import Link from "next/link";
+import {
+  removeRound,
+  getRounds,
+} from "@/modules/admin/round-match-management/round.actions";
 
 const RoundsPage = async () => {
   const rounds = await getRounds();
@@ -65,8 +68,12 @@ const RoundsPage = async () => {
                   </th>
                   <td className="px-6 py-4">{round.stage}</td>
                   <td className="px-6 py-4">{round.scoreFactor}</td>
-                  <td className="px-6 py-4">
+                  <td className="flex gap-2 px-6 py-4">
                     <Link href={`/admin/rounds/${round.id}/edit`}>Edit</Link>
+                    <form action={removeRound}>
+                      <input type="hidden" name="id" value={round.id} />
+                      <button type="submit">Delete</button>
+                    </form>
                   </td>
                 </tr>
               ))}
