@@ -93,16 +93,15 @@ export const getBets = async (
 };
 
 export const hasUserSetBonusInThisRound = async (
-  currentMatchDay: IMatchDay,
+  matchDayId: string,
+  roundId: string,
   userId: string,
 ): Promise<boolean> => {
   try {
     await connectDB();
 
-    if (!currentMatchDay) return false;
-
     const bets = await Bet.find({ user: userId });
-    const matches = await Match.find({ round: currentMatchDay.round });
+    const matches = await Match.find({ round: roundId });
 
     const matchIds = matches.map((match) => match.id);
     const betsForRound = bets.filter((bet) =>
@@ -110,8 +109,7 @@ export const hasUserSetBonusInThisRound = async (
     );
 
     return betsForRound.some(
-      (bet) =>
-        bet.result.bonus && bet.matchDay.toString() !== currentMatchDay.id,
+      (bet) => bet.result.bonus && bet.matchDay.toString() !== matchDayId,
     );
   } catch (error) {
     throw new Error("failed to fetch bonus");

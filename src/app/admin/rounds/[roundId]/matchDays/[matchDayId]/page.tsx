@@ -1,18 +1,14 @@
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { getMatches } from "@/lib/actions/match";
 import { Results } from "@/components/admin/rounds/match-days/results";
-import { getMatchDaysInRound } from "@/lib/actions/matchDays";
 import Link from "next/link";
+import { getMatchDay } from "@/modules/admin/round-match-management/match-day.actions";
 
 const EditMatchDayPage = async ({ params }: Params) => {
-  const matchDays = await getMatchDaysInRound(params.roundId);
+  const matchDay = await getMatchDay(params.matchDayId);
   const matches = await getMatches(params.matchDayId);
 
-  const matchDayNumber = matchDays.find(
-    (matchDay) => matchDay.id === params.matchDayId,
-  )?.dayNumber;
-
-  const header = `Match Day ${matchDayNumber}`;
+  const header = `Match Day ${matchDay.dayNumber}`;
 
   return (
     <div>

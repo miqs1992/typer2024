@@ -1,7 +1,13 @@
-import { getMatchDaysInRound } from "@/lib/actions/matchDays";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
-import { getRound } from "@/lib/actions/rounds";
 import Link from "next/link";
+import {
+  getRound,
+  removeRound,
+} from "@/modules/admin/round-match-management/round.actions";
+import {
+  getMatchDaysInRound,
+  removeMatchDay,
+} from "@/modules/admin/round-match-management/match-day.actions";
 
 const RoundPage = async ({ params }: Params) => {
   const round = await getRound(params.roundId);
@@ -77,12 +83,17 @@ const RoundPage = async ({ params }: Params) => {
                 </th>
                 <td className="px-6 py-4">{day.stopBetTime.toISOString()}</td>
                 <td className="px-6 py-4">TBD</td>
-                <td className="px-6 py-4">
+                <td className="flex gap-2 px-6 py-4">
                   <Link
                     href={`/admin/rounds/${round.id}/matchDays/${day.id}/edit`}
                   >
                     Edit
                   </Link>
+                  <form action={removeMatchDay}>
+                    <input type="hidden" name="id" value={day.id} />
+                    <input type="hidden" name="roundId" value={round.id} />
+                    <button type="submit">Delete</button>
+                  </form>
                 </td>
               </tr>
             ))}
