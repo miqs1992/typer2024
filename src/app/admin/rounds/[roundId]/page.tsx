@@ -1,15 +1,12 @@
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import Link from "next/link";
-import {
-  getRound,
-  removeRound,
-} from "@/modules/admin/round-match-management/round.actions";
+import { getRound } from "@/modules/admin/round-match-management/round.actions";
 import {
   getMatchDaysInRound,
   removeMatchDay,
 } from "@/modules/admin/round-match-management/match-day.actions";
+import { RoundParams } from "@/app/admin/rounds/[roundId]/round.params";
 
-const RoundPage = async ({ params }: Params) => {
+const RoundPage = async ({ params }: RoundParams) => {
   const round = await getRound(params.roundId);
   const matchDays = await getMatchDaysInRound(params.roundId);
 

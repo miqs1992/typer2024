@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { getTeam } from "@/lib/actions/teams";
 import TeamForm from "@/components/admin/teams/teamForm";
+import { TeamParams } from "@/app/admin/teams/[teamId]/team.params";
 
-const EditTeamPage = async ({ params }: Params) => {
+const EditTeamPage = async ({ params }: TeamParams) => {
   const team = await getTeam(params.teamId);
 
   return (

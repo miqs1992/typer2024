@@ -1,8 +1,8 @@
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import Link from "next/link";
 import PlayerForm from "@/components/admin/teams/players/playerForm";
+import { TeamParams } from "@/app/admin/teams/[teamId]/team.params";
 
-const NewPlayerPage = async ({ params }: Params) => {
+const NewPlayerPage = async ({ params }: TeamParams) => {
   const teamId = params.teamId;
   return (
     <div>

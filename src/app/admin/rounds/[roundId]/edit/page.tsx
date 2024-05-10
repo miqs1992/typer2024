@@ -1,9 +1,9 @@
 import Link from "next/link";
 import RoundForm from "@/components/admin/rounds/round-form";
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { getRound } from "@/modules/admin/round-match-management/round.actions";
+import { RoundParams } from "@/app/admin/rounds/[roundId]/round.params";
 
-const EditRoundPage = async ({ params }: Params) => {
+const EditRoundPage = async ({ params }: RoundParams) => {
   const round = await getRound(params.roundId);
 
   return (

@@ -1,9 +1,9 @@
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { getMatchDay } from "@/modules/admin/round-match-management/match-day.actions";
+import { MatchDayParams } from "@/app/match-day/[matchDayId]/match-day.params";
 
-const MatchDayPage = async ({ params }: Params) => {
+const MatchDayPage = async ({ params }: MatchDayParams) => {
   // TODO: Not admin action
-  const matchDay = await getMatchDay(params.id);
+  const matchDay = await getMatchDay(params.matchDayId);
 
   return (
     <div className="relative my-4 mb-12 text-center text-3xl text-white">

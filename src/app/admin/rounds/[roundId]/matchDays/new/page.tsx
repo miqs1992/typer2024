@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import MatchDayForm from "@/components/admin/rounds/match-days/match-day-form";
+import { RoundParams } from "@/app/admin/rounds/[roundId]/round.params";
 
-const NewMatchDayPage = async ({ params }: Params) => {
+const NewMatchDayPage = async ({ params }: RoundParams) => {
   return (
     <div>
       <div className="relative my-4 mb-12 text-center text-3xl text-white">
