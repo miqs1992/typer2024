@@ -24,7 +24,9 @@ export default async function RootLayout({
       <body className={inter.className}>
         <div className="min-w-screen min-h-screen bg-gray-900">
           {session ? <Navigation /> : null}
-          <main className="align-center mt-[66px] flex w-full justify-center p-8">
+          <main
+            className={`align-center relative flex w-full justify-center p-8 ${session ? "mt-[66px]" : ""}`}
+          >
             <div className="w-full max-w-[1200px]">{children}</div>
           </main>
         </div>

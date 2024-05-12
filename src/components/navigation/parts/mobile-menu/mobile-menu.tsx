@@ -2,6 +2,7 @@
 
 import { useClickOutside } from "@/hooks/use-click-outside";
 import { useEffect, useRef, useState } from "react";
+import { handleLogout } from "@/lib/actions/session";
 import { NavLink } from "../nav-link";
 import { usePathname } from "next/navigation";
 import * as Accordion from "@radix-ui/react-accordion";
@@ -61,7 +62,7 @@ export const MobileMenu = ({
             onClick={() => setIsOpen(false)}
           ></div>
           <div
-            className="fixed right-0 top-[57px] z-50 w-[80%]"
+            className="fixed right-0 top-[56px] z-50 w-[80%]"
             id="navbar-hamburger"
           >
             <ul
@@ -107,6 +108,11 @@ export const MobileMenu = ({
                 </Accordion.Item>
               </Accordion.Root>
               <NavLink to="/profile" label="Profile" />
+              <form action={handleLogout}>
+                <button className="block rounded px-3 py-2 font-light text-gray-900 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-blue-300 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent md:dark:hover:text-blue-300">
+                  Logout
+                </button>
+              </form>
             </ul>
           </div>
         </>
