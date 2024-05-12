@@ -10,7 +10,7 @@ const TeamsPage = async () => {
       <div className="relative my-4 mb-12 text-center text-3xl text-white">
         <h1 className="inline-block">Teams</h1>
       </div>
-      <div className="relative flex w-full max-w-screen-xl flex-wrap items-center justify-between overflow-x-auto sm:rounded-lg">
+      <div className="relative flex w-full max-w-screen-xl flex-wrap items-center justify-between overflow-x-auto rounded-lg">
         <div className="relative w-full overflow-hidden bg-white shadow-md dark:bg-gray-800">
           <div className="flex-row items-center justify-between space-y-3 p-4 sm:flex sm:space-x-4 sm:space-y-0">
             <div>

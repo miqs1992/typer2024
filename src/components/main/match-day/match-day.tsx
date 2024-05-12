@@ -82,7 +82,7 @@ export const MatchDay = ({
           {headingLabel}
         </h3>
       </div>
-      <div className="relative w-full overflow-x-auto shadow-[rgba(0,_0,_0,_0.24)_0px_0px_8px] shadow-gray-600 sm:rounded-lg">
+      <div className="relative w-full overflow-x-auto rounded-lg shadow-[rgba(0,_0,_0,_0.24)_0px_0px_8px] shadow-gray-600">
         <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
           <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -124,7 +124,10 @@ export const MatchDay = ({
                   className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
                   key={index}
                 >
-                  <td scope="row" className="whitespace-nowrap px-6 py-4">
+                  <td
+                    scope="row"
+                    className="whitespace-nowrap px-4 py-2 lg:px-6 lg:py-4"
+                  >
                     <div className="flex items-center justify-center gap-2">
                       {bet.match.firstTeam.name}
                       <FlagIcon country={bet.match.firstTeam.flag} />
@@ -132,7 +135,7 @@ export const MatchDay = ({
                   </td>
                   <td
                     scope="row flex"
-                    className="flex h-full items-center justify-center gap-2 whitespace-nowrap px-6 py-4"
+                    className="flex h-full items-center justify-center gap-2 whitespace-nowrap px-4 py-2 lg:px-6 lg:py-4"
                   >
                     <div className="flex space-x-2 rtl:space-x-reverse">
                       <div className="flex items-center justify-center">
@@ -144,7 +147,7 @@ export const MatchDay = ({
                           data-focus-input-init
                           data-focus-input-next="code-2"
                           id="code-1"
-                          className={`block h-9 w-9  rounded-lg border-2 border-gray-300 bg-white py-3 text-center text-sm font-extrabold text-gray-900 outline-none focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500 [&::-webkit-inner-spin-button]:appearance-none ${previous ? "border-none dark:bg-gray-800" : ""}`}
+                          className={`block h-9 w-9 rounded-lg border-2 border-gray-300 bg-white py-3 text-center text-sm font-extrabold text-gray-900 outline-none focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500 [&::-webkit-inner-spin-button]:appearance-none ${previous ? "border-none dark:bg-gray-800" : ""}`}
                           required
                           onFocus={(v) => onInputChange("", index, "firstTeam")}
                           onChange={(v) =>
@@ -175,7 +178,10 @@ export const MatchDay = ({
                       </div>
                     </div>
                   </td>
-                  <td scope="row" className="whitespace-nowrap px-6 py-4">
+                  <td
+                    scope="row"
+                    className="whitespace-nowrap px-4 py-2 lg:px-6 lg:py-4"
+                  >
                     <div className="flex items-center justify-center gap-2">
                       <FlagIcon country={bet.match.secondTeam.flag} />
                       {bet.match.secondTeam.name}
@@ -184,7 +190,7 @@ export const MatchDay = ({
                   {previous ? (
                     <td
                       scope="row"
-                      className="flex items-center justify-center whitespace-nowrap px-6 py-4 font-bold"
+                      className="flex items-center justify-center whitespace-nowrap px-4 py-2 font-bold lg:px-6 lg:py-4"
                     >
                       {bet.points.toFixed(2)}
                     </td>
@@ -192,7 +198,7 @@ export const MatchDay = ({
                   {isEditable ? (
                     <td
                       scope="row"
-                      className="flex items-center justify-center whitespace-nowrap px-6 py-4 font-bold"
+                      className="flex items-center justify-center whitespace-nowrap px-4 py-2 font-bold lg:px-6 lg:py-4"
                     >
                       <Tooltip
                         text="You have already used the bonus in this round."
