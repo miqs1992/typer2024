@@ -30,7 +30,6 @@ const userSchema = new mongoose.Schema<IUser>(
     topScorer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: Player,
-      required: true,
     },
   },
   { timestamps: true },
