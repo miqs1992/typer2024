@@ -26,13 +26,16 @@ export const TopScorers = ({
         <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
           <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th scope="col" className="text-md px-6 py-3 font-bold">
+              <th
+                scope="col"
+                className="text-md px-6 py-3 text-center font-bold"
+              >
                 Name
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-6 py-3 text-center">
                 {isMobile ? "G." : "Goals"}
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-6 py-3 text-center">
                 {isMobile ? "A." : "Assists"}
               </th>
             </tr>
@@ -55,12 +58,16 @@ export const TopScorers = ({
                   >
                     <th
                       scope="row"
-                      className={`flex gap-3 whitespace-nowrap px-6 py-4 font-bold ${textColor()}`}
+                      className={`flex gap-3 whitespace-nowrap px-6 py-4 font-bold ${textColor()} items-center justify-center`}
                     >
                       {<FlagIcon country={team} />} {name}
                     </th>
-                    <td className={`px-6 py-4 ${textColor()}`}>{goals}</td>
-                    <td className={`px-6 py-4 ${textColor()}`}>{assists}</td>
+                    <td className={`px-6 py-4 ${textColor()} text-center`}>
+                      {goals}
+                    </td>
+                    <td className={`px-6 py-4 ${textColor()} text-center`}>
+                      {assists}
+                    </td>
                   </tr>
                 );
               })}

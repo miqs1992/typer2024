@@ -94,9 +94,9 @@ export const MobileMenu = ({
                   <Accordion.Content>
                     <ul className="py-0 text-sm text-gray-700 dark:text-gray-400">
                       {matchDays.map((matchDay) => (
-                        <li key={`/matchDay/${matchDay.id}`}>
+                        <li key={`/match-day/${matchDay.id}`}>
                           <Link
-                            href={`/matchDay/${matchDay.id}`}
+                            href={`/match-day/${matchDay.id}`}
                             className={`block px-4 py-2 text-gray-400 lg:hover:bg-gray-100 lg:dark:hover:bg-gray-600 lg:dark:hover:text-white ${pathname === `/matchDay/${matchDay.id}` ? "dark:text-blue-400" : ""}`}
                           >
                             {`Match Day ${matchDay.dayNumber}`}

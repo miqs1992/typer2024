@@ -5,7 +5,6 @@ import connectDB from "../../../config/database";
 import { Bet, IBet } from "../models/bet";
 import { Match, IMatch } from "../models/match";
 import { RequestState } from "./state";
-import { IMatchDay } from "../models/matchDay";
 
 export const updateBets = async (
   previousState: RequestState | undefined,
@@ -87,6 +86,15 @@ export const getBets = async (
     revalidatePath("/");
 
     return bets;
+  } catch (error) {
+    throw new Error("failed to fetch bets");
+  }
+};
+
+export const getAllBetsForMatch = async (matchId: string): Promise<IBet[]> => {
+  try {
+    await connectDB();
+    return await Bet.find({ match: matchId }).populate("user");
   } catch (error) {
     throw new Error("failed to fetch bets");
   }

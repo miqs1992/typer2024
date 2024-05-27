@@ -34,16 +34,22 @@ export const Ranking = ({
         <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
           <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th scope="col" className="text-md px-6 py-3 font-bold">
+              <th
+                scope="col"
+                className="text-md px-6 py-3 text-center font-bold"
+              >
                 No.
               </th>
-              <th scope="col" className="text-md px-6 py-3 font-bold">
+              <th
+                scope="col"
+                className="text-md px-6 py-3 text-center font-bold"
+              >
                 Name
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-6 py-3 text-center">
                 Points
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-6 py-3 text-center">
                 Exact
               </th>
               {showExtended ? (
@@ -71,23 +77,27 @@ export const Ranking = ({
 
                 return (
                   <tr
-                    className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
+                    className="border-b bg-white text-center dark:border-gray-700 dark:bg-gray-800"
                     key={name}
                   >
                     <th
                       scope="row"
-                      className={`font-bol whitespace-nowrap px-6 py-4 ${textColor()}`}
+                      className={`font-bol whitespace-nowrap px-6 py-4 ${textColor()} text-center`}
                     >
                       {index + 1}
                     </th>
                     <th
                       scope="row"
-                      className={`font-bol whitespace-nowrap px-6 py-4 ${textColor()}`}
+                      className={`font-bol whitespace-nowrap px-6 py-4 ${textColor()} text-center`}
                     >
                       {name}
                     </th>
-                    <td className={`px-6 py-4 ${textColor()}`}>{points}</td>
-                    <td className={`px-6 py-4 ${textColor()}`}>{exactBets}</td>
+                    <td className={`px-6 py-4 ${textColor()} text-center`}>
+                      {points}
+                    </td>
+                    <td className={`px-6 py-4 ${textColor()} text-center`}>
+                      {exactBets}
+                    </td>
 
                     {showExtended ? (
                       <>
