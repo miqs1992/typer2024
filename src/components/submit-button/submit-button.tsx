@@ -21,7 +21,7 @@ export const SubmitButton = ({
     <button
       type="submit"
       disabled={status.pending || isSuccess}
-      className={`flex ${fullWidth ? "w-full" : ""} items-center justify-center rounded-lg bg-primary-700 px-4 py-2 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 ${status.pending ? "cursor-not-allowed dark:bg-primary-800" : isSuccess ? "dark:bg-green-600" : "dark:bg-primary-600"} ${isSuccess ? "bg-green-600" : ""} dark:hover:bg-primary-700 dark:focus:ring-primary-800`}
+      className={`flex ${fullWidth ? "w-full" : ""} items-center justify-center rounded-lg bg-primary-700 px-4 py-2 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 ${status.pending ? "cursor-not-allowed dark:bg-primary-800" : isSuccess ? "dark:bg-green-600" : "dark:bg-primary-600"} ${isSuccess ? "bg-green-600" : ""} ${!status.pending && !isSuccess ? "dark:lg:hover:bg-primary-700 dark:lg:focus:ring-primary-800" : ""}`}
     >
       {status.pending ? (
         <Image

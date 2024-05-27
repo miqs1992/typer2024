@@ -99,3 +99,26 @@ export const searchPlayers = async (inputValue: string): Promise<IPlayer[]> => {
     throw new Error("failed to search players");
   }
 };
+
+export const getFiveTopScorers = async (): Promise<IPlayer[]> => {
+  try {
+    await connectDB();
+    const topFive = await Player.find()
+      .sort({ goals: -1, assists: -1 })
+      .limit(5)
+      .populate("team");
+
+    return topFive.map((player) => {
+      return {
+        id: player.id,
+        name: player.name,
+        goals: player.goals,
+        assists: player.assists,
+        team: player.team,
+      };
+    });
+  } catch (error) {
+    console.log(error);
+    throw new Error("failed to fetch top scorers");
+  }
+};

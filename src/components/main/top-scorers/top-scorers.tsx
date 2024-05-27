@@ -2,10 +2,11 @@
 
 import FlagIcon from "@/components/flagIcon/flag-icon";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { NameAndFlag } from "../ranking/ranking";
 
-interface TopScorers {
+export interface TopScorers {
   name: string;
-  team: string;
+  team: NameAndFlag;
   goals: number;
   assists: number;
 }
@@ -26,6 +27,12 @@ export const TopScorers = ({
         <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
           <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
             <tr>
+              <th
+                scope="col"
+                className="text-md px-6 py-3 text-center font-bold"
+              >
+                No.
+              </th>
               <th
                 scope="col"
                 className="text-md px-6 py-3 text-center font-bold"
@@ -56,11 +63,14 @@ export const TopScorers = ({
                     className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
                     key={name}
                   >
+                    <td className={`px-6 py-4 ${textColor()} text-center`}>
+                      {index + 1}
+                    </td>
                     <th
                       scope="row"
                       className={`flex gap-3 whitespace-nowrap px-6 py-4 font-bold ${textColor()} items-center justify-center`}
                     >
-                      {<FlagIcon country={team} />} {name}
+                      {<FlagIcon country={team.flag} />} {name}
                     </th>
                     <td className={`px-6 py-4 ${textColor()} text-center`}>
                       {goals}

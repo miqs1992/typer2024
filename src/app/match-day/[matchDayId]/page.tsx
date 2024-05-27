@@ -22,7 +22,7 @@ const MatchDayPage = async ({ params }: any) => {
   const { stopBetTime } = matchDay;
 
   return (
-    <div className="relative my-4 mb-12 text-center text-3xl text-white">
+    <div className="relative my-4 mb-12 text-center text-3xl font-bold text-white">
       <h1 className="mb-10 inline-block">Match Day {matchDay.dayNumber}</h1>
       {stopBetTime < currentDate ? (
         <PastMatchDay matches={matches} />

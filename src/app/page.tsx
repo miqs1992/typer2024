@@ -1,4 +1,3 @@
-import { mockedRanking, mockedTopScorers } from "../../mocks/data";
 import { TopScorers } from "@/components/main/top-scorers/top-scorers";
 import { getMatchDayByTimeframe } from "@/modules/matches/match-day.actions";
 import { MatchDay } from "@/components/main/match-day/match-day";
@@ -7,9 +6,11 @@ import Alert from "@/components/alert/alert";
 import Link from "next/link";
 import { isBeforeFirstMatch } from "../../config/firstMatchStart";
 import { getCurrentProfile } from "@/lib/actions/profile";
-import { Ranking } from "@/components/main/ranking/ranking";
+import { Ranking, RankingData } from "@/components/main/ranking/ranking";
 import { EmptyMatchDay } from "@/components/main/match-day/empty-match.day";
 import { MatchDayTimeframe } from "@/modules/matches/match-day.service";
+import { getUsers } from "@/lib/actions/user";
+import { getFiveTopScorers } from "@/lib/actions/players";
 
 const Home = async () => {
   const profile = await getCurrentProfile();
@@ -36,9 +37,13 @@ const Home = async () => {
         profile.id,
       )
     : false;
+  const usersData = await getUsers();
+  const topScorersData = await getFiveTopScorers();
+
+  console.log(topScorersData);
 
   return (
-    <>
+    <div className="mt-6 lg:mt-12">
       {showAlert && (
         <Alert>
           <span className="text-md">
@@ -79,14 +84,21 @@ const Home = async () => {
         </div>
         <div className="flex flex-col gap-10 lg:flex-row lg:gap-20">
           <div className="w-full lg:w-[50%]">
-            <Ranking rankingData={mockedRanking} showExtended={false} />
+            <Ranking
+              rankingData={usersData as unknown as RankingData[]}
+              showExtended={false}
+            />
           </div>
           <div className="w-full lg:w-[50%]">
-            <TopScorers topScorersData={mockedTopScorers} />
+            <TopScorers
+              topScorersData={JSON.parse(
+                JSON.stringify(topScorersData as unknown as TopScorers[]),
+              )}
+            />
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default Home;
