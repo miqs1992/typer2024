@@ -47,7 +47,6 @@ export class MatchManagementService extends AdminService {
       .sort({ start: 1 })
       .populate("firstTeam")
       .populate("secondTeam")
-      .lean()
       .then((matches) => {
         return matches.map((match) => this.parseMatch(match));
       });

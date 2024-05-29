@@ -1,9 +1,9 @@
-import { getMatches } from "@/lib/actions/match";
 import { PastMatchDay } from "@/components/main/past-match-day/past-match-day";
 import { getMatchDay } from "@/modules/admin/round-match-management/match-day.actions";
 import { MatchDay } from "@/components/main/match-day/match-day";
 import { getBets, hasUserSetBonusInThisRound } from "@/lib/actions/bet";
 import { getCurrentProfile } from "@/lib/actions/profile";
+import { getMatchesInDay } from "@/modules/admin/round-match-management/match.actions";
 
 const currentDate = new Date();
 
@@ -11,7 +11,7 @@ const MatchDayPage = async ({ params }: any) => {
   // TODO: Not admin action
   const profile = await getCurrentProfile();
   const matchDay = await getMatchDay(params.matchDayId);
-  const matches = await getMatches(params.matchDayId);
+  const matches = await getMatchesInDay(params.matchDayId);
   const bets = await getBets(params.matchDayId, profile.id);
   const hasUserSetBonus = await hasUserSetBonusInThisRound(
     matchDay.id,

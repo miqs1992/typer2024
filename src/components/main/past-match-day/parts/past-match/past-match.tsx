@@ -1,8 +1,9 @@
 import FlagIcon from "@/components/flagIcon/flag-icon";
 import { getAllBetsForMatch } from "@/lib/actions/bet";
 import { IMatch } from "@/lib/models/match";
+import { PersistedMatch } from "@/modules/admin/round-match-management/match-management.service";
 
-export const PastMatch = async ({ match }: { match: IMatch }) => {
+export const PastMatch = async ({ match }: { match: PersistedMatch }) => {
   const bets = await getAllBetsForMatch(match.id);
 
   return (
@@ -22,8 +23,7 @@ export const PastMatch = async ({ match }: { match: IMatch }) => {
             >
               <div className="flex items-center justify-center gap-2 whitespace-nowrap">
                 <FlagIcon country={match.firstTeam.flag} />
-                {match.finalResult.firstTeamResult} -{" "}
-                {match.finalResult.secondTeamResult}{" "}
+                {`${match.firstTeamScore} - ${match.secondTeamScore}`}
                 <FlagIcon country={match.secondTeam.flag} />
               </div>
             </th>
