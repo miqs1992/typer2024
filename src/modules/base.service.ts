@@ -6,8 +6,10 @@ type StaticThis<T> = { new (session: Session): T };
 
 export abstract class BaseService {
   protected currentUser: User;
+  protected session: Session;
 
   constructor(currentSession: Session) {
+    this.session = currentSession;
     this.currentUser = currentSession.user;
   }
 

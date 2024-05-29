@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getMatchDay } from "@/modules/admin/round-match-management/match-day.actions";
 import { MatchDayParams } from "@/app/admin/rounds/[roundId]/matchDays/[matchDayId]/match-day.params";
 import { getMatchesInDay } from "@/modules/admin/round-match-management/match.actions";
+import { calculateDayResults } from "@/modules/admin/calculations/calculation.actions";
 
 const EditMatchDayPage = async ({ params }: MatchDayParams) => {
   const matchDay = await getMatchDay(params.matchDayId);
@@ -27,25 +28,32 @@ const EditMatchDayPage = async ({ params }: MatchDayParams) => {
             <div>
               <h5 className="mr-3 font-semibold dark:text-white">Matches</h5>
             </div>
-            <button
-              type="button"
-              className="flex items-center justify-center rounded-lg bg-primary-700 px-4 py-2 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="-ml-1 mr-2 h-3.5 w-3.5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
+            <div className="flex gap-2">
+              <button
+                type="button"
+                className="flex items-center justify-center rounded-lg bg-primary-700 px-4 py-2 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
-                <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
-              </svg>
-              <Link
-                href={`/admin/rounds/${params.roundId}/matchDays/${params.matchDayId}/match/new`}
-              >
-                Add new match
-              </Link>
-            </button>
+                <Link
+                  href={`/admin/rounds/${params.roundId}/matchDays/${params.matchDayId}/match/new`}
+                >
+                  Add new match
+                </Link>
+              </button>
+              <form action={calculateDayResults}>
+                <input type="hidden" name="roundId" value={params.roundId} />
+                <input
+                  type="hidden"
+                  name="matchDayId"
+                  value={params.matchDayId}
+                />
+                <button
+                  type="submit"
+                  className="flex items-center justify-center rounded-lg bg-primary-700 px-4 py-2 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                >
+                  Recalculate
+                </button>
+              </form>
+            </div>
           </div>
         </div>
         <Results

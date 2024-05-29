@@ -1,6 +1,6 @@
-import { IMatch } from "@/lib/models/match";
 import { PastMatch } from "./parts/past-match/past-match";
+import { PersistedMatch } from "@/modules/admin/round-match-management/match-management.service";
 
-export const PastMatchDay = ({ matches }: { matches: IMatch[] }) => {
+export const PastMatchDay = ({ matches }: { matches: PersistedMatch[] }) => {
   return matches.map((match) => <PastMatch match={match} key={match.id} />);
 };
