@@ -1,18 +1,22 @@
 "use client";
 
-import { editMatch } from "@/lib/actions/match";
-import { IMatch } from "@/lib/models/match";
 import { useFormState } from "react-dom";
-import Form from "../../../../form/form";
+import Form from "@/components/form/form";
+import { PersistedMatch } from "@/modules/admin/round-match-management/match-management.service";
+import { setMatchResult } from "@/modules/admin/round-match-management/match.actions";
 
 interface FormProps {
-  match: IMatch & { _id: string };
+  match: PersistedMatch;
   matchDayId: string;
   roundId: string;
 }
 
-export const EditMatchForm = ({ match, matchDayId, roundId }: FormProps) => {
-  const [state, formAction] = useFormState(editMatch, undefined);
+export const SetMatchResultForm = ({
+  match,
+  matchDayId,
+  roundId,
+}: FormProps) => {
+  const [state, formAction] = useFormState(setMatchResult, undefined);
 
   return (
     <Form
@@ -25,7 +29,8 @@ export const EditMatchForm = ({ match, matchDayId, roundId }: FormProps) => {
       {state?.error && (
         <p className="text-xs italic text-red-500">{state.error}</p>
       )}
-      <input type="hidden" name="id" value={match._id} />
+      <input type="hidden" name="id" value={match.id} />
+      <input type="hidden" name="roundId" value={roundId} />
       <div className="mb-5">
         <label
           htmlFor="firstTeam"

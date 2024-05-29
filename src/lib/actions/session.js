@@ -27,8 +27,16 @@ export const handleRegistration = async (previousState, formData) => {
   const { username, email, password, passwordConfirmation } =
     Object.fromEntries(formData);
 
+  if (!password) {
+    return { error: "Password missing" };
+  }
+
+  if (password.length < 8) {
+    return { error: "Password must be at least 8 characters long" };
+  }
+
   if (password !== passwordConfirmation) {
-    return { error: "Passwords do not match!" };
+    return { error: "Passwords do not match" };
   }
 
   await connectDB();
@@ -36,7 +44,7 @@ export const handleRegistration = async (previousState, formData) => {
     const user = await User.findOne({ email });
 
     if (user) {
-      return { error: "User already exists!" };
+      return { error: "User already exists" };
     }
 
     const salt = await bcrypt.genSalt(10);
