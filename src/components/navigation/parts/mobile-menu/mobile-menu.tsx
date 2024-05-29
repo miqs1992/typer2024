@@ -48,9 +48,9 @@ export const MobileMenu = ({
         >
           <path
             stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
             d="M1 1h15M1 7h15M1 13h15"
           />
         </svg>
@@ -94,9 +94,9 @@ export const MobileMenu = ({
                   <Accordion.Content>
                     <ul className="py-0 text-sm text-gray-700 dark:text-gray-400">
                       {matchDays.map((matchDay) => (
-                        <li key={`/matchDay/${matchDay.id}`}>
+                        <li key={`/match-day/${matchDay.id}`}>
                           <Link
-                            href={`/matchDay/${matchDay.id}`}
+                            href={`/match-day/${matchDay.id}`}
                             className={`block px-4 py-2 text-gray-400 lg:hover:bg-gray-100 lg:dark:hover:bg-gray-600 lg:dark:hover:text-white ${pathname === `/matchDay/${matchDay.id}` ? "dark:text-blue-400" : ""}`}
                           >
                             {`Match Day ${matchDay.dayNumber}`}

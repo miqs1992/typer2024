@@ -29,6 +29,15 @@ const calculatePointsAndUpdateUser = async (
     points = 1 * ratio;
   }
 
+  if (
+    bet.result.firstTeamResult === firstTeamResult &&
+    bet.result.secondTeamResult === secondTeamResult
+  ) {
+    // tutaj bylo 3?
+    points * 3;
+    bet.isExact = true;
+  }
+
   bet.points = points;
   await bet.save();
 

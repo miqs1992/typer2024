@@ -10,10 +10,7 @@ import AsyncSelectInput, {
 } from "@/components/form/inputs/async-select-input";
 import { searchPlayers } from "@/lib/actions/players";
 import FlagIcon from "@/components/flagIcon/flag-icon";
-import {
-  COUNTRIES_MAPPER,
-  getIsoFromCountryName,
-} from "@/constants/countries-mapper";
+import { getIsoFromCountryName } from "@/constants/countries-mapper";
 
 interface FormProps {
   profile: Profile;

@@ -6,7 +6,6 @@ import { IBet } from "@/lib/models/bet";
 import { updateBets } from "@/lib/actions/bet";
 import { useFormState } from "react-dom";
 import { SubmitButton } from "../../submit-button/submit-button";
-import { SuccessToast } from "../../success-toast/success-toast";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { Tooltip } from "../../tooltip/tooltip";
 import Image from "next/image";
@@ -17,11 +16,13 @@ export const MatchDay = ({
   matchDayNumber,
   bets,
   disabledBonus = false,
+  hideHeading = false,
 }: {
-  matchDayNumber: number;
+  matchDayNumber?: number;
   bets: IBet[];
   disabledBonus?: boolean;
   previous?: boolean;
+  hideHeading?: boolean;
 }) => {
   const isEditable = !previous;
 
@@ -76,13 +77,14 @@ export const MatchDay = ({
 
   return (
     <>
-      {statusMessage ? <SuccessToast customMessage={statusMessage} /> : null}
-      <div>
-        <h3 className="mb-10 text-center text-3xl font-bold text-white">
-          {headingLabel}
-        </h3>
-      </div>
-      <div className="relative w-full overflow-x-auto rounded-lg shadow-[rgba(0,_0,_0,_0.24)_0px_0px_8px] shadow-gray-600">
+      {!hideHeading ? (
+        <div>
+          <h3 className="mb-10 text-center text-3xl font-bold text-white">
+            {headingLabel}
+          </h3>
+        </div>
+      ) : null}
+      <div className="relative grid w-full overflow-x-auto rounded-lg shadow-[rgba(0,_0,_0,_0.24)_0px_0px_8px] shadow-gray-600">
         <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
           <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -236,15 +238,15 @@ export const MatchDay = ({
         {isEditable ? (
           <form
             action={formAction}
-            className="flex-row items-center justify-between space-y-3 p-4 sm:flex sm:space-x-4 sm:space-y-0 dark:bg-gray-800"
+            className="flex flex-row items-center justify-between p-4 lg:justify-end dark:bg-gray-800"
           >
+            <SubmitButton isSuccess={!!statusMessage} />
             <div></div>
             <input
               type="hidden"
               name="betList"
               value={JSON.stringify(betList)}
             />
-            <SubmitButton />
           </form>
         ) : null}
       </div>
