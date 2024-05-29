@@ -1,13 +1,13 @@
-import { IMatch } from "@/lib/models/match";
-import FlagIcon from "../../../flagIcon/flag-icon";
+import FlagIcon from "@/components/flagIcon/flag-icon";
 import Link from "next/link";
+import { PersistedMatch } from "@/modules/admin/round-match-management/match-management.service";
 
 export const Results = ({
   matches,
   roundId,
   matchDayId,
 }: {
-  matches: IMatch[];
+  matches: PersistedMatch[];
   roundId: string;
   matchDayId: string;
 }) => {
@@ -36,7 +36,13 @@ export const Results = ({
                 new Date(b.start).getTime() - new Date(a.start).getTime(),
             )
             .map(
-              ({ firstTeam, secondTeam, finalResult, id: matchId }, index) => (
+              ({
+                firstTeam,
+                secondTeam,
+                id: matchId,
+                firstTeamScore,
+                secondTeamScore,
+              }) => (
                 <tr
                   className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
                   key={firstTeam.name}
@@ -51,8 +57,7 @@ export const Results = ({
                     scope="row flex"
                     className="flex h-full items-center justify-center gap-2 whitespace-nowrap px-6 py-4"
                   >
-                    {finalResult?.firstTeamResult} -{" "}
-                    {finalResult?.secondTeamResult}
+                    {`${firstTeamScore ?? "?"} - ${secondTeamScore ?? "?"}`}
                   </td>
                   <td scope="row" className="whitespace-nowrap px-6 py-4">
                     <div className="flex items-center justify-center gap-2">
@@ -62,12 +67,17 @@ export const Results = ({
                   </td>
                   <td
                     scope="row"
-                    className="flex items-center justify-center whitespace-nowrap px-6 py-4"
+                    className="flex items-center justify-center gap-3 whitespace-nowrap px-6 py-4"
                   >
+                    <Link
+                      href={`/admin/rounds/${roundId}/matchDays/${matchDayId}/match/${matchId}/edit`}
+                    >
+                      Edit details
+                    </Link>
                     <Link
                       href={`/admin/rounds/${roundId}/matchDays/${matchDayId}/match/${matchId}`}
                     >
-                      Edit
+                      Set Result
                     </Link>
                   </td>
                 </tr>

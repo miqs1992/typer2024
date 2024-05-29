@@ -10,10 +10,16 @@ import {
   createRound,
   editRound,
 } from "@/modules/admin/round-match-management/round.actions";
+import { SelectInput } from "@/components/form/inputs/select-input";
 
 interface FormProps {
   round?: IRound;
 }
+
+const stageOptions = [
+  { value: "group", label: "Group" },
+  { value: "knockout", label: "Knockout" },
+];
 
 const RoundForm = ({ round }: FormProps) => {
   const action = round ? editRound : createRound;
@@ -56,12 +62,18 @@ const RoundForm = ({ round }: FormProps) => {
         value={Number(formRound.order)}
         handleChange={handleFormChange}
       />
-      <NumberInput
+
+      <SelectInput
         field="stage"
         label="Stage"
-        value={Number(formRound.stage)}
-        handleChange={handleFormChange}
+        options={stageOptions}
+        defaultValue={
+          formRound.stage
+            ? stageOptions.find((option) => option.value === formRound.stage)
+            : undefined
+        }
       />
+
       <NumberInput
         field="scoreFactor"
         label="Factor"

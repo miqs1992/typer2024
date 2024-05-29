@@ -54,7 +54,7 @@ export const editMatchDay = async (
 export const removeMatchDay = async (formData: FormData): Promise<void> => {
   const { id, roundId } = Object.fromEntries(formData);
   if (!id || !roundId) {
-    throw new Error("Match Day ID is required");
+    throw new Error("Round and Match Day IDs are required");
   }
 
   try {
