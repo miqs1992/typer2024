@@ -41,7 +41,11 @@ const ProfileForm = ({ profile }: FormProps) => {
       return players.map((player) => {
         return {
           value: player.id,
-          label: player.name,
+          label: (
+            <div className="flex gap-2">
+              <FlagIcon country={player.team.flag} /> {player.name}
+            </div>
+          ),
         };
       });
     });
@@ -77,12 +81,24 @@ const ProfileForm = ({ profile }: FormProps) => {
       <AsyncSelectInput
         field="topScorerId"
         label="Top Scorer"
+        loadFunction={loadPlayers}
         defaultValue={
           profile.topScorer
-            ? { value: profile.topScorer.id, label: profile.topScorer.name }
+            ? {
+                value: profile.topScorer.id,
+                label: (
+                  <div className="flex gap-2">
+                    <FlagIcon
+                      country={getIsoFromCountryName(
+                        profile.topScorer.team.name,
+                      )}
+                    />
+                    {profile.topScorer.name}
+                  </div>
+                ),
+              }
             : undefined
         }
-        loadFunction={loadPlayers}
       />
     </Form>
   );

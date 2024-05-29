@@ -40,8 +40,6 @@ const Home = async () => {
   const usersData = await getUsers();
   const topScorersData = await getFiveTopScorers();
 
-  console.log(topScorersData);
-
   return (
     <div className="mt-6 lg:mt-12">
       {showAlert && (
