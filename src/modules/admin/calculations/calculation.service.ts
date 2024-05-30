@@ -68,8 +68,21 @@ export class CalculationService extends AdminService {
       return acc;
     }, {});
 
-    for (const [userId, { points, exactBetCount }] of Object.entries(results)) {
-      await User.findByIdAndUpdate(userId, { points, exactBetCount });
+    const sortedUsers = Object.entries(results).sort((a, b) => {
+      if (b[1].points !== a[1].points) {
+        return b[1].points - a[1].points;
+      } else {
+        return b[1].exactBetCount - a[1].exactBetCount;
+      }
+    });
+
+    for (let i = 0; i < sortedUsers.length; i++) {
+      const [userId, { points, exactBetCount }] = sortedUsers[i];
+      await User.findByIdAndUpdate(userId, {
+        points,
+        exactBetCount,
+        leagueRank: i + 1,
+      });
     }
   }
 

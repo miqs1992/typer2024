@@ -61,7 +61,10 @@ export const getCurrentProfile = async (): Promise<Profile> => {
         ? {
             name: user.topScorer.name,
             id: user.topScorer.id,
-            team: user.topScorer.team,
+            team: {
+              name: user.topScorer.team.name,
+              flag: user.topScorer.team.flag,
+            },
           }
         : null,
     };

@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import Joi from "joi";
-import { IRound } from "@/lib/models/round";
 
 export interface IMatchDay {
   id: string;

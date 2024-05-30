@@ -73,7 +73,7 @@ export const Ranking = ({
           </thead>
           <tbody>
             {rankingData
-              .sort((a, b) => b.leagueRank - a.leagueRank)
+              .sort((a, b) => a.leagueRank - b.leagueRank)
               .map(
                 (
                   { username, points, exactBetCount, topScorer, winner },
