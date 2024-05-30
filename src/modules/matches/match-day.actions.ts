@@ -30,3 +30,13 @@ export const getMatchDayByTimeframe = async (type: MatchDayTimeframe) => {
     throw new Error(`Failed to fetch ${type} match day`);
   }
 };
+
+export const getMatchDayById = async (id: string) => {
+  try {
+    const service = await getService();
+    return service.getMatchDayById(id);
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Failed to fetch match day with id: ${id}`);
+  }
+};

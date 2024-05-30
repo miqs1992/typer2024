@@ -1,16 +1,21 @@
 import { TopScorers } from "@/components/main/top-scorers/top-scorers";
 import { getMatchDayByTimeframe } from "@/modules/matches/match-day.actions";
-import { MatchDay } from "@/components/main/match-day/match-day";
-import { getBets, hasUserSetBonusInThisRound } from "@/lib/actions/bet";
+import { MyFutureMatchDay } from "@/components/main/my-match-day/my-future-match-day";
 import Alert from "@/components/alert/alert";
 import Link from "next/link";
 import { isBeforeFirstMatch } from "../../config/firstMatchStart";
 import { getCurrentProfile } from "@/lib/actions/profile";
 import { Ranking, RankingData } from "@/components/main/ranking/ranking";
-import { EmptyMatchDay } from "@/components/main/match-day/empty-match.day";
+import { EmptyMatchDay } from "@/components/main/my-match-day/empty-match.day";
 import { MatchDayTimeframe } from "@/modules/matches/match-day.service";
 import { getUsers } from "@/lib/actions/user";
 import { getFiveTopScorers } from "@/lib/actions/players";
+import {
+  getMyBetsForFutureMatchDay,
+  getMyBetsForPastMatchDay,
+  isBonusAvailableForMatchDay,
+} from "@/modules/betting/betting.actions";
+import { MyPastMatchDay } from "@/components/main/my-match-day/my-past-match-day";
 
 const Home = async () => {
   const profile = await getCurrentProfile();
@@ -25,22 +30,16 @@ const Home = async () => {
     MatchDayTimeframe.Previous,
   );
   const currentBets = currentMatchDay
-    ? await getBets(currentMatchDay.id, profile.id)
+    ? await getMyBetsForFutureMatchDay(currentMatchDay.id)
     : [];
   const previousBets = previousMatchDay
-    ? await getBets(previousMatchDay.id, profile.id)
+    ? await getMyBetsForPastMatchDay(previousMatchDay.id)
     : [];
-  const hasUserSetBonus = currentMatchDay
-    ? await hasUserSetBonusInThisRound(
-        currentMatchDay.id,
-        currentMatchDay.roundId,
-        profile.id,
-      )
+  const isBonusAvailable = currentMatchDay
+    ? await isBonusAvailableForMatchDay(currentMatchDay.id)
     : false;
   const usersData = await getUsers();
   const topScorersData = await getFiveTopScorers();
-
-  console.log(topScorersData);
 
   return (
     <div className="mt-6 lg:mt-12">
@@ -61,10 +60,9 @@ const Home = async () => {
         <div className="flex flex-col gap-10 lg:flex-row lg:gap-20">
           <div className="w-full lg:w-[50%]">
             {previousMatchDay ? (
-              <MatchDay
+              <MyPastMatchDay
                 matchDayNumber={previousMatchDay.dayNumber}
-                bets={JSON.parse(JSON.stringify(previousBets))}
-                previous
+                bets={previousBets}
               />
             ) : (
               <EmptyMatchDay previous />
@@ -72,10 +70,10 @@ const Home = async () => {
           </div>
           <div className="w-full lg:w-[50%]">
             {currentMatchDay ? (
-              <MatchDay
+              <MyFutureMatchDay
                 matchDayNumber={currentMatchDay.dayNumber}
-                bets={JSON.parse(JSON.stringify(currentBets))}
-                disabledBonus={hasUserSetBonus}
+                bets={currentBets}
+                disabledBonus={!isBonusAvailable}
               />
             ) : (
               <EmptyMatchDay />
