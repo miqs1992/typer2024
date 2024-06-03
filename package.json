@@ -15,6 +15,7 @@
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-tooltip": "^1.0.7",
     "bcryptjs": "^2.4.3",
+    "dayjs": "^1.11.11",
     "joi": "^17.13.1",
     "mongoose": "^8.2.3",
     "mongoose-sequence": "^6.0.1",

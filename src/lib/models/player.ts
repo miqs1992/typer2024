@@ -1,11 +1,15 @@
 import mongoose from "mongoose";
+import { Team } from "./team";
 
 export interface IPlayer {
   id: string;
   name: string;
   goals: number;
   assists: number;
-  team: mongoose.Types.ObjectId;
+  team: {
+    name: string;
+    flag: string;
+  };
 }
 
 const playerSchema = new mongoose.Schema<IPlayer>(

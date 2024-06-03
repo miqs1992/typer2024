@@ -6,6 +6,7 @@ import { auth } from "@/lib/auth";
 import { RequestState } from "@/lib/actions/state";
 import { revalidatePath } from "next/cache";
 import { isBeforeFirstMatch } from "../../../config/firstMatchStart";
+import { NameAndFlag } from "@/components/main/ranking/ranking";
 
 export interface Profile {
   id: string;
@@ -15,7 +16,7 @@ export interface Profile {
   leagueRank: number;
   exactBetCount: number;
   winner: { name: string; id: string } | null;
-  topScorer: { name: string; id: string } | null;
+  topScorer: { name: string; id: string; team: NameAndFlag } | null;
 }
 
 const getCurrentUserId = async () => {
@@ -35,7 +36,12 @@ export const getCurrentProfile = async (): Promise<Profile> => {
     const userId = await getCurrentUserId();
     const user = await User.findById(userId)
       .populate("winner")
-      .populate("topScorer");
+      .populate({
+        path: "topScorer",
+        populate: {
+          path: "team",
+        },
+      });
 
     if (!user) {
       throw new Error("user not profile");
@@ -52,7 +58,14 @@ export const getCurrentProfile = async (): Promise<Profile> => {
         ? { name: user.winner.name, id: user.winner.id }
         : null,
       topScorer: user.topScorer
-        ? { name: user.topScorer.name, id: user.topScorer.id }
+        ? {
+            name: user.topScorer.name,
+            id: user.topScorer.id,
+            team: {
+              name: user.topScorer.team.name,
+              flag: user.topScorer.team.flag,
+            },
+          }
         : null,
     };
   } catch (error) {
