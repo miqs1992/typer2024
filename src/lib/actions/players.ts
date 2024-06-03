@@ -4,6 +4,7 @@ import connectDB from "../../../config/database";
 import { IPlayer, Player } from "@/lib/models/player";
 import { RequestState } from "@/lib/actions/state";
 import { revalidatePath } from "next/cache";
+import { Team } from "../models/team";
 
 export const getPlayers = async (teamId: string): Promise<IPlayer[]> => {
   try {
@@ -40,7 +41,7 @@ export const createPlayer = async (
 
   try {
     await connectDB();
-    const newPlayer = new Player({ name, team: teamId });
+    const newPlayer = new Player({ name, teamId });
     await newPlayer.save();
     revalidatePath(`/admin/teams/${teamId}`);
     return { success: true };
@@ -87,13 +88,24 @@ export const searchPlayers = async (inputValue: string): Promise<IPlayer[]> => {
     const players = await Player.find({
       name: { $regex: inputValue, $options: "i" },
     }).limit(5);
-    return players.map((player) => ({
-      id: player.id,
-      name: player.name,
-      goals: player.goals,
-      assists: player.assists,
-      team: player.team.toString(),
-    }));
+
+    const newPlayers = await Promise.all(
+      players.map(async (player) => {
+        const team = await Team.findOne({ _id: player.team });
+        return {
+          id: player.id,
+          name: player.name,
+          goals: player.goals,
+          assists: player.assists,
+          team: {
+            team: team?.name,
+            flag: team?.flag,
+          },
+        };
+      }),
+    );
+
+    return newPlayers as unknown as IPlayer[];
   } catch (error) {
     console.log(error);
     throw new Error("failed to search players");

@@ -16,6 +16,7 @@ import {
   isBonusAvailableForMatchDay,
 } from "@/modules/betting/betting.actions";
 import { MyPastMatchDay } from "@/components/main/my-match-day/my-past-match-day";
+import { InfoTile } from "@/components/main/info-tile/info-tile";
 
 const Home = async () => {
   const profile = await getCurrentProfile();
@@ -57,6 +58,11 @@ const Home = async () => {
         </Alert>
       )}
       <div className="flex w-full flex-col gap-10 lg:gap-20">
+        <InfoTile
+          myPoints={profile.points}
+          myPlace={profile.leagueRank}
+          stopBetTime={currentMatchDay?.stopBetTime}
+        />
         <div className="flex flex-col gap-10 lg:flex-row lg:gap-20">
           <div className="w-full lg:w-[50%]">
             {previousMatchDay ? (

@@ -63,7 +63,7 @@ export const PastMatch = async ({ match }: { match: PersistedMatch }) => {
                     </p>
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 font-bold">
-                    {bet.points}
+                    {bet.points.toFixed(2)}
                   </td>
                 </tr>
               );
