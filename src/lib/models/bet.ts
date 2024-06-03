@@ -53,4 +53,6 @@ const betSchema = new mongoose.Schema<IBet>({
   },
 });
 
+betSchema.index({ match: 1, user: 1 }, { unique: true });
+
 export const Bet = mongoose.models?.Bet || mongoose.model("Bet", betSchema);

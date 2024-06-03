@@ -25,6 +25,20 @@ export class MatchDayService extends NonAdminService {
     }
   }
 
+  public async getMatchDayById(id: string): Promise<PublicMatchDay> {
+    let matchDay;
+    try {
+      matchDay = await MatchDay.findById(id);
+    } catch (error) {
+      console.log(error);
+      throw new ServiceError(`Failed to fetch match day with id: ${id}`);
+    }
+
+    if (!matchDay) throw new ServiceError(`Match day with id: ${id} not found`);
+
+    return this.parseMatchDay(matchDay);
+  }
+
   public async getMatchDayByTimeframe(
     type: MatchDayTimeframe,
   ): Promise<PublicMatchDay | null> {
