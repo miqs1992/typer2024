@@ -4,12 +4,13 @@ import { getMatchDay } from "@/modules/admin/round-match-management/match-day.ac
 import { MatchDayParams } from "@/app/admin/rounds/[roundId]/matchDays/[matchDayId]/match-day.params";
 import { getMatchesInDay } from "@/modules/admin/round-match-management/match.actions";
 import { calculateDayResults } from "@/modules/admin/calculations/calculation.actions";
+import { displayDate } from "@/tools/time-helpers";
 
 const EditMatchDayPage = async ({ params }: MatchDayParams) => {
   const matchDay = await getMatchDay(params.matchDayId);
   const matches = await getMatchesInDay(params.matchDayId);
 
-  const header = `Match Day ${matchDay.dayNumber}`;
+  const header = `Match Day ${matchDay.dayNumber} - ${displayDate(matchDay.stopBetTime)}`;
 
   return (
     <div>

@@ -15,6 +15,7 @@ import AsyncSelectInput, {
 import { searchTeams } from "@/lib/actions/teams";
 import FlagIcon from "@/components/flagIcon/flag-icon";
 import DateTimeInput from "@/components/form/inputs/date-time-input";
+import { convertToDateTimeLocalString } from "@/tools/time-helpers";
 
 interface FormProps {
   match?: PersistedMatch;
@@ -31,12 +32,12 @@ export const MatchForm = ({ match, matchDayId, roundId }: FormProps) => {
       ? {
           firstTeamId: match.firstTeam.id,
           secondTeamId: match.secondTeam.id,
-          start: match.start.toISOString().slice(0, 16),
+          start: convertToDateTimeLocalString(match.start),
         }
       : {
           firstTeamId: null,
           secondTeamId: null,
-          start: new Date().toISOString().slice(0, 16),
+          start: convertToDateTimeLocalString(new Date()),
         },
   );
 

@@ -1,6 +1,7 @@
 import FlagIcon from "@/components/flagIcon/flag-icon";
 import Link from "next/link";
 import { PersistedMatch } from "@/modules/admin/round-match-management/match-management.service";
+import { displayDateTime } from "@/tools/time-helpers";
 
 export const Results = ({
   matches,
@@ -25,6 +26,9 @@ export const Results = ({
             </th>
             <th scope="col" className="px-6 py-3 text-center"></th>
             <th scope="col" className="px-6 py-3 text-center">
+              Start time
+            </th>
+            <th scope="col" className="px-6 py-3 text-center">
               Actions
             </th>
           </tr>
@@ -42,6 +46,7 @@ export const Results = ({
                 id: matchId,
                 firstTeamScore,
                 secondTeamScore,
+                start,
               }) => (
                 <tr
                   className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -64,6 +69,12 @@ export const Results = ({
                       <FlagIcon country={secondTeam.flag} />
                       {secondTeam.name}
                     </div>
+                  </td>
+                  <td
+                    scope="row"
+                    className="whitespace-nowrap px-6 py-4 text-center"
+                  >
+                    {displayDateTime(start)}
                   </td>
                   <td
                     scope="row"
