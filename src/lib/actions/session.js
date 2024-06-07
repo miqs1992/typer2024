@@ -4,6 +4,7 @@ import connectDB from "../../../config/database";
 import { signIn, signOut } from "@/lib/auth";
 import { User } from "@/lib/models/user";
 import bcrypt from "bcryptjs";
+import { hashPassword } from "@/tools/password";
 
 export const handleLogin = async (previousState, formData) => {
   const { email, password } = Object.fromEntries(formData);
@@ -47,13 +48,10 @@ export const handleRegistration = async (previousState, formData) => {
       return { error: "User already exists" };
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
     const newUser = new User({
       email,
       username,
-      encryptedPassword: hashedPassword,
+      encryptedPassword: await hashPassword(password),
     });
 
     await newUser.save();
