@@ -47,6 +47,7 @@ const Navigation = async () => {
                 id="admin"
                 label="Admin"
                 links={[
+                  { to: "/admin/users", label: "Users" },
                   { to: "/admin/teams", label: "Team & players" },
                   { to: "/admin/rounds", label: "Rounds & matches" },
                 ]}
