@@ -5,6 +5,7 @@ import {
   removeMatchDay,
 } from "@/modules/admin/round-match-management/match-day.actions";
 import { RoundParams } from "@/app/admin/rounds/[roundId]/round.params";
+import { displayDateTime } from "@/tools/time-helpers";
 
 const RoundPage = async ({ params }: RoundParams) => {
   const round = await getRound(params.roundId);
@@ -78,7 +79,9 @@ const RoundPage = async ({ params }: RoundParams) => {
                     {day.dayNumber}
                   </Link>
                 </th>
-                <td className="px-6 py-4">{day.stopBetTime.toISOString()}</td>
+                <td className="px-6 py-4">
+                  {displayDateTime(day.stopBetTime)}
+                </td>
                 <td className="px-6 py-4">TBD</td>
                 <td className="flex gap-2 px-6 py-4">
                   <Link

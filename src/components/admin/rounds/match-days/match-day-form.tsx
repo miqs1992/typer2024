@@ -11,6 +11,7 @@ import {
   editMatchDay,
 } from "@/modules/admin/round-match-management/match-day.actions";
 import { PersistedMatchDay } from "@/modules/admin/round-match-management/match-day-management.service";
+import { convertToDateTimeLocalString } from "@/tools/time-helpers";
 
 interface FormProps {
   roundId: string;
@@ -24,11 +25,11 @@ const MatchDayForm = ({ roundId, matchDay }: FormProps) => {
     matchDay
       ? {
           dayNumber: matchDay.dayNumber,
-          stopBetTime: matchDay.stopBetTime.toISOString().slice(0, 16),
+          stopBetTime: convertToDateTimeLocalString(matchDay.stopBetTime),
         }
       : {
           dayNumber: 0,
-          stopBetTime: new Date().toISOString().slice(0, 16),
+          stopBetTime: convertToDateTimeLocalString(new Date()),
         },
   );
 

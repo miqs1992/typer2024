@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { NavDropdown } from "@/components/navigation/parts/nav-dropdown";
 import { getAllMatchDays } from "@/modules/matches/match-day.actions";
 import { MobileMenu } from "./parts/mobile-menu/mobile-menu";
+import { displayDate } from "@/tools/time-helpers";
 
 const Navigation = async () => {
   const matchDays = await getAllMatchDays();
@@ -39,7 +40,7 @@ const Navigation = async () => {
               label="Match Days"
               links={matchDays.map((matchDay) => ({
                 to: `/match-day/${matchDay.id}`,
-                label: `Match Day ${matchDay.dayNumber}`,
+                label: `MD ${matchDay.dayNumber} (${displayDate(matchDay.stopBetTime)})`,
               }))}
             />
             {session?.user?.isAdmin && (
