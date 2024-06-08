@@ -50,8 +50,8 @@ export const MyPastMatchDay = ({
                   className="whitespace-nowrap px-4 py-2 lg:px-6 lg:py-4"
                 >
                   <div className="flex items-center justify-center gap-2">
-                    <FlagIcon country={bet.match.firstTeam.flag} />
                     {bet.match.firstTeam.name}
+                    <FlagIcon country={bet.match.firstTeam.flag} />
                     {" -"}
                     <FlagIcon country={bet.match.secondTeam.flag} />
                     {bet.match.secondTeam.name}

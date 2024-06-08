@@ -29,9 +29,6 @@ export const InfoTile = ({ myPoints, myPlace, stopBetTime }: any) => {
             <th scope="col" className="px-6 py-3 text-center font-bold">
               Stop Bet Time
             </th>
-            {/* <th scope="col" className="px-6 py-3 text-center">
-                {isMobile ? "A." : "Assists"}
-              </th> */}
           </tr>
         </thead>
         <tbody>

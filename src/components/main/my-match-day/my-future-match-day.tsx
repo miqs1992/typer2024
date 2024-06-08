@@ -46,7 +46,7 @@ export const MyFutureMatchDay = ({
     setStatusMessage(state?.message);
     const timeout = setTimeout(() => {
       setStatusMessage("");
-    }, 3000);
+    }, 2000);
 
     return () => clearTimeout(timeout);
   }, [state]);

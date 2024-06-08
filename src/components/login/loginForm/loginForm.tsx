@@ -3,6 +3,7 @@
 import { useFormState } from "react-dom";
 import { handleLogin } from "@/lib/actions/session";
 import Link from "next/link";
+import { SubmitButton } from "@/components/submit-button/submit-button";
 
 const LoginForm = () => {
   const [state, formAction] = useFormState(handleLogin, undefined);
@@ -44,12 +45,7 @@ const LoginForm = () => {
           required
         />
       </div>
-      <button
-        type="submit"
-        className="w-full rounded-lg bg-primary-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-      >
-        Login
-      </button>
+      <SubmitButton text="Login" loadingText="Logging in..." fullWidth />
       <p className="text-sm font-light text-gray-500 dark:text-gray-400">
         Don’t have an account yet?
         <Link

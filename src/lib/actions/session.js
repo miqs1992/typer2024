@@ -3,7 +3,6 @@
 import connectDB from "../../../config/database";
 import { signIn, signOut } from "@/lib/auth";
 import { User } from "@/lib/models/user";
-import bcrypt from "bcryptjs";
 import { hashPassword } from "@/tools/password";
 
 export const handleLogin = async (previousState, formData) => {
