@@ -149,7 +149,7 @@ export const MyFutureMatchDay = ({
                         }
                         onChange={(v) =>
                           onResultInputChange(
-                            v.target.value,
+                            Number(v.target.value) >= 0 ? v.target.value : "",
                             index,
                             "firstTeam",
                           )
@@ -173,7 +173,7 @@ export const MyFutureMatchDay = ({
                         }
                         onChange={(v) =>
                           onResultInputChange(
-                            v.target.value,
+                            Number(v.target.value) >= 0 ? v.target.value : "",
                             index,
                             "secondTeam",
                           )

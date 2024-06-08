@@ -10,7 +10,7 @@ const ProfilePage = async () => {
       <h1 className="my-4 mb-8 text-center text-3xl font-bold text-gray-900 dark:text-white">
         Edit Profile
       </h1>
-      {isBeforeFirstMatch() && <ProfileForm profile={profile} />}
+      {isBeforeFirstMatch() && profile && <ProfileForm profile={profile} />}
     </>
   );
 };

@@ -46,8 +46,8 @@ export class UsersManagementService extends AdminService {
 
     return {
       ...this.parseUser(user),
-      winner: user.winner.name,
-      topScorer: user.topScorer.name,
+      winner: user?.winner?.name,
+      topScorer: user?.topScorer?.name,
     };
   };
 
