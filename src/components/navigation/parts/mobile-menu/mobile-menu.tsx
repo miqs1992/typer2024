@@ -11,8 +11,10 @@ import Link from "next/link";
 
 export const MobileMenu = ({
   matchDays,
+  isAdmin = false,
 }: {
   matchDays: Pick<IMatchDay, "id" | "dayNumber">[];
+  isAdmin?: boolean;
 }) => {
   const pathname = usePathname();
   const menuRef = useRef<HTMLDivElement>(null);
@@ -107,6 +109,58 @@ export const MobileMenu = ({
                   </Accordion.Content>
                 </Accordion.Item>
               </Accordion.Root>
+              {isAdmin ? (
+                <Accordion.Root className="w-full" type="single" collapsible>
+                  <Accordion.Item value="item-1">
+                    <Accordion.Trigger className="group flex h-[50px] w-full items-center rounded px-3 py-2 font-light text-white">
+                      <span className="block">Admin</span>
+                      <svg
+                        className="ms-2.5 h-2.5 w-2.5 group-aria-expanded:rotate-180"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 10 6"
+                      >
+                        <path
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="m1 1 4 4 4-4"
+                        />
+                      </svg>
+                    </Accordion.Trigger>
+                    <Accordion.Content>
+                      <ul className="py-0 text-sm text-gray-700 dark:text-gray-400">
+                        <li key={`/admin/users`}>
+                          <Link
+                            href={`/admin/users`}
+                            className={`block px-4 py-2 text-gray-400 lg:hover:bg-gray-100 lg:dark:hover:bg-gray-600 lg:dark:hover:text-white ${pathname === `/admin/users` ? "dark:text-blue-400" : ""}`}
+                          >
+                            Users
+                          </Link>
+                        </li>
+                        <li key={`/admin/teams`}>
+                          <Link
+                            href={`/admin/teams`}
+                            className={`block px-4 py-2 text-gray-400 lg:hover:bg-gray-100 lg:dark:hover:bg-gray-600 lg:dark:hover:text-white ${pathname === `/admin/teams` ? "dark:text-blue-400" : ""}`}
+                          >
+                            Teams & players
+                          </Link>
+                        </li>
+                        <li key={`/admin/rounds`}>
+                          <Link
+                            href={`/admin/rounds`}
+                            className={`block px-4 py-2 text-gray-400 lg:hover:bg-gray-100 lg:dark:hover:bg-gray-600 lg:dark:hover:text-white ${pathname === `/admin/rounds` ? "dark:text-blue-400" : ""}`}
+                          >
+                            Rounds & matches
+                          </Link>
+                        </li>
+                      </ul>
+                    </Accordion.Content>
+                  </Accordion.Item>
+                </Accordion.Root>
+              ) : null}
               <NavLink to="/profile" label="Profile" />
               <form action={handleLogout}>
                 <button className="block rounded px-3 py-2 font-light text-gray-900 hover:bg-gray-100 md:border-0 md:p-0 md:hover:bg-transparent md:hover:text-blue-300 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent md:dark:hover:text-blue-300">
