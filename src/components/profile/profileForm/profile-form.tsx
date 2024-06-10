@@ -10,7 +10,6 @@ import AsyncSelectInput, {
 } from "@/components/form/inputs/async-select-input";
 import { searchPlayers } from "@/lib/actions/players";
 import FlagIcon from "@/components/flagIcon/flag-icon";
-import { getIsoFromCountryName } from "@/constants/countries-mapper";
 
 interface FormProps {
   profile: Profile;
@@ -67,9 +66,7 @@ const ProfileForm = ({ profile }: FormProps) => {
                 value: profile.winner.id,
                 label: (
                   <div className="flex gap-2">
-                    <FlagIcon
-                      country={getIsoFromCountryName(profile.winner.name)}
-                    />
+                    <FlagIcon country={profile.winner.flag} />
                     {profile.winner.name}
                   </div>
                 ),
@@ -88,11 +85,7 @@ const ProfileForm = ({ profile }: FormProps) => {
                 value: profile.topScorer.id,
                 label: (
                   <div className="flex gap-2">
-                    <FlagIcon
-                      country={getIsoFromCountryName(
-                        profile.topScorer.team.name,
-                      )}
-                    />
+                    <FlagIcon country={profile.topScorer.team.flag} />
                     {profile.topScorer.name}
                   </div>
                 ),

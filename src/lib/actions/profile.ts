@@ -15,7 +15,7 @@ export interface Profile {
   points: number;
   leagueRank: number;
   exactBetCount: number;
-  winner: { name: string; id: string } | null;
+  winner: { name: string; id: string; flag: string } | null;
   topScorer: { name: string; id: string; team: NameAndFlag } | null;
 }
 
@@ -55,7 +55,7 @@ export const getCurrentProfile = async (): Promise<Profile> => {
       points: user.points,
       exactBetCount: user.exactBetCount,
       winner: user.winner
-        ? { name: user.winner.name, id: user.winner.id }
+        ? { name: user.winner.name, id: user.winner.id, flag: user.winner.flag }
         : null,
       topScorer: user.topScorer
         ? {
