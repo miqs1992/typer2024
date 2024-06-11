@@ -6,6 +6,7 @@ import { useFormState } from "react-dom";
 import React, { useState } from "react";
 import Form from "@/components/form/form";
 import TextInput from "@/components/form/inputs/text-input";
+import BooleanInput from "@/components/form/inputs/boolean-input";
 
 interface FormProps {
   user: ExtendedPersistedUser;
@@ -18,6 +19,7 @@ export const UserForm = ({ user }: FormProps) => {
     email: user.email,
     password: "",
     passwordConfirmation: "",
+    hasPaid: user.hasPaid,
   });
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,6 +27,15 @@ export const UserForm = ({ user }: FormProps) => {
       return {
         ...prevState,
         [e.target.name]: e.target.value,
+      };
+    });
+  };
+
+  const handlePaidChange = () => {
+    setFormUser((prevState) => {
+      return {
+        ...prevState,
+        hasPaid: !prevState.hasPaid,
       };
     });
   };
@@ -50,6 +61,12 @@ export const UserForm = ({ user }: FormProps) => {
         value={formUser.email}
         handleChange={handleFormChange}
         type="email"
+      />
+      <BooleanInput
+        field="hasPaid"
+        label="Has Paid?"
+        value={formUser.hasPaid}
+        handleChange={handlePaidChange}
       />
       <TextInput
         field="password"

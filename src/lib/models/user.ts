@@ -10,6 +10,7 @@ export interface IUser {
   encryptedPassword: string;
   username: string;
   isAdmin: boolean;
+  hasPaid: boolean;
   points: number;
   leagueRank: number;
   exactBetCount: number;
@@ -23,6 +24,7 @@ const userSchema = new mongoose.Schema<IUser>(
     email: { type: String, required: true, unique: true, min: 3, max: 50 },
     encryptedPassword: { type: String, required: true, min: 5, max: 50 },
     isAdmin: { type: Boolean, default: false },
+    hasPaid: { type: Boolean, default: false },
 
     points: { type: Number, default: 0 },
     leagueRank: { type: Number, default: 0 },
@@ -42,6 +44,7 @@ export const userJoiSchema = Joi.object({
   email: Joi.string().required().email(),
   password: Joi.string().optional().min(8),
   passwordConfirmation: Joi.ref("password"),
+  hasPaid: Joi.boolean(),
 }).with("password", "passwordConfirmation");
 
 export const User = mongoose.models?.User || mongoose.model("User", userSchema);
