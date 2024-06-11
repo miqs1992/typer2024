@@ -25,6 +25,9 @@ const UsersPage = async () => {
           <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
+                No.
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Name
               </th>
               <th scope="col" className="px-6 py-3">
@@ -34,16 +37,20 @@ const UsersPage = async () => {
                 Points / Exact
               </th>
               <th scope="col" className="px-6 py-3">
+                Has Paid
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Actions
               </th>
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {users.map((user, index) => (
               <tr
                 key={user.id}
                 className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
               >
+                <td className="px-6 py-4">{index + 1}.</td>
                 <th
                   scope="row"
                   className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
@@ -56,6 +63,7 @@ const UsersPage = async () => {
                 <td className="px-6 py-4">
                   {user.points} / {user.exactBetCount}
                 </td>
+                <td className="px-6 py-4">{user.hasPaid ? "Yes" : "No"}</td>
                 <td className="flex gap-2 px-6 py-4">
                   <Link href={`/admin/users/${user.id}/edit`}>Edit</Link>
                   <form action={removeUser}>

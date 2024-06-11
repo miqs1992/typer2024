@@ -1,7 +1,6 @@
 import { AdminService } from "@/modules/admin/admin-service";
 import { IUser, User, userJoiSchema } from "@/lib/models/user";
 import { ServiceError } from "@/modules/service.error";
-import bcrypt from "bcryptjs";
 import { hashPassword } from "@/tools/password";
 
 interface PersistedUser {
@@ -12,6 +11,7 @@ interface PersistedUser {
   exactBetCount: number;
   leagueRank: number;
   isAdmin: boolean;
+  hasPaid: boolean;
 }
 
 export interface ExtendedPersistedUser extends PersistedUser {
@@ -64,7 +64,7 @@ export class UsersManagementService extends AdminService {
     id: string,
     formData: FormData,
   ): Promise<ExtendedPersistedUser> {
-    const { username, email, password, passwordConfirmation } =
+    const { username, email, password, passwordConfirmation, hasPaid } =
       Object.fromEntries(formData);
 
     const { value, error } = userJoiSchema.validate({
@@ -72,6 +72,7 @@ export class UsersManagementService extends AdminService {
       email,
       password: password || undefined,
       passwordConfirmation: passwordConfirmation || undefined,
+      hasPaid: hasPaid === "1",
     });
 
     if (error) {
@@ -81,6 +82,7 @@ export class UsersManagementService extends AdminService {
     const user = await User.findByIdAndUpdate(id, {
       username: value.username,
       email: value.email,
+      hasPaid: value.hasPaid,
       ...(password && {
         encryptedPassword: await hashPassword(value.password),
       }),
@@ -97,6 +99,8 @@ export class UsersManagementService extends AdminService {
   }
 
   private parseUser = (user: IUser): PersistedUser => {
+    console.log(user);
+
     return {
       id: user.id.toString(),
       email: user.email,
@@ -105,6 +109,7 @@ export class UsersManagementService extends AdminService {
       exactBetCount: user.exactBetCount,
       leagueRank: user.leagueRank,
       isAdmin: user.isAdmin,
+      hasPaid: user.hasPaid,
     };
   };
 }
