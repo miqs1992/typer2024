@@ -16,7 +16,7 @@ const NumberInput = ({
   label,
   value,
   handleChange,
-  max = 10,
+  max = 99,
   step = 1,
 }: InputProps) => {
   return (

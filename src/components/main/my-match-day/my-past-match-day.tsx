@@ -1,4 +1,7 @@
+"use client";
+
 import FlagIcon from "@/components/flagIcon/flag-icon";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { PersistedBet } from "@/modules/betting/betting.service";
 
 export const MyPastMatchDay = ({
@@ -10,6 +13,7 @@ export const MyPastMatchDay = ({
   bets: PersistedBet[];
   hideHeading?: boolean;
 }) => {
+  const { isMobile } = useMediaQuery();
   const headingLabel = `Match Day ${matchDayNumber}`;
 
   return (
@@ -40,44 +44,59 @@ export const MyPastMatchDay = ({
             </tr>
           </thead>
           <tbody>
-            {bets.map((bet: PersistedBet, index: number) => (
-              <tr
-                className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
-                key={index}
-              >
-                <td
-                  scope="row"
-                  className="whitespace-nowrap px-4 py-2 lg:px-6 lg:py-4"
+            {bets.map((bet: PersistedBet, index: number) => {
+              const wonBet = bet.points > 0;
+              const isExactBet = bet.isExact;
+
+              const betFontColor = () => {
+                if (isExactBet) {
+                  return "text-yellow-500";
+                }
+                if (wonBet) {
+                  return "text-green-500";
+                }
+                return "";
+              };
+
+              return (
+                <tr
+                  className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
+                  key={index}
                 >
-                  <div className="flex items-center justify-center gap-2">
-                    {bet.match.firstTeam.name}
-                    <FlagIcon country={bet.match.firstTeam.flag} />
-                    {" -"}
-                    <FlagIcon country={bet.match.secondTeam.flag} />
-                    {bet.match.secondTeam.name}
-                  </div>
-                </td>
-                <td
-                  scope="row"
-                  className="whitespace-nowrap px-4 py-2 text-center lg:px-6 lg:py-4"
-                >
-                  {bet.match.firstTeamResult} - {bet.match.secondTeamResult}
-                </td>
-                <td
-                  scope="row"
-                  className="whitespace-nowrap px-4 py-2 text-center lg:px-6 lg:py-4"
-                >
-                  {bet.result.firstTeamResult} - {bet.result.secondTeamResult}
-                  {bet.result.bonus ? " *" : ""}
-                </td>
-                <td
-                  scope="row"
-                  className="whitespace-nowrap px-4 py-2 text-center font-bold lg:px-6 lg:py-4"
-                >
-                  {bet.points.toFixed(2)}
-                </td>
-              </tr>
-            ))}
+                  <td
+                    scope="row"
+                    className="whitespace-nowrap px-4 py-2 lg:px-6 lg:py-4"
+                  >
+                    <div className="flex items-center justify-center gap-2">
+                      {isMobile ? null : bet.match.firstTeam.name}
+                      <FlagIcon country={bet.match.firstTeam.flag} />
+                      {" -"}
+                      <FlagIcon country={bet.match.secondTeam.flag} />
+                      {isMobile ? null : bet.match.secondTeam.name}
+                    </div>
+                  </td>
+                  <td
+                    scope="row"
+                    className="whitespace-nowrap px-4 py-2 text-center lg:px-6 lg:py-4"
+                  >
+                    {bet.match.firstTeamResult} - {bet.match.secondTeamResult}
+                  </td>
+                  <td
+                    scope="row"
+                    className={`whitespace-nowrap px-4 py-2 text-center lg:px-6 lg:py-4 ${betFontColor()}`}
+                  >
+                    {bet.result.firstTeamResult} - {bet.result.secondTeamResult}
+                    {bet.result.bonus ? " *" : ""}
+                  </td>
+                  <td
+                    scope="row"
+                    className="whitespace-nowrap px-4 py-2 text-center font-bold lg:px-6 lg:py-4"
+                  >
+                    {bet.points.toFixed(2)}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
