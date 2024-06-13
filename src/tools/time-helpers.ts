@@ -2,6 +2,7 @@ export const displayDateTime = (date: Date) => {
   return Intl.DateTimeFormat("pl", {
     dateStyle: "short",
     timeStyle: "short",
+    timeZone: "Europe/Warsaw",
   }).format(date);
 };
 

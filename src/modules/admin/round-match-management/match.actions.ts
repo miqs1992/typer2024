@@ -99,3 +99,19 @@ export const setMatchResult = async (
     throw error;
   }
 };
+
+export const removeMatch = async (formData: FormData): Promise<void> => {
+  const { id, matchDayId, roundId } = Object.fromEntries(formData);
+  if (!id || !matchDayId || !roundId) {
+    throw new Error("Round, Match Day, Match IDs are required");
+  }
+
+  try {
+    const service = await getService();
+    await service.removeMatch(id as string);
+    revalidatePath(`/admin/rounds/${roundId}/matchDays/${matchDayId}`);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

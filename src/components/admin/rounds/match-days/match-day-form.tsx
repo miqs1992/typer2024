@@ -55,6 +55,7 @@ const MatchDayForm = ({ roundId, matchDay }: FormProps) => {
       <NumberInput
         field="dayNumber"
         label="Day Number"
+        max={50}
         value={formMatchDay.dayNumber}
         handleChange={handleFormChange}
       />
