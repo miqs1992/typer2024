@@ -5,6 +5,7 @@ import {
   matchResultJoiSchema,
 } from "@/lib/models/match";
 import { ServiceError } from "@/modules/service.error";
+import { Bet } from "@/lib/models/bet";
 
 export interface PersistedTeam {
   id: string;
@@ -42,7 +43,7 @@ export class MatchManagementService extends AdminService {
     return this.parseMatch(match);
   }
 
-  public getMatchesInDay(matchDayId: string): Promise<PersistedMatch[]> {
+  public async getMatchesInDay(matchDayId: string): Promise<PersistedMatch[]> {
     return Match.find({ matchDay: matchDayId })
       .sort({ start: 1 })
       .populate("firstTeam")
@@ -150,6 +151,16 @@ export class MatchManagementService extends AdminService {
     // TODO: recalculate user scores
 
     return this.parseMatch(match);
+  }
+
+  public async removeMatch(matchId: string): Promise<void> {
+    try {
+      await Bet.deleteMany({ match: matchId });
+      await Match.findByIdAndDelete(matchId);
+    } catch (error) {
+      console.log(error);
+      throw new ServiceError(`Failed to remove match  ${matchId}`);
+    }
   }
 
   private parseMatch(match: any): PersistedMatch {

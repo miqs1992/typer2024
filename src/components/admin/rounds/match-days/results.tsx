@@ -2,6 +2,7 @@ import FlagIcon from "@/components/flagIcon/flag-icon";
 import Link from "next/link";
 import { PersistedMatch } from "@/modules/admin/round-match-management/match-management.service";
 import { displayDateTime } from "@/tools/time-helpers";
+import { removeMatch } from "@/modules/admin/round-match-management/match.actions";
 
 export const Results = ({
   matches,
@@ -90,6 +91,17 @@ export const Results = ({
                     >
                       Set Result
                     </Link>
+
+                    <form action={removeMatch}>
+                      <input type="hidden" name="id" value={matchId} />
+                      <input
+                        type="hidden"
+                        name="matchDayId"
+                        value={matchDayId}
+                      />
+                      <input type="hidden" name="roundId" value={roundId} />
+                      <button type="submit">Delete</button>
+                    </form>
                   </td>
                 </tr>
               ),
