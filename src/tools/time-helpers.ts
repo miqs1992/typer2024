@@ -9,7 +9,9 @@ export const displayDateTime = (date: Date) => {
 export const displayDate = (date: Date) => {
   return Intl.DateTimeFormat("pl", {
     dateStyle: "short",
-  }).format(date);
+  })
+    .format(date)
+    .slice(0, -5);
 };
 
 export const convertToDateTimeLocalString = (date: Date) => {

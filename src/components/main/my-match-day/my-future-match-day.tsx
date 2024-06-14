@@ -10,6 +10,8 @@ import Image from "next/image";
 import checkboxIcon from "./check.svg";
 import { PersistedBet } from "@/modules/betting/betting.service";
 import { updateMyBets } from "@/modules/betting/betting.actions";
+import { PublicMatchDay } from "@/modules/matches/match-day.service";
+import { displayDate } from "@/tools/time-helpers";
 
 interface FormBet {
   id: string;
@@ -19,17 +21,18 @@ interface FormBet {
 }
 
 export const MyFutureMatchDay = ({
-  matchDayNumber,
+  matchDay,
   bets,
   disabledBonus = false,
   hideHeading = false,
 }: {
-  matchDayNumber?: number;
+  matchDay: PublicMatchDay;
   bets: PersistedBet[];
   disabledBonus?: boolean;
   hideHeading?: boolean;
 }) => {
-  const headingLabel = `Match Day ${matchDayNumber}`;
+  const headingLabel = `Match Day ${matchDay.dayNumber} - ${displayDate(matchDay.stopBetTime)}`;
+
   const [state, formAction] = useFormState(updateMyBets, undefined);
   const [statusMessage, setStatusMessage] = useState<string | undefined>("");
 

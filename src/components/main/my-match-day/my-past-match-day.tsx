@@ -3,18 +3,20 @@
 import FlagIcon from "@/components/flagIcon/flag-icon";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { PersistedBet } from "@/modules/betting/betting.service";
+import { PublicMatchDay } from "@/modules/matches/match-day.service";
+import { displayDate } from "@/tools/time-helpers";
 
 export const MyPastMatchDay = ({
-  matchDayNumber,
+  matchDay,
   bets,
   hideHeading = false,
 }: {
-  matchDayNumber?: number;
+  matchDay: PublicMatchDay;
   bets: PersistedBet[];
   hideHeading?: boolean;
 }) => {
   const { isMobile } = useMediaQuery();
-  const headingLabel = `Match Day ${matchDayNumber}`;
+  const headingLabel = `Match Day ${matchDay.dayNumber} - ${displayDate(matchDay.stopBetTime)}`;
 
   return (
     <>

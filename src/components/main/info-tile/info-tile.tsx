@@ -1,11 +1,4 @@
-import dayjs from "dayjs";
-
-const formatDate = (dateString: string) => {
-  const date = dayjs(dateString);
-  return date.isSame(dayjs(), "day")
-    ? `Today ${date.format("HH:mm")}`
-    : date.format("YYYY-MM-DD HH:mm");
-};
+import { displayDateTime } from "@/tools/time-helpers";
 
 export const InfoTile = ({ myPoints, myPlace, stopBetTime }: any) => {
   const placeColor = () => {
@@ -44,8 +37,8 @@ export const InfoTile = ({ myPoints, myPlace, stopBetTime }: any) => {
             >
               {myPoints.toFixed(2)}
             </th>
-            <td className={`px-6 py-4 text-center font-bold`}>
-              {formatDate(stopBetTime)}
+            <td className={`px-6 py-4 text-center font-bold text-red-500`}>
+              {displayDateTime(stopBetTime)}
             </td>
           </tr>
         </tbody>

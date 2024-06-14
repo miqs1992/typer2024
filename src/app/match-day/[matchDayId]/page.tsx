@@ -33,6 +33,7 @@ const MatchDayPage = async ({ params }: any) => {
         <MatchDayHistory matches={matches} />
       ) : (
         <MyFutureMatchDay
+          matchDay={matchDay}
           hideHeading
           bets={bets}
           disabledBonus={!isBonusAvailable}

@@ -66,10 +66,7 @@ const Home = async () => {
         <div className="flex flex-col gap-10 lg:flex-row lg:gap-20">
           <div className="w-full lg:w-[50%]">
             {previousMatchDay ? (
-              <MyPastMatchDay
-                matchDayNumber={previousMatchDay.dayNumber}
-                bets={previousBets}
-              />
+              <MyPastMatchDay matchDay={previousMatchDay} bets={previousBets} />
             ) : (
               <EmptyMatchDay previous />
             )}
@@ -77,7 +74,7 @@ const Home = async () => {
           <div className="w-full lg:w-[50%]">
             {currentMatchDay ? (
               <MyFutureMatchDay
-                matchDayNumber={currentMatchDay.dayNumber}
+                matchDay={currentMatchDay}
                 bets={currentBets}
                 disabledBonus={!isBonusAvailable}
               />
