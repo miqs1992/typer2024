@@ -1,6 +1,5 @@
 import FlagIcon from "@/components/flagIcon/flag-icon";
 import { getAllBetsForMatch } from "@/lib/actions/bet";
-import { IMatch } from "@/lib/models/match";
 import { PersistedMatch } from "@/modules/admin/round-match-management/match-management.service";
 
 export const PastMatch = async ({ match }: { match: PersistedMatch }) => {

@@ -27,7 +27,9 @@ export const Ranking = ({
   showExtended?: boolean;
 }) => {
   if (!showExtended) {
-    rankingData = rankingData.slice(0, 5);
+    rankingData = rankingData
+      .sort((a, b) => a.leagueRank - b.leagueRank)
+      .slice(0, 5);
   }
 
   return (

@@ -41,7 +41,7 @@ export const createPlayer = async (
 
   try {
     await connectDB();
-    const newPlayer = new Player({ name, teamId });
+    const newPlayer = new Player({ name, team: teamId });
     await newPlayer.save();
     revalidatePath(`/admin/teams/${teamId}`);
     return { success: true };

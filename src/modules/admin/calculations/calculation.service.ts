@@ -55,7 +55,7 @@ export class CalculationService extends AdminService {
   }
 
   public async recalculateUsers(): Promise<void> {
-    const bets = await Bet.find().where({ points: { $gt: 0 } });
+    const bets = await Bet.find().where({ points: { $gte: 0 } });
 
     const results: {
       [key: string]: { points: number; exactBetCount: number };
