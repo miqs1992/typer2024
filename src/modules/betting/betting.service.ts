@@ -2,7 +2,7 @@ import { NonAdminService } from "@/modules/non-admin-service";
 import { PersistedMatchDay } from "@/modules/admin/round-match-management/match-day-management.service";
 import { MatchDay } from "@/lib/models/matchDay";
 import { ServiceError } from "@/modules/service.error";
-import { Bet } from "@/lib/models/bet";
+import { Bet, betResultJoiSchema } from "@/lib/models/bet";
 import { Match } from "@/lib/models/match";
 
 interface PersistedTeam {
@@ -116,12 +116,17 @@ export class BettingService extends NonAdminService {
         throw new ServiceError("Bet not found");
       }
 
-      bet.result = {
+      const { value, error } = betResultJoiSchema.validate({
         firstTeamResult: betPayload.firstTeamResult,
         secondTeamResult: betPayload.secondTeamResult,
         bonus: betPayload.bonus,
-      };
+      });
 
+      if (error) {
+        throw new ServiceError(error.message);
+      }
+
+      bet.result = value;
       betsToSave.push(bet);
     }
 

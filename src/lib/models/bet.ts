@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { IMatch } from "./match";
 import { IUser } from "./user";
 import { IMatchDay } from "./matchDay";
+import Joi from "joi";
 
 export interface IResult {
   firstTeamResult: number;
@@ -54,5 +55,11 @@ const betSchema = new mongoose.Schema<IBet>({
 });
 
 betSchema.index({ match: 1, user: 1 }, { unique: true });
+
+export const betResultJoiSchema = Joi.object<IResult>({
+  firstTeamResult: Joi.number().min(0).max(20).integer().required(),
+  secondTeamResult: Joi.number().min(0).max(20).integer().required(),
+  bonus: Joi.boolean(),
+});
 
 export const Bet = mongoose.models?.Bet || mongoose.model("Bet", betSchema);

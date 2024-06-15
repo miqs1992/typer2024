@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import { Player } from "@/lib/models/player";
 import { Team } from "@/lib/models/team";
 import Joi from "joi";
-import { IRound } from "@/lib/models/round";
 
 export interface IUser {
   id: string;
@@ -39,12 +38,18 @@ const userSchema = new mongoose.Schema<IUser>(
   { timestamps: true },
 );
 
-export const userJoiSchema = Joi.object({
+export const userJoiAdminSchema = Joi.object({
   username: Joi.string().required().min(3).max(20),
   email: Joi.string().required().email(),
   password: Joi.string().optional().min(8),
   passwordConfirmation: Joi.ref("password"),
   hasPaid: Joi.boolean(),
+}).with("password", "passwordConfirmation");
+
+export const userJoiSchema = Joi.object({
+  username: Joi.string().required().min(3).max(20),
+  password: Joi.string().optional().min(8),
+  passwordConfirmation: Joi.ref("password"),
 }).with("password", "passwordConfirmation");
 
 export const User = mongoose.models?.User || mongoose.model("User", userSchema);

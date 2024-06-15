@@ -9,6 +9,7 @@ interface InputProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type?: "text" | "email" | "password";
   required?: boolean;
+  hint?: string;
 }
 
 const TextInput = ({
@@ -18,6 +19,7 @@ const TextInput = ({
   handleChange,
   type = "text",
   required = true,
+  hint,
 }: InputProps) => {
   return (
     <div className="mb-5">
@@ -37,6 +39,9 @@ const TextInput = ({
         onChange={handleChange}
         required={required}
       />
+      {hint && (
+        <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">{hint}</p>
+      )}
     </div>
   );
 };
