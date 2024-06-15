@@ -1,5 +1,5 @@
 import { AdminService } from "@/modules/admin/admin-service";
-import { IUser, User, userJoiSchema } from "@/lib/models/user";
+import { IUser, User, userJoiAdminSchema } from "@/lib/models/user";
 import { ServiceError } from "@/modules/service.error";
 import { hashPassword } from "@/tools/password";
 
@@ -67,7 +67,7 @@ export class UsersManagementService extends AdminService {
     const { username, email, password, passwordConfirmation, hasPaid } =
       Object.fromEntries(formData);
 
-    const { value, error } = userJoiSchema.validate({
+    const { value, error } = userJoiAdminSchema.validate({
       username,
       email,
       password: password || undefined,

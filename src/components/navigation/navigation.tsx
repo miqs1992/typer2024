@@ -35,6 +35,7 @@ const Navigation = async () => {
             <NavLink to="/" label="Home" />
             <NavLink to="/ranking" label="Ranking" />
             <NavLink to="/profile" label="Profile" />
+            <NavLink to="/rules" label="Rules" />
             <NavDropdown
               id="match-days"
               label="Match Days"

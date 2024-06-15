@@ -15,7 +15,7 @@ interface FormProps {
   profile: Profile;
 }
 
-const ProfileForm = ({ profile }: FormProps) => {
+const ProfileWinnerAndKingForm = ({ profile }: FormProps) => {
   const [formState, formAction] = useFormState(
     setWinnerAndTopScorer,
     undefined,
@@ -97,4 +97,4 @@ const ProfileForm = ({ profile }: FormProps) => {
   );
 };
 
-export default ProfileForm;
+export default ProfileWinnerAndKingForm;

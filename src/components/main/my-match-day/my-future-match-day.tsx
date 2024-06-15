@@ -35,6 +35,7 @@ export const MyFutureMatchDay = ({
 
   const [state, formAction] = useFormState(updateMyBets, undefined);
   const [statusMessage, setStatusMessage] = useState<string | undefined>("");
+  const [errorMessage, setErrorMessage] = useState<string | undefined>("");
 
   const [betList, setBetList] = useState<FormBet[]>(
     bets.map((bet) => ({
@@ -47,8 +48,10 @@ export const MyFutureMatchDay = ({
 
   useEffect(() => {
     setStatusMessage(state?.message);
+    setErrorMessage(state?.error);
     const timeout = setTimeout(() => {
       setStatusMessage("");
+      setErrorMessage("");
     }, 2000);
 
     return () => clearTimeout(timeout);
@@ -141,6 +144,8 @@ export const MyFutureMatchDay = ({
                       <input
                         value={formBet.firstTeamResult}
                         type="number"
+                        min="0"
+                        step="1"
                         maxLength={2}
                         data-focus-input-init
                         data-focus-input-next="code-2"
@@ -164,6 +169,8 @@ export const MyFutureMatchDay = ({
                       <input
                         value={formBet.secondTeamResult}
                         type="number"
+                        min="0"
+                        step="1"
                         maxLength={2}
                         data-focus-input-init
                         data-focus-input-prev="code-1"
@@ -232,7 +239,10 @@ export const MyFutureMatchDay = ({
           action={formAction}
           className="flex flex-row items-center justify-between p-4 lg:justify-end dark:bg-gray-800"
         >
-          <SubmitButton isSuccess={!!statusMessage} />
+          <SubmitButton
+            isSuccess={!!statusMessage}
+            isFailure={!!errorMessage}
+          />
           <div></div>
           <input type="hidden" name="betList" value={JSON.stringify(betList)} />
           <input type="hidden" name="matchDayId" value={bets[0].matchDayId} />
