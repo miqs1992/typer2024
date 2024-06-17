@@ -40,7 +40,7 @@ export const PastMatch = async ({ match }: { match: PersistedMatch }) => {
               return (
                 <tr
                   className="border-b bg-white text-center dark:border-gray-700 dark:bg-gray-800"
-                  key={bet._id}
+                  key={bet?._id}
                 >
                   <th
                     scope="row"
