@@ -73,6 +73,7 @@ export const MobileMenu = ({
             >
               <NavLink to="/" label="Home" />
               <NavLink to="/ranking" label="Ranking" />
+              <NavLink to="/rules" label="Rules" />
               <Accordion.Root className="w-full" type="single" collapsible>
                 <Accordion.Item value="item-1">
                   <Accordion.Trigger className="group flex h-[50px] w-full items-center rounded px-3 py-2 font-light text-white">
