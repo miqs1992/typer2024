@@ -52,7 +52,9 @@ export class BettingService extends NonAdminService {
     const matchDay = await this.getMatchDayById(matchDayId);
 
     if (matchDay.stopBetTime < new Date()) {
-      throw new ServiceError("Cannot get bets for past match day");
+      throw new ServiceError(
+        `Cannot get my bets for past match day. Stop Bet Time: ${matchDay.stopBetTime.toISOString()}, current time: ${new Date().toISOString()}`,
+      );
     }
 
     await this.ensureBetsForMatchDay(matchDayId);
@@ -66,7 +68,9 @@ export class BettingService extends NonAdminService {
     const matchDay = await this.getMatchDayById(matchDayId);
 
     if (matchDay.stopBetTime >= new Date()) {
-      throw new ServiceError("Cannot get bets for future match day");
+      throw new ServiceError(
+        `Cannot get my bets for future match day. Stop Bet Time: ${matchDay.stopBetTime.toISOString()}, current time: ${new Date().toISOString()}`,
+      );
     }
 
     return this.getBetsForMatchDay(matchDayId, this.getUserId()!);
@@ -94,7 +98,7 @@ export class BettingService extends NonAdminService {
     const matchDay = await this.getMatchDayById(matchDayId);
 
     if (matchDay.stopBetTime < new Date()) {
-      throw new ServiceError("Cannot get bets for past match day");
+      throw new ServiceError("Cannot update bets for past match day");
     }
 
     if (payload.some((bet) => bet.bonus)) {

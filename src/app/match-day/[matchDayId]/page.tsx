@@ -13,6 +13,7 @@ const currentDate = new Date();
 const MatchDayPage = async ({ params }: any) => {
   const matchDay = await getMatchDayById(params.matchDayId);
   const isPastMatchDay = matchDay.stopBetTime < currentDate;
+  console.log(matchDay.stopBetTime, currentDate, isPastMatchDay);
   // TODO: Not admin action
   const matches = isPastMatchDay
     ? await getMatchesInDay(params.matchDayId)
