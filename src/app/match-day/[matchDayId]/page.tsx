@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { MatchDayHistory } from "@/components/main/past-match-day/match-day-history";
 import { MyFutureMatchDay } from "@/components/main/my-match-day/my-future-match-day";
 import { getMatchesInDay } from "@/modules/admin/round-match-management/match.actions";
