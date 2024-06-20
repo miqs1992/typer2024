@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { TopScorers } from "@/components/main/top-scorers/top-scorers";
 import { getMatchDayByTimeframe } from "@/modules/matches/match-day.actions";
 import { MyFutureMatchDay } from "@/components/main/my-match-day/my-future-match-day";
