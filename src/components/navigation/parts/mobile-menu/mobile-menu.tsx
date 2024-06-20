@@ -8,12 +8,14 @@ import { usePathname } from "next/navigation";
 import * as Accordion from "@radix-ui/react-accordion";
 import { IMatchDay } from "@/lib/models/matchDay";
 import Link from "next/link";
+import { displayDate } from "@/tools/time-helpers";
+import { PublicMatchDay } from "@/modules/matches/match-day.service";
 
 export const MobileMenu = ({
   matchDays,
   isAdmin = false,
 }: {
-  matchDays: Pick<IMatchDay, "id" | "dayNumber">[];
+  matchDays: PublicMatchDay[];
   isAdmin?: boolean;
 }) => {
   const pathname = usePathname();
@@ -102,7 +104,8 @@ export const MobileMenu = ({
                             href={`/match-day/${matchDay.id}`}
                             className={`block px-4 py-2 text-gray-400 lg:hover:bg-gray-100 lg:dark:hover:bg-gray-600 lg:dark:hover:text-white ${pathname === `/matchDay/${matchDay.id}` ? "dark:text-blue-400" : ""}`}
                           >
-                            {`Match Day ${matchDay.dayNumber}`}
+                            {`MD ${matchDay.dayNumber} (${displayDate(matchDay.stopBetTime)})`}
+                            ,
                           </Link>
                         </li>
                       ))}
