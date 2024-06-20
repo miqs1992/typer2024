@@ -1,6 +1,8 @@
 import { NonAdminService } from "@/modules/non-admin-service";
 import { MatchDay } from "@/lib/models/matchDay";
 import { ServiceError } from "@/modules/service.error";
+import { Match } from "@/lib/models/match";
+import { PersistedMatch } from "@/modules/admin/round-match-management/match-management.service";
 
 export interface PublicMatchDay {
   id: string;
@@ -69,12 +71,42 @@ export class MatchDayService extends NonAdminService {
     return matchDay ? this.parseMatchDay(matchDay) : null;
   }
 
+  public async getMatchesInDay(matchDayId: string): Promise<PersistedMatch[]> {
+    return Match.find({ matchDay: matchDayId })
+      .sort({ start: 1 })
+      .populate("firstTeam")
+      .populate("secondTeam")
+      .then((matches) => {
+        return matches.map((match) => this.parseMatch(match));
+      });
+  }
+
   private parseMatchDay(matchDay: any): PublicMatchDay {
     return {
       id: matchDay.id,
       dayNumber: matchDay.dayNumber,
       stopBetTime: matchDay.stopBetTime,
       roundId: matchDay.round.toString(),
+    };
+  }
+
+  private parseMatch(match: any): PersistedMatch {
+    return {
+      id: match.id,
+      matchDayId: match.matchDay.toString(),
+      firstTeam: {
+        id: match.firstTeam.id,
+        name: match.firstTeam.name,
+        flag: match.firstTeam.flag,
+      },
+      secondTeam: {
+        id: match.secondTeam.id,
+        name: match.secondTeam.name,
+        flag: match.secondTeam.flag,
+      },
+      start: match.start,
+      firstTeamScore: match.finalResult.firstTeamResult,
+      secondTeamScore: match.finalResult.secondTeamResult,
     };
   }
 }
