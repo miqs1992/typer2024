@@ -15,7 +15,7 @@ interface PersistedUser {
   name: string;
 }
 
-interface PersistedMatch {
+export interface PersistedMatch {
   id: string;
   firstTeam: PersistedTeam;
   secondTeam: PersistedTeam;
@@ -43,6 +43,23 @@ export interface UpdateBetPayload {
   firstTeamResult: number;
   secondTeamResult: number;
   bonus: boolean;
+}
+
+export interface UserBet {
+  user: PersistedUser;
+  bets: {
+    id: string;
+    points: number;
+    isExact: boolean;
+    matchId: string;
+    firstTeamResult: number;
+    secondTeamResult: number;
+    bonus: boolean;
+  }[];
+}
+export interface PastMatchDayHistory {
+  matches: PersistedMatch[];
+  userBets: UserBet[];
 }
 
 export class BettingService extends NonAdminService {
@@ -137,6 +154,62 @@ export class BettingService extends NonAdminService {
     await Promise.all(betsToSave.map((bet) => bet.save()));
   }
 
+  public async getAllBetsInPastMatchDay(
+    matchDayId: string,
+  ): Promise<PastMatchDayHistory> {
+    const matchDay = await this.getMatchDayById(matchDayId);
+
+    if (matchDay.stopBetTime >= new Date()) {
+      throw new ServiceError("Cannot get bets for future match day");
+    }
+
+    const matches = await Match.find({ matchDay: matchDayId })
+      .sort({ start: 1 })
+      .populate("firstTeam")
+      .populate("secondTeam");
+
+    const bets = await Bet.find({ matchDay: matchDayId }).populate("user");
+
+    return {
+      matches: matches.map((match) => this.parseMatch(match)),
+      userBets: bets.reduce((acc: UserBet[], bet) => {
+        const userBets = acc.find(
+          (userBet: UserBet) => userBet.user.id === bet.user.id.toString(),
+        );
+        if (userBets) {
+          userBets.bets.push({
+            id: bet.id,
+            points: bet.points,
+            isExact: bet.isExact,
+            matchId: bet.match.toString(),
+            firstTeamResult: bet.result.firstTeamResult,
+            secondTeamResult: bet.result.secondTeamResult,
+            bonus: bet.result.bonus,
+          });
+        } else {
+          acc.push({
+            user: {
+              id: bet.user.id.toString(),
+              name: bet.user.username,
+            },
+            bets: [
+              {
+                id: bet.id,
+                points: bet.points,
+                isExact: bet.isExact,
+                matchId: bet.match.toString(),
+                firstTeamResult: bet.result.firstTeamResult,
+                secondTeamResult: bet.result.secondTeamResult,
+                bonus: bet.result.bonus,
+              },
+            ],
+          });
+        }
+        return acc;
+      }, [] as UserBet[]),
+    };
+  }
+
   private async getMatchDayById(
     matchDayId: string,
   ): Promise<PersistedMatchDay> {
@@ -208,20 +281,7 @@ export class BettingService extends NonAdminService {
           id: bet.user.id.toString(),
           name: bet.user.username,
         },
-        match: {
-          id: bet.match.id.toString(),
-          firstTeam: {
-            name: bet.match.firstTeam.name,
-            flag: bet.match.firstTeam.flag,
-          },
-          secondTeam: {
-            name: bet.match.secondTeam.name,
-            flag: bet.match.secondTeam.flag,
-          },
-          start: bet.match.start,
-          firstTeamResult: bet.match.finalResult.firstTeamResult,
-          secondTeamResult: bet.match.finalResult.secondTeamResult,
-        },
+        match: this.parseMatch(bet.match),
         matchDayId: bet.matchDay.toString(),
         bonus: bet.result.bonus,
         result: {
@@ -236,5 +296,22 @@ export class BettingService extends NonAdminService {
         (a: PersistedBet, b: PersistedBet) =>
           new Date(b.match.start).getTime() - new Date(a.match.start).getTime(),
       );
+  }
+
+  private parseMatch(match: any): PersistedMatch {
+    return {
+      id: match.id.toString(),
+      firstTeam: {
+        name: match.firstTeam.name,
+        flag: match.firstTeam.flag,
+      },
+      secondTeam: {
+        name: match.secondTeam.name,
+        flag: match.secondTeam.flag,
+      },
+      start: match.start,
+      firstTeamResult: match.finalResult.firstTeamResult,
+      secondTeamResult: match.finalResult.secondTeamResult,
+    };
   }
 }
