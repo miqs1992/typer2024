@@ -19,7 +19,7 @@ export const MatchDayHistory = async ({
   const { user } = await getCurrentSession();
 
   return (
-    <div className="relative my-[50px] mb-12 mt-0 w-full overflow-x-auto rounded-lg shadow-[rgba(0,_0,_0,_0.24)_0px_0px_8px] shadow-gray-600">
+    <div className="relative my-[50px] mb-12 mt-0 max-h-svh w-full overflow-x-auto rounded-lg shadow-[rgba(0,_0,_0,_0.24)_0px_0px_8px] shadow-gray-600">
       <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
         <thead className="sticky top-0 bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
           <tr>
@@ -52,7 +52,7 @@ export const MatchDayHistory = async ({
         <tbody className="overflow-y-auto">
           {sortedUserBets.map((userBet) => (
             <tr
-              className={`border-b bg-white text-center dark:border-gray-700 dark:bg-gray-800 ${userBet.user.id === user.id ? "dark:bg-gray-600" : "dark:bg-gray-800"}`}
+              className={`border-b bg-white text-center dark:border-gray-700 ${userBet.user.id === user.id ? "dark:bg-gray-600" : "dark:bg-gray-800"}`}
               key={userBet.user.id}
             >
               <th scope="row" className="px-2 font-bold">
@@ -72,11 +72,11 @@ export const MatchDayHistory = async ({
                     </td>
                   );
 
-                const wonBet = bet?.points > 0;
-                const isExactBet = bet?.isExact;
-                const emphasisClass = isExactBet
-                  ? "text-yellow-500"
-                  : wonBet
+                const emphasisClass = bet.isExact
+                  ? bet.bonus
+                    ? "text-red-500"
+                    : "text-yellow-500"
+                  : bet.points > 0
                     ? "text-green-500"
                     : "";
 

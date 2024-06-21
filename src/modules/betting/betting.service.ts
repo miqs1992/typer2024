@@ -172,41 +172,43 @@ export class BettingService extends NonAdminService {
 
     return {
       matches: matches.map((match) => this.parseMatch(match)),
-      userBets: bets.reduce((acc: UserBet[], bet) => {
-        const userBets = acc.find(
-          (userBet: UserBet) => userBet.user.id === bet.user.id.toString(),
-        );
-        if (userBets) {
-          userBets.bets.push({
-            id: bet.id,
-            points: bet.points,
-            isExact: bet.isExact,
-            matchId: bet.match.toString(),
-            firstTeamResult: bet.result.firstTeamResult,
-            secondTeamResult: bet.result.secondTeamResult,
-            bonus: bet.result.bonus,
-          });
-        } else {
-          acc.push({
-            user: {
-              id: bet.user.id.toString(),
-              name: bet.user.username,
-            },
-            bets: [
-              {
-                id: bet.id,
-                points: bet.points,
-                isExact: bet.isExact,
-                matchId: bet.match.toString(),
-                firstTeamResult: bet.result.firstTeamResult,
-                secondTeamResult: bet.result.secondTeamResult,
-                bonus: bet.result.bonus,
+      userBets: bets
+        .filter((bet) => bet.user)
+        .reduce((acc: UserBet[], bet) => {
+          const userBets = acc.find(
+            (userBet: UserBet) => userBet.user.id === bet.user.id.toString(),
+          );
+          if (userBets) {
+            userBets.bets.push({
+              id: bet.id,
+              points: bet.points,
+              isExact: bet.isExact,
+              matchId: bet.match.toString(),
+              firstTeamResult: bet.result.firstTeamResult,
+              secondTeamResult: bet.result.secondTeamResult,
+              bonus: bet.result.bonus,
+            });
+          } else {
+            acc.push({
+              user: {
+                id: bet.user.id.toString(),
+                name: bet.user.username,
               },
-            ],
-          });
-        }
-        return acc;
-      }, [] as UserBet[]),
+              bets: [
+                {
+                  id: bet.id,
+                  points: bet.points,
+                  isExact: bet.isExact,
+                  matchId: bet.match.toString(),
+                  firstTeamResult: bet.result.firstTeamResult,
+                  secondTeamResult: bet.result.secondTeamResult,
+                  bonus: bet.result.bonus,
+                },
+              ],
+            });
+          }
+          return acc;
+        }, [] as UserBet[]),
     };
   }
 
