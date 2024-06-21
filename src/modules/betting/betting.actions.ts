@@ -61,3 +61,13 @@ export const updateMyBets = async (
     throw error;
   }
 };
+
+export const getAllBetsInPastMatchDay = async (matchDayId: string) => {
+  try {
+    const service = await getService();
+    return service.getAllBetsInPastMatchDay(matchDayId);
+  } catch (error) {
+    console.log(error);
+    throw new Error(`failed to fetch all bets for Match Day ${matchDayId}`);
+  }
+};
