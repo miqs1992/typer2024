@@ -1,12 +1,11 @@
 "use server";
 
 import connectDB from "../../../config/database";
-import { IUser, User } from "@/lib/models/user";
+import { User } from "@/lib/models/user";
 import { auth } from "@/lib/auth";
 import { RequestState } from "@/lib/actions/state";
 import { revalidatePath } from "next/cache";
 import { isBeforeFirstMatch } from "../../../config/firstMatchStart";
-import { NameAndFlag } from "@/components/main/ranking/ranking";
 
 export interface Profile {
   id: string;
@@ -16,7 +15,11 @@ export interface Profile {
   leagueRank: number;
   exactBetCount: number;
   winner: { name: string; id: string; flag: string } | null;
-  topScorer: { name: string; id: string; team: NameAndFlag } | null;
+  topScorer: {
+    name: string;
+    id: string;
+    team: { name: string; flag: string };
+  } | null;
 }
 
 const getCurrentUserId = async () => {

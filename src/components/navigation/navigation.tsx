@@ -6,9 +6,11 @@ import { NavDropdown } from "@/components/navigation/parts/nav-dropdown";
 import { getAllMatchDays } from "@/modules/matches/match-day.actions";
 import { MobileMenu } from "./parts/mobile-menu/mobile-menu";
 import { displayDate } from "@/tools/time-helpers";
+import { getAllRounds } from "@/modules/matches/round.actions";
 
 const Navigation = async () => {
   const matchDays = await getAllMatchDays();
+  const rounds = await getAllRounds();
   const session = await auth();
 
   return (
@@ -29,7 +31,11 @@ const Navigation = async () => {
             Typer 2024
           </span>
         </a>
-        <MobileMenu matchDays={matchDays} isAdmin={session?.user?.isAdmin} />
+        <MobileMenu
+          matchDays={matchDays}
+          rounds={rounds}
+          isAdmin={session?.user?.isAdmin}
+        />
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
           <ul className="mt-4 flex flex-col rounded-lg border border-gray-100 bg-gray-50 p-4 font-medium md:mt-0 md:flex-row md:space-x-8 md:border-0 md:bg-white md:p-0 rtl:space-x-reverse dark:border-gray-700 dark:bg-gray-800 md:dark:bg-gray-800">
             <NavLink to="/" label="Home" />
@@ -44,6 +50,15 @@ const Navigation = async () => {
                 label: `MD ${matchDay.dayNumber} (${displayDate(matchDay.stopBetTime)})`,
               }))}
             />
+            <NavDropdown
+              id="rounds"
+              label="Round stats"
+              links={rounds.map((round) => ({
+                to: `/rounds/${round.id}`,
+                label: round.name,
+              }))}
+            />
+
             {session?.user?.isAdmin && (
               <NavDropdown
                 id="admin"

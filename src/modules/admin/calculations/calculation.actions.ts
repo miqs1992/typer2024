@@ -23,6 +23,8 @@ export const calculateDayResults = async (
     const service = await getService();
     await service.calculateDayResults(matchDayId as string);
     revalidatePath(`/admin/rounds/${roundId}/matchDays/${matchDayId}`);
+    revalidatePath(`/admin/${roundId}`);
+    revalidatePath(`/match-day/${matchDayId}`);
     revalidatePath("/");
   } catch (error) {
     console.log(error);

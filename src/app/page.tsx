@@ -1,3 +1,5 @@
+import { getRanking } from "@/modules/ranking/ranking.actions";
+
 export const dynamic = "force-dynamic";
 
 import { TopScorers } from "@/components/main/top-scorers/top-scorers";
@@ -7,10 +9,9 @@ import Alert from "@/components/alert/alert";
 import Link from "next/link";
 import { isBeforeFirstMatch } from "../../config/firstMatchStart";
 import { getCurrentProfile } from "@/lib/actions/profile";
-import { Ranking, RankingData } from "@/components/main/ranking/ranking";
+import { Ranking } from "@/components/main/ranking/ranking";
 import { EmptyMatchDay } from "@/components/main/my-match-day/empty-match.day";
 import { MatchDayTimeframe } from "@/modules/matches/match-day.service";
-import { getUsers } from "@/lib/actions/user";
 import { getFiveTopScorers } from "@/lib/actions/players";
 import {
   getMyBetsForFutureMatchDay,
@@ -41,7 +42,7 @@ const Home = async () => {
   const isBonusAvailable = currentMatchDay
     ? await isBonusAvailableForMatchDay(currentMatchDay.id)
     : false;
-  const usersData = await getUsers();
+  const rankingData = await getRanking();
   const topScorersData = await getFiveTopScorers();
 
   return (
@@ -87,10 +88,7 @@ const Home = async () => {
         </div>
         <div className="flex flex-col gap-10 lg:flex-row lg:gap-20">
           <div className="w-full lg:w-[50%]">
-            <Ranking
-              rankingData={usersData as unknown as RankingData[]}
-              showExtended={false}
-            />
+            <Ranking rankingData={rankingData} showExtended={false} />
           </div>
           <div className="w-full lg:w-[50%]">
             <TopScorers

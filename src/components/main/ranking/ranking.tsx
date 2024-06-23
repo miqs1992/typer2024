@@ -1,35 +1,15 @@
 import FlagIcon from "@/components/flagIcon/flag-icon";
-
-export interface NameAndFlag {
-  name: string;
-  flag: string;
-}
-
-interface TopScorer {
-  name: string;
-  team: NameAndFlag;
-}
-
-export interface RankingData {
-  username: string;
-  points: number;
-  exactBetCount: number;
-  winner: NameAndFlag;
-  leagueRank: number;
-  topScorer: TopScorer;
-}
+import { RankedUserData } from "@/modules/ranking/ranking.service";
 
 export const Ranking = ({
   rankingData,
   showExtended = true,
 }: {
-  rankingData: RankingData[];
+  rankingData: RankedUserData[];
   showExtended?: boolean;
 }) => {
   if (!showExtended) {
-    rankingData = rankingData
-      .sort((a, b) => a.leagueRank - b.leagueRank)
-      .slice(0, 5);
+    rankingData = rankingData.slice(0, 5);
   }
 
   return (
@@ -74,68 +54,66 @@ export const Ranking = ({
             </tr>
           </thead>
           <tbody>
-            {rankingData
-              .sort((a, b) => a.leagueRank - b.leagueRank)
-              .map(
-                (
-                  { username, points, exactBetCount, topScorer, winner },
-                  index,
-                ) => {
-                  const textColor = () => {
-                    if (index === 0) return "text-yellow-400";
-                    if (index === 1) return "text-gray-200";
-                    if (index === 2) return "text-yellow-600";
-                    return "text-slate-400";
-                  };
+            {rankingData.map(
+              (
+                { username, points, exactBetCount, topScorer, winner },
+                index,
+              ) => {
+                const textColor = () => {
+                  if (index === 0) return "text-yellow-400";
+                  if (index === 1) return "text-gray-200";
+                  if (index === 2) return "text-yellow-600";
+                  return "text-slate-400";
+                };
 
-                  return (
-                    <tr
-                      className="border-b bg-white text-center dark:border-gray-700 dark:bg-gray-800"
-                      key={username}
+                return (
+                  <tr
+                    className="border-b bg-white text-center dark:border-gray-700 dark:bg-gray-800"
+                    key={username}
+                  >
+                    <th
+                      scope="row"
+                      className={`font-bol whitespace-nowrap px-6 py-4 ${textColor()} text-center`}
                     >
-                      <th
-                        scope="row"
-                        className={`font-bol whitespace-nowrap px-6 py-4 ${textColor()} text-center`}
-                      >
-                        {index + 1}
-                      </th>
-                      <th
-                        scope="row"
-                        className={`font-bol whitespace-nowrap px-6 py-4 ${textColor()} text-center`}
-                      >
-                        {username}
-                      </th>
-                      <td className={`px-6 py-4 ${textColor()} text-center`}>
-                        {points.toFixed(2)}
-                      </td>
-                      <td className={`px-6 py-4 ${textColor()} text-center`}>
-                        {exactBetCount}
-                      </td>
+                      {index + 1}
+                    </th>
+                    <th
+                      scope="row"
+                      className={`font-bol whitespace-nowrap px-6 py-4 ${textColor()} text-center`}
+                    >
+                      {username}
+                    </th>
+                    <td className={`px-6 py-4 ${textColor()} text-center`}>
+                      {points.toFixed(2)}
+                    </td>
+                    <td className={`px-6 py-4 ${textColor()} text-center`}>
+                      {exactBetCount}
+                    </td>
 
-                      {showExtended ? (
-                        <>
-                          <td className="px-6 py-4">
-                            <div className="flex justify-center">
-                              <FlagIcon country={topScorer?.team?.flag} />
-                              <span className="ml-[7px] block  text-slate-300">
-                                {topScorer?.name}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 text-slate-300">
-                            <div className="flex justify-center">
-                              <FlagIcon country={winner?.flag} />
-                              <span className="ml-[7px] block">
-                                {winner?.name}
-                              </span>
-                            </div>
-                          </td>
-                        </>
-                      ) : null}
-                    </tr>
-                  );
-                },
-              )}
+                    {showExtended ? (
+                      <>
+                        <td className="px-6 py-4">
+                          <div className="flex justify-center">
+                            <FlagIcon country={topScorer?.team?.flag} />
+                            <span className="ml-[7px] block  text-slate-300">
+                              {topScorer?.name}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-slate-300">
+                          <div className="flex justify-center">
+                            <FlagIcon country={winner?.flag} />
+                            <span className="ml-[7px] block">
+                              {winner?.name}
+                            </span>
+                          </div>
+                        </td>
+                      </>
+                    ) : null}
+                  </tr>
+                );
+              },
+            )}
           </tbody>
         </table>
       </div>

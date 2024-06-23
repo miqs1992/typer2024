@@ -5,17 +5,18 @@ import { useEffect, useRef, useState } from "react";
 import { handleLogout } from "@/lib/actions/session";
 import { NavLink } from "../nav-link";
 import { usePathname } from "next/navigation";
-import * as Accordion from "@radix-ui/react-accordion";
-import { IMatchDay } from "@/lib/models/matchDay";
-import Link from "next/link";
 import { displayDate } from "@/tools/time-helpers";
 import { PublicMatchDay } from "@/modules/matches/match-day.service";
+import { PublicRound } from "@/modules/matches/round.service";
+import { MobileAccordion } from "@/components/navigation/parts/mobile-menu/parts/mobile-accordion";
 
 export const MobileMenu = ({
   matchDays,
+  rounds,
   isAdmin = false,
 }: {
   matchDays: PublicMatchDay[];
+  rounds: PublicRound[];
   isAdmin?: boolean;
 }) => {
   const pathname = usePathname();
@@ -76,95 +77,45 @@ export const MobileMenu = ({
               <NavLink to="/" label="Home" />
               <NavLink to="/ranking" label="Ranking" />
               <NavLink to="/rules" label="Rules" />
-              <Accordion.Root className="w-full" type="single" collapsible>
-                <Accordion.Item value="item-1">
-                  <Accordion.Trigger className="group flex h-[50px] w-full items-center rounded px-3 py-2 font-light text-white">
-                    <span className="block">Match Days</span>
-                    <svg
-                      className="ms-2.5 h-2.5 w-2.5 group-aria-expanded:rotate-180"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 10 6"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="m1 1 4 4 4-4"
-                      />
-                    </svg>
-                  </Accordion.Trigger>
-                  <Accordion.Content>
-                    <div className="max-h-48 overflow-y-scroll">
-                      <ul className="py-0 text-sm text-gray-700 dark:text-gray-400">
-                        {matchDays.map((matchDay) => (
-                          <li key={`/match-day/${matchDay.id}`}>
-                            <Link
-                              href={`/match-day/${matchDay.id}`}
-                              className={`block px-4 py-2 text-gray-400 lg:hover:bg-gray-100 lg:dark:hover:bg-gray-600 lg:dark:hover:text-white ${pathname === `/matchDay/${matchDay.id}` ? "dark:text-blue-400" : ""}`}
-                            >
-                              {`MD ${matchDay.dayNumber} (${displayDate(matchDay.stopBetTime)})`}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </Accordion.Content>
-                </Accordion.Item>
-              </Accordion.Root>
+
+              <MobileAccordion
+                title="Match Days"
+                elements={matchDays.map((matchDay) => ({
+                  id: matchDay.id,
+                  label: `MD ${matchDay.dayNumber} (${displayDate(matchDay.stopBetTime)})`,
+                  link: `/match-day/${matchDay.id}`,
+                }))}
+              />
+
+              <MobileAccordion
+                title="Round stats"
+                elements={rounds.map((round) => ({
+                  id: round.id,
+                  label: round.name,
+                  link: `/rounds/${round.id}`,
+                }))}
+              />
               {isAdmin ? (
-                <Accordion.Root className="w-full" type="single" collapsible>
-                  <Accordion.Item value="item-1">
-                    <Accordion.Trigger className="group flex h-[50px] w-full items-center rounded px-3 py-2 font-light text-white">
-                      <span className="block">Admin</span>
-                      <svg
-                        className="ms-2.5 h-2.5 w-2.5 group-aria-expanded:rotate-180"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 10 6"
-                      >
-                        <path
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="m1 1 4 4 4-4"
-                        />
-                      </svg>
-                    </Accordion.Trigger>
-                    <Accordion.Content>
-                      <ul className="py-0 text-sm text-gray-700 dark:text-gray-400">
-                        <li key={`/admin/users`}>
-                          <Link
-                            href={`/admin/users`}
-                            className={`block px-4 py-2 text-gray-400 lg:hover:bg-gray-100 lg:dark:hover:bg-gray-600 lg:dark:hover:text-white ${pathname === `/admin/users` ? "dark:text-blue-400" : ""}`}
-                          >
-                            Users
-                          </Link>
-                        </li>
-                        <li key={`/admin/teams`}>
-                          <Link
-                            href={`/admin/teams`}
-                            className={`block px-4 py-2 text-gray-400 lg:hover:bg-gray-100 lg:dark:hover:bg-gray-600 lg:dark:hover:text-white ${pathname === `/admin/teams` ? "dark:text-blue-400" : ""}`}
-                          >
-                            Teams & players
-                          </Link>
-                        </li>
-                        <li key={`/admin/rounds`}>
-                          <Link
-                            href={`/admin/rounds`}
-                            className={`block px-4 py-2 text-gray-400 lg:hover:bg-gray-100 lg:dark:hover:bg-gray-600 lg:dark:hover:text-white ${pathname === `/admin/rounds` ? "dark:text-blue-400" : ""}`}
-                          >
-                            Rounds & matches
-                          </Link>
-                        </li>
-                      </ul>
-                    </Accordion.Content>
-                  </Accordion.Item>
-                </Accordion.Root>
+                <MobileAccordion
+                  title="Admin"
+                  elements={[
+                    {
+                      id: "users",
+                      label: "Users",
+                      link: "/admin/users",
+                    },
+                    {
+                      id: "teams",
+                      label: "Team & players",
+                      link: "/admin/teams",
+                    },
+                    {
+                      id: "rounds",
+                      label: "Rounds & matches",
+                      link: "/admin/rounds",
+                    },
+                  ]}
+                />
               ) : null}
               <NavLink to="/profile" label="Profile" />
               <form action={handleLogout}>

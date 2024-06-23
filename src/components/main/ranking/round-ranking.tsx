@@ -1,28 +1,18 @@
-"use client";
+import { ShortUserData } from "@/modules/ranking/ranking.service";
 
-import FlagIcon from "@/components/flagIcon/flag-icon";
-import { useMediaQuery } from "@/hooks/use-media-query";
-
-export interface TopScorers {
-  name: string;
-  team: { name: string; flag: string };
-  goals: number;
-  assists: number;
-}
-
-export const TopScorers = ({
-  topScorersData,
+export const RoundRanking = ({
+  rankingData,
+  roundName,
 }: {
-  topScorersData: TopScorers[];
+  rankingData: ShortUserData[];
+  roundName: string;
 }) => {
-  const { isMobile } = useMediaQuery();
-
   return (
     <>
-      <h3 className="mb-10 text-center text-3xl font-bold text-white">
-        Top Scorers
+      <h3 className="my-4 mb-12 text-center text-3xl font-bold text-white">
+        {roundName} ranking
       </h3>
-      <div className="relative w-full max-w-[600px] overflow-x-auto rounded-lg shadow-[rgba(0,_0,_0,_0.24)_0px_0px_8px]  shadow-gray-600">
+      <div className="relative w-full overflow-x-auto rounded-lg shadow-[rgba(0,_0,_0,_0.24)_0px_0px_8px] shadow-gray-600">
         <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
           <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -39,17 +29,16 @@ export const TopScorers = ({
                 Name
               </th>
               <th scope="col" className="px-6 py-3 text-center">
-                {isMobile ? "G." : "Goals"}
+                Points
               </th>
               <th scope="col" className="px-6 py-3 text-center">
-                {isMobile ? "A." : "Assists"}
+                Exact
               </th>
             </tr>
           </thead>
           <tbody>
-            {topScorersData
-              .sort((a, b) => b.goals - a.goals)
-              .map(({ name, team, goals, assists }, index) => {
+            {rankingData.map(
+              ({ id, username, points, exactBetCount }, index) => {
                 const textColor = () => {
                   if (index === 0) return "text-yellow-400";
                   if (index === 1) return "text-gray-200";
@@ -59,27 +48,31 @@ export const TopScorers = ({
 
                 return (
                   <tr
-                    className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
-                    key={name}
+                    className="border-b bg-white text-center dark:border-gray-700 dark:bg-gray-800"
+                    key={id}
                   >
-                    <td className={`px-6 py-4 ${textColor()} text-center`}>
-                      {index + 1}
-                    </td>
                     <th
                       scope="row"
-                      className={`flex gap-3 whitespace-nowrap px-6 py-4 font-bold ${textColor()} items-center justify-center`}
+                      className={`font-bol whitespace-nowrap px-6 py-4 ${textColor()} text-center`}
                     >
-                      {<FlagIcon country={team.flag} />} {name}
+                      {index + 1}
+                    </th>
+                    <th
+                      scope="row"
+                      className={`font-bol whitespace-nowrap px-6 py-4 ${textColor()} text-center`}
+                    >
+                      {username}
                     </th>
                     <td className={`px-6 py-4 ${textColor()} text-center`}>
-                      {goals}
+                      {points.toFixed(2)}
                     </td>
                     <td className={`px-6 py-4 ${textColor()} text-center`}>
-                      {assists}
+                      {exactBetCount}
                     </td>
                   </tr>
                 );
-              })}
+              },
+            )}
           </tbody>
         </table>
       </div>
