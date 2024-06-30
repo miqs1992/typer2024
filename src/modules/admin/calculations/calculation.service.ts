@@ -2,6 +2,7 @@ import { AdminService } from "@/modules/admin/admin-service";
 import { MatchManagementService } from "@/modules/admin/round-match-management/match-management.service";
 import { Bet, IBet } from "@/lib/models/bet";
 import { User } from "@/lib/models/user";
+import { MatchDay } from "@/lib/models/matchDay";
 
 type Winner = "first" | "second" | "draw";
 
@@ -9,6 +10,11 @@ export class CalculationService extends AdminService {
   public async calculateDayResults(matchDayId: string): Promise<void> {
     const matchService = new MatchManagementService(this.session);
     const matches = await matchService.getMatchesInDay(matchDayId);
+    const scoreFactor = await this.getScoreFactor(matchDayId);
+
+    console.log(
+      `Calculating results for ${matches.length} matches with factor ${scoreFactor}`,
+    );
 
     for (const match of matches) {
       if (match.firstTeamScore === null || match.secondTeamScore === null) {
@@ -36,15 +42,17 @@ export class CalculationService extends AdminService {
             match.firstTeamScore === bet.result.firstTeamResult &&
             match.secondTeamScore === bet.result.secondTeamResult
           ) {
-            points = 3;
+            points = 3.0;
             isExact = true;
           } else {
-            points = 1;
+            points = 1.0;
           }
 
           if (bet.result.bonus) {
-            points *= 2;
+            points *= 2.0;
           }
+
+          points *= scoreFactor;
         }
 
         await Bet.findByIdAndUpdate(bet._id, { points, isExact });
@@ -96,5 +104,13 @@ export class CalculationService extends AdminService {
     }
 
     return "draw";
+  }
+
+  private async getScoreFactor(matchDayId: string): Promise<number> {
+    const matchDay = await MatchDay.findById(matchDayId).populate("round");
+    if (!matchDay) {
+      throw new Error(`Round not found for match day ${matchDayId}`);
+    }
+    return Number(matchDay.round.scoreFactor);
   }
 }
