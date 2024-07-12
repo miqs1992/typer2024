@@ -25,7 +25,8 @@ export const getPlayer = async (playerId: string): Promise<IPlayer> => {
       name: player.name,
       goals: player.goals,
       assists: player.assists,
-      team: player.team,
+      team: player.team.toString(),
+      king: player.king,
     };
   } catch (error) {
     console.log(error);
@@ -55,11 +56,16 @@ export const editPlayer = async (
   previousState: RequestState | undefined,
   formData: FormData,
 ): Promise<RequestState> => {
-  const { id, name, goals, assists } = Object.fromEntries(formData);
+  const { id, name, goals, assists, king } = Object.fromEntries(formData);
 
   try {
     await connectDB();
-    const player = await Player.findByIdAndUpdate(id, { name, goals, assists });
+    const player = await Player.findByIdAndUpdate(id, {
+      name,
+      goals,
+      assists,
+      king: king ?? false,
+    });
     await player.save();
     revalidatePath(`/admin/teams/${player.team}`);
     return { success: true };
@@ -101,6 +107,7 @@ export const searchPlayers = async (inputValue: string): Promise<IPlayer[]> => {
             team: team?.name,
             flag: team?.flag,
           },
+          king: player.king,
         };
       }),
     );
@@ -127,6 +134,7 @@ export const getFiveTopScorers = async (): Promise<IPlayer[]> => {
         goals: player.goals,
         assists: player.assists,
         team: player.team,
+        king: player.king,
       };
     });
   } catch (error) {

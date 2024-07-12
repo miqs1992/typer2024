@@ -61,7 +61,7 @@ const UsersPage = async () => {
                   {`${user.email} ${user.isAdmin ? "(Admin)" : ""}`}
                 </td>
                 <td className="px-6 py-4">
-                  {user.points} / {user.exactBetCount}
+                  {user.points.toFixed(2)} / {user.exactBetCount}
                 </td>
                 <td className="px-6 py-4">{user.hasPaid ? "Yes" : "No"}</td>
                 <td className="flex gap-2 px-6 py-4">

@@ -51,6 +51,9 @@ const TeamPage = async ({ params }: TeamParams) => {
               Assists
             </th>
             <th scope="col" className="px-6 py-3">
+              King
+            </th>
+            <th scope="col" className="px-6 py-3">
               Actions
             </th>
           </tr>
@@ -69,6 +72,7 @@ const TeamPage = async ({ params }: TeamParams) => {
               </th>
               <td className="px-6 py-4">{player.goals}</td>
               <td className="px-6 py-4">{player.assists}</td>
+              <td className="px-6 py-4">{player.king ? "yes" : "no"}</td>
               <td className="flex gap-2 px-6 py-4">
                 <Link
                   href={`/admin/teams/${team.id}/players/${player.id}/edit`}

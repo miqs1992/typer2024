@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import Form from "@/components/form/form";
 import TextInput from "@/components/form/inputs/text-input";
 import NumberInput from "@/components/form/inputs/number-input";
+import BooleanInput from "@/components/form/inputs/boolean-input";
 
 interface PlayerFormProps {
   teamId: string;
@@ -21,6 +22,7 @@ const PlayerForm = ({ player, teamId }: PlayerFormProps) => {
       name: "",
       goals: 0,
       assists: 0,
+      king: false,
     },
   );
 
@@ -29,6 +31,15 @@ const PlayerForm = ({ player, teamId }: PlayerFormProps) => {
       return {
         ...prevState,
         [e.target.name]: e.target.value,
+      };
+    });
+  };
+
+  const handleKingChange = () => {
+    setFromPlayer((prevState) => {
+      return {
+        ...prevState,
+        king: !prevState.king,
       };
     });
   };
@@ -62,6 +73,12 @@ const PlayerForm = ({ player, teamId }: PlayerFormProps) => {
             label="Assists"
             value={formPlayer.assists}
             handleChange={handleFormChange}
+          />
+          <BooleanInput
+            field="king"
+            label="King"
+            value={formPlayer.king}
+            handleChange={handleKingChange}
           />
         </>
       )}
