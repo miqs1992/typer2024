@@ -3,6 +3,8 @@ import { MatchManagementService } from "@/modules/admin/round-match-management/m
 import { Bet, IBet } from "@/lib/models/bet";
 import { User } from "@/lib/models/user";
 import { MatchDay } from "@/lib/models/matchDay";
+import { Team } from "@/lib/models/team";
+import { Player } from "@/lib/models/player";
 
 type Winner = "first" | "second" | "draw";
 
@@ -57,12 +59,14 @@ export class CalculationService extends AdminService {
 
         await Bet.findByIdAndUpdate(bet._id, { points, isExact });
       }
-
-      await this.recalculateUsers();
     }
+
+    await this.recalculateUsers();
   }
 
   public async recalculateUsers(): Promise<void> {
+    console.log(`Recalculating users`);
+
     const bets = await Bet.find().where({ points: { $gte: 0 } });
 
     const results: {
@@ -75,6 +79,28 @@ export class CalculationService extends AdminService {
       acc[userId] = value;
       return acc;
     }, {});
+
+    const winner = await Team.findOne({ winner: true });
+    if (winner) {
+      const users = await User.find({ winner: winner.id.toString() });
+      for (const user of users) {
+        results[user.id.toString()] = {
+          points: results[user.id.toString()].points + 7.0,
+          exactBetCount: results[user.id.toString()].exactBetCount,
+        };
+      }
+    }
+
+    const king = await Player.findOne({ king: true });
+    if (king) {
+      const users = await User.find({ king: king.id.toString() });
+      for (const user of users) {
+        results[user.id.toString()] = {
+          points: results[user.id.toString()].points + 5.0,
+          exactBetCount: results[user.id.toString()].exactBetCount,
+        };
+      }
+    }
 
     const sortedUsers = Object.entries(results).sort((a, b) => {
       if (b[1].points !== a[1].points) {

@@ -6,6 +6,7 @@ export interface IPlayer {
   name: string;
   goals: number;
   assists: number;
+  king: boolean;
   team: {
     name: string;
     flag: string;
@@ -18,6 +19,7 @@ const playerSchema = new mongoose.Schema<IPlayer>(
     goals: { type: Number, default: 0 },
     assists: { type: Number, default: 0 },
     team: { type: mongoose.Schema.Types.ObjectId, ref: Team, required: true },
+    king: { type: Boolean, default: false },
   },
   { timestamps: true },
 );
