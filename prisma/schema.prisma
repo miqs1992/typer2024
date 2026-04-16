@@ -19,7 +19,7 @@ enum RoundStage {
 model Team {
   id        String   @id @default(cuid())
   name      String   @unique
-  flag      String   @unique @db.Char(2)
+  flag      String   @unique @db.VarChar(6)
   winner    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
