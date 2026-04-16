@@ -8,8 +8,8 @@ import { auth } from "@/lib/auth";
 const inter = Inter({ subsets: ["latin"], weight: ["300", "400", "500"] });
 
 export const metadata: Metadata = {
-  title: "Typer 2024",
-  description: "Application for Euro 2024",
+  title: "Typer 2026",
+  description: "Application for World Cup 2026",
 };
 
 export default async function RootLayout({
@@ -21,8 +21,10 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <div className="min-w-screen min-h-screen bg-gray-900">
+      <body
+        className={inter.className + " min-w-screen min-h-screen bg-gray-900"}
+      >
+        <div className="">
           {session ? <Navigation /> : null}
           <main
             className={`align-center relative flex w-full justify-center p-8 ${session ? "mt-[66px]" : ""}`}

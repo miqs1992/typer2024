@@ -19,7 +19,7 @@ export const Ranking = ({
       >
         {showExtended ? "League ranking" : "Current Top 5"}
       </h3>
-      <div className="relative w-full overflow-x-auto rounded-lg shadow-[rgba(0,_0,_0,_0.24)_0px_0px_8px]  shadow-gray-600">
+      <div className="relative w-full overflow-x-auto rounded-lg shadow-[rgba(0,_0,_0,_0.24)_0px_0px_8px] shadow-gray-600">
         <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
           <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -95,7 +95,7 @@ export const Ranking = ({
                         <td className="px-6 py-4">
                           <div className="flex justify-center">
                             <FlagIcon country={topScorer?.team?.flag} />
-                            <span className="ml-[7px] block  text-slate-300">
+                            <span className="ml-[7px] block text-slate-300">
                               {topScorer?.name}
                             </span>
                           </div>

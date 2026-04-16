@@ -2,7 +2,7 @@
 
 import { ExtendedPersistedUser } from "@/modules/admin/users-management/users.management.service";
 import { editUser } from "@/modules/admin/users-management/users.actions";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import React, { useState } from "react";
 import Form from "@/components/form/form";
 import TextInput from "@/components/form/inputs/text-input";
@@ -13,7 +13,7 @@ interface FormProps {
 }
 
 export const UserForm = ({ user }: FormProps) => {
-  const [formState, formAction] = useFormState(editUser, undefined);
+  const [formState, formAction] = useActionState(editUser, undefined);
   const [formUser, setFormUser] = useState({
     username: user.username,
     email: user.email,

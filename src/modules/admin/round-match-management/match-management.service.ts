@@ -1,11 +1,10 @@
 import { AdminService } from "@/modules/admin/admin-service";
 import {
-  Match,
   matchManagementJoiSchema,
   matchResultJoiSchema,
 } from "@/lib/models/match";
 import { ServiceError } from "@/modules/service.error";
-import { Bet } from "@/lib/models/bet";
+import { prisma } from "@/lib/prisma";
 
 export interface PersistedTeam {
   id: string;
@@ -28,9 +27,10 @@ export class MatchManagementService extends AdminService {
     let match;
 
     try {
-      match = await Match.findById(matchId)
-        .populate("firstTeam")
-        .populate("secondTeam");
+      match = await prisma.match.findUnique({
+        where: { id: matchId },
+        include: { firstTeam: true, secondTeam: true },
+      });
     } catch (error) {
       console.log(error);
       throw new ServiceError(`Failed to fetch match ${matchId}`);
@@ -44,13 +44,12 @@ export class MatchManagementService extends AdminService {
   }
 
   public async getMatchesInDay(matchDayId: string): Promise<PersistedMatch[]> {
-    return Match.find({ matchDay: matchDayId })
-      .sort({ start: 1 })
-      .populate("firstTeam")
-      .populate("secondTeam")
-      .then((matches) => {
-        return matches.map((match) => this.parseMatch(match));
-      });
+    const matches = await prisma.match.findMany({
+      where: { matchDayId },
+      orderBy: { start: "asc" },
+      include: { firstTeam: true, secondTeam: true },
+    });
+    return matches.map((match) => this.parseMatch(match));
   }
 
   public async createNewMatch(formData: FormData): Promise<PersistedMatch> {
@@ -68,16 +67,21 @@ export class MatchManagementService extends AdminService {
       throw new ServiceError(error.message);
     }
 
-    const newMatch = new Match(value);
-
     try {
-      await newMatch.save();
+      const match = await prisma.match.create({
+        data: {
+          firstTeamId: value.firstTeam,
+          secondTeamId: value.secondTeam,
+          matchDayId: value.matchDay,
+          start: new Date(value.start),
+        },
+        include: { firstTeam: true, secondTeam: true },
+      });
+      return this.parseMatch(match);
     } catch (error) {
       console.log(error);
       throw new ServiceError("Failed to create new match");
     }
-
-    return this.parseMatch(newMatch);
   }
 
   public async updateMatch(
@@ -86,7 +90,9 @@ export class MatchManagementService extends AdminService {
   ): Promise<PersistedMatch> {
     const { firstTeamId, secondTeamId, start } = Object.fromEntries(formData);
 
-    const existingMatch = await Match.findById(matchId);
+    const existingMatch = await prisma.match.findUnique({
+      where: { id: matchId },
+    });
 
     if (!existingMatch) {
       throw new ServiceError("Match not found");
@@ -96,24 +102,28 @@ export class MatchManagementService extends AdminService {
       firstTeam: firstTeamId,
       secondTeam: secondTeamId,
       start,
-      matchDay: existingMatch.matchDay.toString(),
+      matchDay: existingMatch.matchDayId,
     });
 
     if (error) {
-      console.log(value, "value");
       throw new ServiceError(error.message);
     }
 
-    const match = await Match.findByIdAndUpdate(matchId, value);
-
     try {
-      await match.save();
+      const match = await prisma.match.update({
+        where: { id: matchId },
+        data: {
+          firstTeamId: value.firstTeam,
+          secondTeamId: value.secondTeam,
+          start: new Date(value.start),
+        },
+        include: { firstTeam: true, secondTeam: true },
+      });
+      return this.parseMatch(match);
     } catch (error) {
       console.log(error);
       throw new ServiceError(`Failed to update match ${matchId}`);
     }
-
-    return this.parseMatch(match);
   }
 
   public async setMatchResult(
@@ -122,7 +132,9 @@ export class MatchManagementService extends AdminService {
   ): Promise<PersistedMatch> {
     const { firstTeamResult, secondTeamResult } = Object.fromEntries(formData);
 
-    const existingMatch = await Match.findById(matchId);
+    const existingMatch = await prisma.match.findUnique({
+      where: { id: matchId },
+    });
 
     if (!existingMatch) {
       throw new ServiceError("Match not found");
@@ -137,36 +149,47 @@ export class MatchManagementService extends AdminService {
       throw new ServiceError(error.message);
     }
 
-    const match = await Match.findByIdAndUpdate(matchId, {
-      finalResult: value,
-    });
-
     try {
-      await match.save();
+      const match = await prisma.match.update({
+        where: { id: matchId },
+        data: {
+          firstTeamResult: value.firstTeamResult,
+          secondTeamResult: value.secondTeamResult,
+        },
+        include: { firstTeam: true, secondTeam: true },
+      });
+
+      // TODO: recalculate user scores
+
+      return this.parseMatch(match);
     } catch (error) {
       console.log(error);
       throw new ServiceError(`Failed to update match ${matchId}`);
     }
-
-    // TODO: recalculate user scores
-
-    return this.parseMatch(match);
   }
 
   public async removeMatch(matchId: string): Promise<void> {
     try {
-      await Bet.deleteMany({ match: matchId });
-      await Match.findByIdAndDelete(matchId);
+      // Bets are cascade-deleted via schema onDelete: Cascade
+      await prisma.match.delete({ where: { id: matchId } });
     } catch (error) {
       console.log(error);
       throw new ServiceError(`Failed to remove match  ${matchId}`);
     }
   }
 
-  private parseMatch(match: any): PersistedMatch {
+  private parseMatch(match: {
+    id: string;
+    matchDayId: string;
+    firstTeam: PersistedTeam;
+    secondTeam: PersistedTeam;
+    start: Date;
+    firstTeamResult: number | null;
+    secondTeamResult: number | null;
+  }): PersistedMatch {
     return {
       id: match.id,
-      matchDayId: match.matchDay.toString(),
+      matchDayId: match.matchDayId,
       firstTeam: {
         id: match.firstTeam.id,
         name: match.firstTeam.name,
@@ -178,8 +201,8 @@ export class MatchManagementService extends AdminService {
         flag: match.secondTeam.flag,
       },
       start: match.start,
-      firstTeamScore: match.finalResult.firstTeamResult,
-      secondTeamScore: match.finalResult.secondTeamResult,
+      firstTeamScore: match.firstTeamResult,
+      secondTeamScore: match.secondTeamResult,
     };
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import Form from "@/components/form/form";
 import { PersistedMatch } from "@/modules/admin/round-match-management/match-management.service";
 import { setMatchResult } from "@/modules/admin/round-match-management/match.actions";
@@ -16,7 +16,7 @@ export const SetMatchResultForm = ({
   matchDayId,
   roundId,
 }: FormProps) => {
-  const [state, formAction] = useFormState(setMatchResult, undefined);
+  const [state, formAction] = useActionState(setMatchResult, undefined);
 
   return (
     <Form

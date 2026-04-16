@@ -1,15 +1,15 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { User } from "@/lib/models/user";
 import bcrypt from "bcryptjs";
 import { authConfig } from "@/lib/auth.config";
-import connectDB from "../../config/database";
+import { prisma } from "@/lib/prisma";
 
 // @ts-ignore
 const login = async (credentials) => {
   try {
-    await connectDB();
-    const user = await User.findOne({ email: credentials.email });
+    const user = await prisma.user.findUnique({
+      where: { email: credentials.email },
+    });
 
     if (!user) throw new Error("Wrong credentials!");
 
@@ -54,7 +54,6 @@ declare module "@auth/core/types" {
 
 export const authOptions = {
   ...authConfig,
-  // Configure one or more authentication providers
   providers: [credentialsProvider],
   callbacks: {
     ...authConfig.callbacks,

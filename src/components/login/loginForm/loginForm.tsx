@@ -1,12 +1,12 @@
 "use client";
 
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { handleLogin } from "@/lib/actions/session";
 import Link from "next/link";
 import { SubmitButton } from "@/components/submit-button/submit-button";
 
 const LoginForm = () => {
-  const [state, formAction] = useFormState(handleLogin, undefined);
+  const [state, formAction] = useActionState(handleLogin, undefined);
 
   return (
     <form className="space-y-4 md:space-y-6" action={formAction}>

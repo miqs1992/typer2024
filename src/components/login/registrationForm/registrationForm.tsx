@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { handleRegistration } from "@/lib/actions/session";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { SubmitButton } from "@/components/submit-button/submit-button";
 
 const RegistrationForm = () => {
-  const [state, formAction] = useFormState(handleRegistration, undefined);
+  const [state, formAction] = useActionState(handleRegistration, undefined);
 
   const router = useRouter();
 
@@ -32,7 +32,7 @@ const RegistrationForm = () => {
           type="email"
           name="email"
           id="email"
-          className="block w-full  rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 outline-none focus:border-2 focus:border-primary-600 focus:ring-primary-600 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 outline-none focus:border-2 focus:border-primary-600 focus:ring-primary-600 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
           placeholder="email@google.com"
           required
         />

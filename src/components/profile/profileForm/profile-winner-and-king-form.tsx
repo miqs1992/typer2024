@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { Profile, setWinnerAndTopScorer } from "@/lib/actions/profile";
 import React from "react";
 import Form from "@/components/form/form";
@@ -16,7 +16,7 @@ interface FormProps {
 }
 
 const ProfileWinnerAndKingForm = ({ profile }: FormProps) => {
-  const [formState, formAction] = useFormState(
+  const [formState, formAction] = useActionState(
     setWinnerAndTopScorer,
     undefined,
   );

@@ -1,7 +1,8 @@
 import { AdminService } from "@/modules/admin/admin-service";
-import { IUser, User, userJoiAdminSchema } from "@/lib/models/user";
+import { IUser, userJoiAdminSchema } from "@/lib/models/user";
 import { ServiceError } from "@/modules/service.error";
 import { hashPassword } from "@/tools/password";
+import { prisma } from "@/lib/prisma";
 
 interface PersistedUser {
   id: string;
@@ -22,7 +23,7 @@ export interface ExtendedPersistedUser extends PersistedUser {
 export class UsersManagementService extends AdminService {
   public getUsers = async (): Promise<PersistedUser[]> => {
     try {
-      const users = await User.find().sort({ email: 1 });
+      const users = await prisma.user.findMany({ orderBy: { email: "asc" } });
       return users.map((user) => this.parseUser(user));
     } catch (error) {
       console.log(error);
@@ -34,7 +35,10 @@ export class UsersManagementService extends AdminService {
     let user;
 
     try {
-      user = await User.findById(id).populate("winner").populate("topScorer");
+      user = await prisma.user.findUnique({
+        where: { id },
+        include: { winner: true, topScorer: true },
+      });
     } catch (error) {
       console.log(error);
       throw new ServiceError(`Failed to fetch user ${id}`);
@@ -46,17 +50,17 @@ export class UsersManagementService extends AdminService {
 
     return {
       ...this.parseUser(user),
-      winner: user?.winner?.name,
-      topScorer: user?.topScorer?.name,
+      winner: user?.winner?.name ?? "",
+      topScorer: user?.topScorer?.name ?? "",
     };
   };
 
   public async removeUser(id: string): Promise<void> {
     try {
-      await User.findByIdAndDelete(id);
+      await prisma.user.delete({ where: { id } });
     } catch (error) {
       console.log(error);
-      throw new ServiceError(`Failed to remove round ${id}`);
+      throw new ServiceError(`Failed to remove user ${id}`);
     }
   }
 
@@ -79,17 +83,18 @@ export class UsersManagementService extends AdminService {
       throw new ServiceError(error.message);
     }
 
-    const user = await User.findByIdAndUpdate(id, {
-      username: value.username,
-      email: value.email,
-      hasPaid: value.hasPaid,
-      ...(password && {
-        encryptedPassword: await hashPassword(value.password),
-      }),
-    });
-
     try {
-      await user.save();
+      await prisma.user.update({
+        where: { id },
+        data: {
+          username: value.username,
+          email: value.email,
+          hasPaid: value.hasPaid,
+          ...(password && {
+            encryptedPassword: await hashPassword(value.password),
+          }),
+        },
+      });
     } catch (error) {
       console.log(error);
       throw new ServiceError(`Failed to update user ${id}`);

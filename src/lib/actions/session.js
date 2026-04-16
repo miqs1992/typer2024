@@ -1,14 +1,12 @@
 "use server";
 
-import connectDB from "../../../config/database";
 import { signIn, signOut } from "@/lib/auth";
-import { User } from "@/lib/models/user";
 import { hashPassword } from "@/tools/password";
+import { prisma } from "@/lib/prisma";
 
 export const handleLogin = async (previousState, formData) => {
   const { email, password } = Object.fromEntries(formData);
 
-  await connectDB();
   try {
     await signIn("credentials", { email, password });
     return { success: true };
@@ -39,21 +37,21 @@ export const handleRegistration = async (previousState, formData) => {
     return { error: "Passwords do not match" };
   }
 
-  await connectDB();
   try {
-    const user = await User.findOne({ email });
+    const existing = await prisma.user.findUnique({ where: { email } });
 
-    if (user) {
+    if (existing) {
       return { error: "User already exists" };
     }
 
-    const newUser = new User({
-      email,
-      username,
-      encryptedPassword: await hashPassword(password),
+    await prisma.user.create({
+      data: {
+        email,
+        username,
+        encryptedPassword: await hashPassword(password),
+      },
     });
 
-    await newUser.save();
     return { success: true };
   } catch (error) {
     console.log(error);

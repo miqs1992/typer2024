@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { Profile } from "@/lib/actions/profile";
 import React, { useState } from "react";
 import Form from "@/components/form/form";
@@ -12,7 +12,7 @@ interface FormProps {
 }
 
 export const ProfileDetailsForm = ({ profile }: FormProps) => {
-  const [formState, formAction] = useFormState(updateProfile, undefined);
+  const [formState, formAction] = useActionState(updateProfile, undefined);
   const [formUser, setFormUser] = useState({
     username: profile.username,
     password: "",

@@ -1,10 +1,6 @@
 import { AdminService } from "@/modules/admin/admin-service";
 import { MatchManagementService } from "@/modules/admin/round-match-management/match-management.service";
-import { Bet, IBet } from "@/lib/models/bet";
-import { User } from "@/lib/models/user";
-import { MatchDay } from "@/lib/models/matchDay";
-import { Team } from "@/lib/models/team";
-import { Player } from "@/lib/models/player";
+import { prisma } from "@/lib/prisma";
 
 type Winner = "first" | "second" | "draw";
 
@@ -29,20 +25,20 @@ export class CalculationService extends AdminService {
         match.secondTeamScore,
       );
 
-      const bets: IBet[] = await Bet.find({ match: match.id }).lean();
+      const bets = await prisma.bet.findMany({ where: { matchId: match.id } });
 
       for (const bet of bets) {
         let points = 0;
         let isExact = false;
         const betWinner = this.getWinner(
-          bet.result.firstTeamResult,
-          bet.result.secondTeamResult,
+          bet.firstTeamResult,
+          bet.secondTeamResult,
         );
 
         if (matchWinner === betWinner) {
           if (
-            match.firstTeamScore === bet.result.firstTeamResult &&
-            match.secondTeamScore === bet.result.secondTeamResult
+            match.firstTeamScore === bet.firstTeamResult &&
+            match.secondTeamScore === bet.secondTeamResult
           ) {
             points = 3.0;
             isExact = true;
@@ -50,14 +46,17 @@ export class CalculationService extends AdminService {
             points = 1.0;
           }
 
-          if (bet.result.bonus) {
+          if (bet.bonus) {
             points *= 2.0;
           }
 
           points *= scoreFactor;
         }
 
-        await Bet.findByIdAndUpdate(bet._id, { points, isExact });
+        await prisma.bet.update({
+          where: { id: bet.id },
+          data: { points, isExact },
+        });
       }
     }
 
@@ -67,37 +66,49 @@ export class CalculationService extends AdminService {
   public async recalculateUsers(): Promise<void> {
     console.log(`Recalculating users`);
 
-    const bets = await Bet.find().where({ points: { $gte: 0 } });
+    const bets = await prisma.bet.findMany({
+      where: { points: { gte: 0 } },
+    });
 
     const results: {
       [key: string]: { points: number; exactBetCount: number };
-    } = bets.reduce((acc, bet) => {
-      const userId = bet.user.toString();
-      const value = acc[userId] || { points: 0, exactBetCount: 0 };
-      value.points += bet.points;
-      value.exactBetCount += bet.isExact ? 1 : 0;
-      acc[userId] = value;
-      return acc;
-    }, {});
+    } = bets.reduce(
+      (
+        acc: { [key: string]: { points: number; exactBetCount: number } },
+        bet,
+      ) => {
+        const userId = bet.userId;
+        const value = acc[userId] || { points: 0, exactBetCount: 0 };
+        value.points += bet.points ?? 0;
+        value.exactBetCount += bet.isExact ? 1 : 0;
+        acc[userId] = value;
+        return acc;
+      },
+      {},
+    );
 
-    const winner = await Team.findOne({ winner: true });
+    const winner = await prisma.team.findFirst({ where: { winner: true } });
     if (winner) {
-      const users = await User.find({ winner: winner.id.toString() });
+      const users = await prisma.user.findMany({
+        where: { winnerId: winner.id },
+      });
       for (const user of users) {
-        results[user.id.toString()] = {
-          points: results[user.id.toString()].points + 7.0,
-          exactBetCount: results[user.id.toString()].exactBetCount,
+        results[user.id] = {
+          points: (results[user.id]?.points ?? 0) + 7.0,
+          exactBetCount: results[user.id]?.exactBetCount ?? 0,
         };
       }
     }
 
-    const king = await Player.findOne({ king: true });
+    const king = await prisma.player.findFirst({ where: { king: true } });
     if (king) {
-      const users = await User.find({ king: king.id.toString() });
+      const users = await prisma.user.findMany({
+        where: { topScorerId: king.id },
+      });
       for (const user of users) {
-        results[user.id.toString()] = {
-          points: results[user.id.toString()].points + 5.0,
-          exactBetCount: results[user.id.toString()].exactBetCount,
+        results[user.id] = {
+          points: (results[user.id]?.points ?? 0) + 5.0,
+          exactBetCount: results[user.id]?.exactBetCount ?? 0,
         };
       }
     }
@@ -112,10 +123,9 @@ export class CalculationService extends AdminService {
 
     for (let i = 0; i < sortedUsers.length; i++) {
       const [userId, { points, exactBetCount }] = sortedUsers[i];
-      await User.findByIdAndUpdate(userId, {
-        points,
-        exactBetCount,
-        leagueRank: i + 1,
+      await prisma.user.update({
+        where: { id: userId },
+        data: { points, exactBetCount, leagueRank: i + 1 },
       });
     }
   }
@@ -133,7 +143,10 @@ export class CalculationService extends AdminService {
   }
 
   private async getScoreFactor(matchDayId: string): Promise<number> {
-    const matchDay = await MatchDay.findById(matchDayId).populate("round");
+    const matchDay = await prisma.matchDay.findUnique({
+      where: { id: matchDayId },
+      include: { round: true },
+    });
     if (!matchDay) {
       throw new Error(`Round not found for match day ${matchDayId}`);
     }

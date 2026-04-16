@@ -2,7 +2,7 @@
 
 import { IPlayer } from "@/lib/models/player";
 import { createPlayer, editPlayer } from "@/lib/actions/players";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import React, { useState } from "react";
 import Form from "@/components/form/form";
 import TextInput from "@/components/form/inputs/text-input";
@@ -16,7 +16,7 @@ interface PlayerFormProps {
 
 const PlayerForm = ({ player, teamId }: PlayerFormProps) => {
   const action = player ? editPlayer : createPlayer;
-  const [state, formAction] = useFormState(action, undefined);
+  const [state, formAction] = useActionState(action, undefined);
   const [formPlayer, setFromPlayer] = useState(
     player || {
       name: "",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import React, { useState } from "react";
 import { ITeam } from "@/lib/models/team";
 import { createTeam, editTeam } from "@/lib/actions/teams";
@@ -14,7 +14,7 @@ interface FormProps {
 
 const TeamForm = ({ team }: FormProps) => {
   const action = team ? editTeam : createTeam;
-  const [formState, formAction] = useFormState(action, undefined);
+  const [formState, formAction] = useActionState(action, undefined);
   const [formTeam, setFormTeam] = useState(
     team || {
       name: "",

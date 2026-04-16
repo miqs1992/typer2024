@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import Form from "@/components/form/form";
 import {
   createMatch,
@@ -26,7 +26,7 @@ interface FormProps {
 export const MatchForm = ({ match, matchDayId, roundId }: FormProps) => {
   const router = useRouter();
   const action = match ? updateMatchDetails : createMatch;
-  const [state, formAction] = useFormState(action, undefined);
+  const [state, formAction] = useActionState(action, undefined);
   const [formMatch, setFormMatch] = useState(
     match
       ? {

@@ -1,6 +1,8 @@
-import { Round, roundJoiSchema, RoundStage } from "@/lib/models/round";
+import { roundJoiSchema, RoundStage } from "@/lib/models/round";
 import { ServiceError } from "@/modules/service.error";
 import { AdminService } from "@/modules/admin/admin-service";
+import { prisma } from "@/lib/prisma";
+import { RoundStage as PrismaRoundStage } from "@/generated/prisma/enums";
 
 interface PersistedRound {
   id: string;
@@ -25,22 +27,15 @@ export class RoundManagementService extends AdminService {
       throw new ServiceError(error.message);
     }
 
-    const newRound = new Round(value);
-
     try {
-      await newRound.save();
+      const round = await prisma.round.create({
+        data: { ...value, stage: value.stage as PrismaRoundStage },
+      });
+      return this.parseRound(round);
     } catch (error) {
       console.log(error);
       throw new ServiceError("Failed to create new round");
     }
-
-    return {
-      id: newRound.id,
-      name: newRound.name,
-      order: newRound.order,
-      scoreFactor: newRound.scoreFactor,
-      stage: newRound.stage,
-    };
   }
 
   public async updateRound(
@@ -60,21 +55,21 @@ export class RoundManagementService extends AdminService {
       throw new ServiceError(error.message);
     }
 
-    const round = await Round.findByIdAndUpdate(id, value);
-
     try {
-      await round.save();
+      const round = await prisma.round.update({
+        where: { id },
+        data: { ...value, stage: value.stage as PrismaRoundStage },
+      });
+      return this.parseRound(round);
     } catch (error) {
       console.log(error);
       throw new ServiceError(`Failed to update round ${id}`);
     }
-
-    return this.parseRound(round);
   }
 
   public async removeRound(id: string): Promise<void> {
     try {
-      await Round.findByIdAndDelete(id);
+      await prisma.round.delete({ where: { id } });
     } catch (error) {
       console.log(error);
       throw new ServiceError(`Failed to remove round ${id}`);
@@ -84,7 +79,7 @@ export class RoundManagementService extends AdminService {
   public async getRound(id: string): Promise<PersistedRound> {
     let round;
     try {
-      round = await Round.findById(id);
+      round = await prisma.round.findUnique({ where: { id } });
     } catch (error) {
       throw new ServiceError(`Failed fetch round ${id}`);
     }
@@ -97,25 +92,30 @@ export class RoundManagementService extends AdminService {
   }
 
   public async getRounds(): Promise<PersistedRound[]> {
-    let rounds;
-
     try {
-      rounds = await Round.find().sort({ order: 1 });
+      const rounds = await prisma.round.findMany({
+        orderBy: { order: "asc" },
+      });
+      return rounds.map((round) => this.parseRound(round));
     } catch (error) {
       console.log(error);
       throw new Error("failed to fetch rounds");
     }
-
-    return rounds.map((round) => this.parseRound(round));
   }
 
-  private parseRound(round: any): PersistedRound {
+  private parseRound(round: {
+    id: string;
+    name: string;
+    order: number;
+    scoreFactor: number;
+    stage: string;
+  }): PersistedRound {
     return {
       id: round.id,
       name: round.name,
       order: round.order,
       scoreFactor: round.scoreFactor,
-      stage: round.stage,
+      stage: round.stage as RoundStage,
     };
   }
 }

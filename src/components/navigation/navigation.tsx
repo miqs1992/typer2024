@@ -14,7 +14,7 @@ const Navigation = async () => {
   const session = await auth();
 
   return (
-    <nav className="fixed top-0 z-50 w-full border-gray-200  bg-gray-800 shadow-[rgba(0,_0,_0,_0.24)_0px_0px_15px] shadow-gray-600">
+    <nav className="fixed top-0 z-50 w-full border-gray-200 bg-gray-800 shadow-[rgba(0,_0,_0,_0.24)_0px_0px_15px] shadow-gray-600">
       <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-4">
         <a href="/" className="flex items-center rtl:space-x-reverse">
           <Image
@@ -28,7 +28,7 @@ const Navigation = async () => {
             }}
           />
           <span className="self-center whitespace-nowrap text-2xl font-semibold text-white">
-            Typer 2024
+            Typer 2026
           </span>
         </a>
         <MobileMenu

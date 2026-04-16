@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 
 import Form from "@/components/form/form";
 import React, { useState } from "react";
@@ -20,7 +20,7 @@ interface FormProps {
 
 const MatchDayForm = ({ roundId, matchDay }: FormProps) => {
   const action = matchDay ? editMatchDay : createMatchDay;
-  const [state, formAction] = useFormState(action, undefined);
+  const [state, formAction] = useActionState(action, undefined);
   const [formMatchDay, setFormMatchDay] = useState(
     matchDay
       ? {

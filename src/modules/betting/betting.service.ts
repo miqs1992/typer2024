@@ -1,9 +1,8 @@
 import { NonAdminService } from "@/modules/non-admin-service";
 import { PersistedMatchDay } from "@/modules/admin/round-match-management/match-day-management.service";
-import { MatchDay } from "@/lib/models/matchDay";
 import { ServiceError } from "@/modules/service.error";
-import { Bet, betResultJoiSchema } from "@/lib/models/bet";
-import { Match } from "@/lib/models/match";
+import { betResultJoiSchema } from "@/lib/models/bet";
+import { prisma } from "@/lib/prisma";
 
 interface PersistedTeam {
   name: string;
@@ -98,17 +97,18 @@ export class BettingService extends NonAdminService {
   ): Promise<boolean> {
     const matchDay = await this.getMatchDayById(matchDayId);
 
-    const otherMatchDays = await MatchDay.find({
-      round: matchDay.roundId,
-      _id: { $ne: matchDay.id },
+    const otherMatchDays = await prisma.matchDay.findMany({
+      where: { roundId: matchDay.roundId, id: { not: matchDay.id } },
     });
 
-    const bets = await Bet.find({
-      matchDay: { $in: otherMatchDays.map((md) => md.id) },
-      user: this.getUserId(),
+    const bets = await prisma.bet.findMany({
+      where: {
+        matchDayId: { in: otherMatchDays.map((md) => md.id) },
+        userId: this.getUserId(),
+      },
     });
 
-    return !bets.some((bet) => bet.result.bonus);
+    return !bets.some((bet) => bet.bonus);
   }
 
   public async updateBets(matchDayId: string, payload: UpdateBetPayload[]) {
@@ -124,13 +124,15 @@ export class BettingService extends NonAdminService {
       }
     }
 
-    const betsToSave = [];
+    const validatedBets: UpdateBetPayload[] = [];
 
     for (const betPayload of payload) {
-      const bet = await Bet.findOne({
-        _id: betPayload.id,
-        user: this.getUserId(),
-        matchDay: matchDayId,
+      const bet = await prisma.bet.findFirst({
+        where: {
+          id: betPayload.id,
+          userId: this.getUserId(),
+          matchDayId,
+        },
       });
 
       if (!bet) {
@@ -147,11 +149,22 @@ export class BettingService extends NonAdminService {
         throw new ServiceError(error.message);
       }
 
-      bet.result = value;
-      betsToSave.push(bet);
+      validatedBets.push({
+        id: betPayload.id,
+        firstTeamResult: value.firstTeamResult,
+        secondTeamResult: value.secondTeamResult,
+        bonus: value.bonus ?? false,
+      });
     }
 
-    await Promise.all(betsToSave.map((bet) => bet.save()));
+    await Promise.all(
+      validatedBets.map(({ id, firstTeamResult, secondTeamResult, bonus }) =>
+        prisma.bet.update({
+          where: { id },
+          data: { firstTeamResult, secondTeamResult, bonus },
+        }),
+      ),
+    );
   }
 
   public async getAllBetsInPastMatchDay(
@@ -163,12 +176,16 @@ export class BettingService extends NonAdminService {
       throw new ServiceError("Cannot get bets for future match day");
     }
 
-    const matches = await Match.find({ matchDay: matchDayId })
-      .sort({ start: 1 })
-      .populate("firstTeam")
-      .populate("secondTeam");
+    const matches = await prisma.match.findMany({
+      where: { matchDayId },
+      orderBy: { start: "asc" },
+      include: { firstTeam: true, secondTeam: true },
+    });
 
-    const bets = await Bet.find({ matchDay: matchDayId }).populate("user");
+    const bets = await prisma.bet.findMany({
+      where: { matchDayId },
+      include: { user: true },
+    });
 
     return {
       matches: matches.map((match) => this.parseMatch(match)),
@@ -176,33 +193,33 @@ export class BettingService extends NonAdminService {
         .filter((bet) => bet.user)
         .reduce((acc: UserBet[], bet) => {
           const userBets = acc.find(
-            (userBet: UserBet) => userBet.user.id === bet.user.id.toString(),
+            (userBet: UserBet) => userBet.user.id === bet.user.id,
           );
           if (userBets) {
             userBets.bets.push({
               id: bet.id,
-              points: bet.points,
-              isExact: bet.isExact,
-              matchId: bet.match.toString(),
-              firstTeamResult: bet.result.firstTeamResult,
-              secondTeamResult: bet.result.secondTeamResult,
-              bonus: bet.result.bonus,
+              points: bet.points ?? 0,
+              isExact: bet.isExact ?? false,
+              matchId: bet.matchId,
+              firstTeamResult: bet.firstTeamResult,
+              secondTeamResult: bet.secondTeamResult,
+              bonus: bet.bonus,
             });
           } else {
             acc.push({
               user: {
-                id: bet.user.id.toString(),
+                id: bet.user.id,
                 name: bet.user.username,
               },
               bets: [
                 {
                   id: bet.id,
-                  points: bet.points,
-                  isExact: bet.isExact,
-                  matchId: bet.match.toString(),
-                  firstTeamResult: bet.result.firstTeamResult,
-                  secondTeamResult: bet.result.secondTeamResult,
-                  bonus: bet.result.bonus,
+                  points: bet.points ?? 0,
+                  isExact: bet.isExact ?? false,
+                  matchId: bet.matchId,
+                  firstTeamResult: bet.firstTeamResult,
+                  secondTeamResult: bet.secondTeamResult,
+                  bonus: bet.bonus,
                 },
               ],
             });
@@ -215,7 +232,9 @@ export class BettingService extends NonAdminService {
   private async getMatchDayById(
     matchDayId: string,
   ): Promise<PersistedMatchDay> {
-    const matchDay = await MatchDay.findById(matchDayId);
+    const matchDay = await prisma.matchDay.findUnique({
+      where: { id: matchDayId },
+    });
 
     if (!matchDay) {
       throw new ServiceError("Match day not found");
@@ -225,21 +244,18 @@ export class BettingService extends NonAdminService {
       id: matchDay.id,
       dayNumber: matchDay.dayNumber,
       stopBetTime: matchDay.stopBetTime,
-      roundId: matchDay.round.toString(),
+      roundId: matchDay.roundId,
     };
   }
 
   private async ensureBetsForMatchDay(matchDayId: string): Promise<void> {
-    const existingBets = await Bet.find({
-      matchDay: matchDayId,
-      user: this.getUserId(),
+    const existingBets = await prisma.bet.findMany({
+      where: { matchDayId, userId: this.getUserId() },
     });
-    const existingMatchIds: string[] = existingBets.map((bet) =>
-      bet.match.toString(),
-    );
-    const matchesWithoutBets = await Match.find({
-      matchDay: matchDayId,
-      _id: { $nin: existingMatchIds },
+    const existingMatchIds = existingBets.map((bet) => bet.matchId);
+
+    const matchesWithoutBets = await prisma.match.findMany({
+      where: { matchDayId, id: { notIn: existingMatchIds } },
     });
 
     if (matchesWithoutBets.length === 0) {
@@ -247,19 +263,20 @@ export class BettingService extends NonAdminService {
     }
 
     await Promise.all(
-      matchesWithoutBets.map((match) => {
-        const bet = new Bet({
-          matchDay: matchDayId,
-          match: match.id,
-          user: this.getUserId(),
-          result: { firstTeamResult: 0, secondTeamResult: 0, bonus: false },
-          points: 0,
-          isExact: false,
-          withBonus: false,
-        });
-
-        return bet.save();
-      }),
+      matchesWithoutBets.map((match) =>
+        prisma.bet.create({
+          data: {
+            matchDayId,
+            matchId: match.id,
+            userId: this.getUserId()!,
+            firstTeamResult: 0,
+            secondTeamResult: 0,
+            bonus: false,
+            points: 0,
+            isExact: false,
+          },
+        }),
+      ),
     );
   }
 
@@ -267,32 +284,31 @@ export class BettingService extends NonAdminService {
     matchDayId: string,
     userId: string,
   ): Promise<PersistedBet[]> {
-    const bets = await Bet.find({ matchDay: matchDayId, user: userId })
-      .populate({
-        path: "match",
-        populate: {
-          path: "firstTeam secondTeam",
-        },
-      })
-      .populate("user");
+    const bets = await prisma.bet.findMany({
+      where: { matchDayId, userId },
+      include: {
+        match: { include: { firstTeam: true, secondTeam: true } },
+        user: true,
+      },
+    });
 
     return bets
       .map((bet) => ({
         id: bet.id,
         user: {
-          id: bet.user.id.toString(),
+          id: bet.user.id,
           name: bet.user.username,
         },
         match: this.parseMatch(bet.match),
-        matchDayId: bet.matchDay.toString(),
-        bonus: bet.result.bonus,
+        matchDayId: bet.matchDayId,
+        bonus: bet.bonus,
         result: {
-          bonus: bet.result.bonus,
-          firstTeamResult: bet.result.firstTeamResult,
-          secondTeamResult: bet.result.secondTeamResult,
+          bonus: bet.bonus,
+          firstTeamResult: bet.firstTeamResult,
+          secondTeamResult: bet.secondTeamResult,
         },
-        points: bet.points,
-        isExact: bet.isExact,
+        points: bet.points ?? 0,
+        isExact: bet.isExact ?? false,
       }))
       .sort(
         (a: PersistedBet, b: PersistedBet) =>
@@ -300,9 +316,16 @@ export class BettingService extends NonAdminService {
       );
   }
 
-  private parseMatch(match: any): PersistedMatch {
+  private parseMatch(match: {
+    id: string;
+    firstTeam: PersistedTeam;
+    secondTeam: PersistedTeam;
+    start: Date;
+    firstTeamResult: number | null;
+    secondTeamResult: number | null;
+  }): PersistedMatch {
     return {
-      id: match.id.toString(),
+      id: match.id,
       firstTeam: {
         name: match.firstTeam.name,
         flag: match.firstTeam.flag,
@@ -312,8 +335,8 @@ export class BettingService extends NonAdminService {
         flag: match.secondTeam.flag,
       },
       start: match.start,
-      firstTeamResult: match.finalResult.firstTeamResult,
-      secondTeamResult: match.finalResult.secondTeamResult,
+      firstTeamResult: match.firstTeamResult,
+      secondTeamResult: match.secondTeamResult,
     };
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import React, { useState } from "react";
 import { IRound } from "@/lib/models/round";
 import Form from "@/components/form/form";
@@ -23,7 +23,7 @@ const stageOptions = [
 
 const RoundForm = ({ round }: FormProps) => {
   const action = round ? editRound : createRound;
-  const [state, formAction] = useFormState(action, undefined);
+  const [state, formAction] = useActionState(action, undefined);
   const [formRound, setFromRound] = useState(
     round || {
       name: "",

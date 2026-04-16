@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RoundStage {
+  group
+  knockout
+}
+
+model Team {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  flag      String   @unique @db.Char(2)
+  winner    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  players         Player[]
+  matchesAsFirst  Match[]  @relation("FirstTeam")
+  matchesAsSecond Match[]  @relation("SecondTeam")
+  usersWinner     User[]   @relation("UserWinner")
+}
+
+model Player {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  goals     Int      @default(0)
+  assists   Int      @default(0)
+  king      Boolean  @default(false)
+  teamId    String
+  team      Team     @relation(fields: [teamId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  usersTopScorer User[] @relation("UserTopScorer")
+}
+
+model User {
+  id                String   @id @default(cuid())
+  username          String   @unique
+  email             String   @unique
+  encryptedPassword String
+  isAdmin           Boolean  @default(false)
+  hasPaid           Boolean  @default(false)
+  points            Int      @default(0)
+  leagueRank        Int      @default(0)
+  exactBetCount     Int      @default(0)
+  winnerId          String?
+  winner            Team?    @relation("UserWinner", fields: [winnerId], references: [id])
+  topScorerId       String?
+  topScorer         Player?  @relation("UserTopScorer", fields: [topScorerId], references: [id])
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  bets Bet[]
+}
+
+model Round {
+  id          String     @id @default(cuid())
+  name        String     @unique
+  order       Int        @unique
+  scoreFactor Float      @default(1)
+  stage       RoundStage @default(group)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  matchDays MatchDay[]
+}
+
+model MatchDay {
+  id          String   @id @default(cuid())
+  dayNumber   Int      @unique
+  stopBetTime DateTime @unique
+  roundId     String
+  round       Round    @relation(fields: [roundId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  matches Match[]
+  bets    Bet[]
+}
+
+model Match {
+  id               String   @id @default(cuid())
+  firstTeamId      String
+  firstTeam        Team     @relation("FirstTeam", fields: [firstTeamId], references: [id])
+  secondTeamId     String
+  secondTeam       Team     @relation("SecondTeam", fields: [secondTeamId], references: [id])
+  matchDayId       String
+  matchDay         MatchDay @relation(fields: [matchDayId], references: [id])
+  start            DateTime
+  firstTeamResult  Int?
+  secondTeamResult Int?
+
+  bets Bet[]
+}
+
+model Bet {
+  id               String   @id @default(cuid())
+  matchId          String
+  match            Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  matchDayId       String
+  matchDay         MatchDay @relation(fields: [matchDayId], references: [id])
+  userId           String
+  user             User     @relation(fields: [userId], references: [id])
+  firstTeamResult  Int
+  secondTeamResult Int
+  bonus            Boolean  @default(false)
+  points           Int?
+  isExact          Boolean?
+
+  @@unique([matchId, userId])
+}

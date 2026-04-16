@@ -1,20 +1,18 @@
 "use server";
 
-import connectDB from "../../../config/database";
-import { ITeam, Team } from "@/lib/models/team";
+import { ITeam } from "@/lib/models/team";
 import { RequestState } from "@/lib/actions/state";
 import { revalidatePath } from "next/cache";
+import { prisma } from "@/lib/prisma";
 
 export const createTeam = async (
   previousState: RequestState | undefined,
   formData: FormData,
 ): Promise<RequestState> => {
-  const { name, flag } = Object.fromEntries(formData);
+  const { name, flag } = Object.fromEntries(formData) as Record<string, string>;
 
   try {
-    await connectDB();
-    const newTeam = new Team({ name, flag });
-    await newTeam.save();
+    await prisma.team.create({ data: { name, flag } });
     revalidatePath("/admin/teams");
     return { success: true };
   } catch (error) {
@@ -27,16 +25,16 @@ export const editTeam = async (
   previousState: RequestState | undefined,
   formData: FormData,
 ): Promise<RequestState> => {
-  const { id, name, flag, winner } = Object.fromEntries(formData);
+  const { id, name, flag, winner } = Object.fromEntries(formData) as Record<
+    string,
+    string
+  >;
 
   try {
-    await connectDB();
-    const team = await Team.findByIdAndUpdate(id, {
-      name,
-      flag,
-      winner: winner ?? false,
+    await prisma.team.update({
+      where: { id },
+      data: { name, flag, winner: winner === "on" || winner === "true" },
     });
-    await team.save();
     revalidatePath("/admin/teams");
     return { success: true };
   } catch (error) {
@@ -47,14 +45,9 @@ export const editTeam = async (
 
 export const getTeam = async (id: string): Promise<ITeam> => {
   try {
-    await connectDB();
-    const team = await Team.findById(id);
-    return {
-      id: team.id,
-      name: team.name,
-      flag: team.flag,
-      winner: team.winner,
-    };
+    const team = await prisma.team.findUnique({ where: { id } });
+    if (!team) throw new Error("team not found");
+    return team;
   } catch (error) {
     console.log(error);
     throw new Error("failed to fetch team");
@@ -63,14 +56,7 @@ export const getTeam = async (id: string): Promise<ITeam> => {
 
 export const getTeams = async (): Promise<ITeam[]> => {
   try {
-    await connectDB();
-    const team = await Team.find().sort({ name: 1 });
-    return team.map((team) => ({
-      id: team.id,
-      name: team.name,
-      flag: team.flag,
-      winner: team.winner,
-    }));
+    return prisma.team.findMany({ orderBy: { name: "asc" } });
   } catch (error) {
     console.log(error);
     throw new Error("failed to fetch teams");
@@ -79,16 +65,10 @@ export const getTeams = async (): Promise<ITeam[]> => {
 
 export const searchTeams = async (search: string): Promise<ITeam[]> => {
   try {
-    await connectDB();
-    const teams = await Team.find({
-      name: { $regex: search, $options: "i" },
-    }).limit(5);
-    return teams.map((team) => ({
-      id: team.id,
-      name: team.name,
-      flag: team.flag,
-      winner: team.winner,
-    }));
+    return prisma.team.findMany({
+      where: { name: { contains: search, mode: "insensitive" } },
+      take: 5,
+    });
   } catch (error) {
     console.log(error);
     throw new Error("failed to search teams");

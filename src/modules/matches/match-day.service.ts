@@ -1,6 +1,6 @@
 import { NonAdminService } from "@/modules/non-admin-service";
-import { MatchDay } from "@/lib/models/matchDay";
 import { ServiceError } from "@/modules/service.error";
+import { prisma } from "@/lib/prisma";
 
 export interface PublicMatchDay {
   id: string;
@@ -17,7 +17,9 @@ export enum MatchDayTimeframe {
 export class MatchDayService extends NonAdminService {
   public async getAllMatchDays(): Promise<PublicMatchDay[]> {
     try {
-      const days = await MatchDay.find().sort({ dayNumber: 1 });
+      const days = await prisma.matchDay.findMany({
+        orderBy: { dayNumber: "asc" },
+      });
       return days.map((matchDay) => this.parseMatchDay(matchDay));
     } catch (error) {
       console.log(error);
@@ -28,7 +30,7 @@ export class MatchDayService extends NonAdminService {
   public async getMatchDayById(id: string): Promise<PublicMatchDay> {
     let matchDay;
     try {
-      matchDay = await MatchDay.findById(id);
+      matchDay = await prisma.matchDay.findUnique({ where: { id } });
     } catch (error) {
       console.log(error);
       throw new ServiceError(`Failed to fetch match day with id: ${id}`);
@@ -47,18 +49,16 @@ export class MatchDayService extends NonAdminService {
     try {
       switch (type) {
         case MatchDayTimeframe.Current:
-          matchDay = await MatchDay.findOne({
-            stopBetTime: { $gte: now },
-          }).sort({
-            stopBetTime: 1,
+          matchDay = await prisma.matchDay.findFirst({
+            where: { stopBetTime: { gte: now } },
+            orderBy: { stopBetTime: "asc" },
           });
           break;
         default:
-          matchDay = await MatchDay.findOne({ stopBetTime: { $lt: now } }).sort(
-            {
-              stopBetTime: -1,
-            },
-          );
+          matchDay = await prisma.matchDay.findFirst({
+            where: { stopBetTime: { lt: now } },
+            orderBy: { stopBetTime: "desc" },
+          });
           break;
       }
     } catch (error) {
@@ -69,12 +69,17 @@ export class MatchDayService extends NonAdminService {
     return matchDay ? this.parseMatchDay(matchDay) : null;
   }
 
-  private parseMatchDay(matchDay: any): PublicMatchDay {
+  private parseMatchDay(matchDay: {
+    id: string;
+    dayNumber: number;
+    stopBetTime: Date;
+    roundId: string;
+  }): PublicMatchDay {
     return {
       id: matchDay.id,
       dayNumber: matchDay.dayNumber,
       stopBetTime: matchDay.stopBetTime,
-      roundId: matchDay.round.toString(),
+      roundId: matchDay.roundId,
     };
   }
 }

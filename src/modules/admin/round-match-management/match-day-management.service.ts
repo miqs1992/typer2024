@@ -1,6 +1,7 @@
 import { AdminService } from "@/modules/admin/admin-service";
-import { MatchDay, matchDayJoiSchema } from "@/lib/models/matchDay";
+import { matchDayJoiSchema } from "@/lib/models/matchDay";
 import { ServiceError } from "@/modules/service.error";
+import { prisma } from "@/lib/prisma";
 
 export interface PersistedMatchDay {
   id: string;
@@ -25,16 +26,19 @@ export class MatchDayManagementService extends AdminService {
       throw new ServiceError(error.message);
     }
 
-    const newMatchDay = new MatchDay(value);
-
     try {
-      await newMatchDay.save();
+      const matchDay = await prisma.matchDay.create({
+        data: {
+          roundId: value.round,
+          dayNumber: Number(value.dayNumber),
+          stopBetTime: new Date(value.stopBetTime),
+        },
+      });
+      return this.parseMatchDay(matchDay);
     } catch (error) {
       console.log(error);
       throw new ServiceError("Failed to create new match day");
     }
-
-    return this.parseMatchDay(newMatchDay);
   }
 
   public async updateMatchDay(
@@ -43,7 +47,9 @@ export class MatchDayManagementService extends AdminService {
   ): Promise<PersistedMatchDay> {
     const { dayNumber, stopBetTime } = Object.fromEntries(formData);
 
-    const existingMatchDay = await MatchDay.findById(matchDayId);
+    const existingMatchDay = await prisma.matchDay.findUnique({
+      where: { id: matchDayId },
+    });
 
     if (!existingMatchDay) {
       throw new ServiceError("Match day not found");
@@ -52,26 +58,35 @@ export class MatchDayManagementService extends AdminService {
     const { value, error } = matchDayJoiSchema.validate({
       dayNumber,
       stopBetTime,
-      round: existingMatchDay.round,
+      round: existingMatchDay.roundId,
     });
 
-    const matchDay = await MatchDay.findByIdAndUpdate(matchDayId, value);
+    if (error) {
+      throw new ServiceError(error.message);
+    }
 
     try {
-      await matchDay.save();
+      const matchDay = await prisma.matchDay.update({
+        where: { id: matchDayId },
+        data: {
+          dayNumber: Number(value.dayNumber),
+          stopBetTime: new Date(value.stopBetTime),
+        },
+      });
+      return this.parseMatchDay(matchDay);
     } catch (error) {
       console.log(error);
       throw new ServiceError(`Failed to update match day ${matchDayId}`);
     }
-
-    return this.parseMatchDay(matchDay);
   }
 
   public async getMatchDay(matchDayId: string): Promise<PersistedMatchDay> {
     let matchDay;
 
     try {
-      matchDay = await MatchDay.findById(matchDayId);
+      matchDay = await prisma.matchDay.findUnique({
+        where: { id: matchDayId },
+      });
     } catch (error) {
       console.log(error);
       throw new ServiceError("Failed to fetch match day");
@@ -86,7 +101,7 @@ export class MatchDayManagementService extends AdminService {
 
   public async removeMatchDay(matchDayId: string): Promise<void> {
     try {
-      await MatchDay.findByIdAndDelete(matchDayId);
+      await prisma.matchDay.delete({ where: { id: matchDayId } });
     } catch (error) {
       console.log(error);
       throw new ServiceError(`Failed to remove match day ${matchDayId}`);
@@ -96,26 +111,29 @@ export class MatchDayManagementService extends AdminService {
   public async getMatchDaysInRound(
     roundId: string,
   ): Promise<PersistedMatchDay[]> {
-    let matchDays;
-
     try {
-      matchDays = await MatchDay.find({ round: roundId }).sort({
-        dayNumber: 1,
+      const matchDays = await prisma.matchDay.findMany({
+        where: { roundId },
+        orderBy: { dayNumber: "asc" },
       });
+      return matchDays.map((day) => this.parseMatchDay(day));
     } catch (error) {
       console.log(error);
       throw new ServiceError("Failed to fetch match days for round");
     }
-
-    return matchDays.map((day) => this.parseMatchDay(day));
   }
 
-  private parseMatchDay(matchDay: any): PersistedMatchDay {
+  private parseMatchDay(matchDay: {
+    id: string;
+    dayNumber: number;
+    stopBetTime: Date;
+    roundId: string;
+  }): PersistedMatchDay {
     return {
       id: matchDay.id,
       dayNumber: matchDay.dayNumber,
       stopBetTime: matchDay.stopBetTime,
-      roundId: matchDay.round.toString(),
+      roundId: matchDay.roundId,
     };
   }
 }

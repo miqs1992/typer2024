@@ -1,11 +1,10 @@
 "use server";
 
-import connectDB from "../../../config/database";
-import { User } from "@/lib/models/user";
 import { auth } from "@/lib/auth";
 import { RequestState } from "@/lib/actions/state";
 import { revalidatePath } from "next/cache";
 import { isBeforeFirstMatch } from "../../../config/firstMatchStart";
+import { prisma } from "@/lib/prisma";
 
 export interface Profile {
   id: string;
@@ -35,19 +34,17 @@ const getCurrentUserId = async () => {
 
 export const getCurrentProfile = async (): Promise<Profile> => {
   try {
-    await connectDB();
     const userId = await getCurrentUserId();
-    const user = await User.findById(userId)
-      .populate("winner")
-      .populate({
-        path: "topScorer",
-        populate: {
-          path: "team",
-        },
-      });
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        winner: true,
+        topScorer: { include: { team: true } },
+      },
+    });
 
     if (!user) {
-      throw new Error("user not profile");
+      throw new Error("user not found");
     }
 
     return {
@@ -81,7 +78,10 @@ export const setWinnerAndTopScorer = async (
   previousState: RequestState | undefined,
   formData: FormData,
 ): Promise<RequestState> => {
-  const { winnerId, topScorerId } = Object.fromEntries(formData);
+  const { winnerId, topScorerId } = Object.fromEntries(formData) as Record<
+    string,
+    string
+  >;
 
   if (!winnerId || !topScorerId) {
     return { error: "winner and top scorer are required" };
@@ -95,12 +95,11 @@ export const setWinnerAndTopScorer = async (
   }
 
   try {
-    await connectDB();
     const userId = await getCurrentUserId();
 
-    await User.findByIdAndUpdate(userId, {
-      winner: winnerId,
-      topScorer: topScorerId,
+    await prisma.user.update({
+      where: { id: userId },
+      data: { winnerId, topScorerId },
     });
 
     revalidatePath("/profile");

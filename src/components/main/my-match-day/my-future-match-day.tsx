@@ -2,7 +2,7 @@
 
 import FlagIcon from "@/components/flagIcon/flag-icon";
 import { useEffect, useState } from "react";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { SubmitButton } from "../../submit-button/submit-button";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { Tooltip } from "@/components/tooltip/tooltip";
@@ -33,7 +33,7 @@ export const MyFutureMatchDay = ({
 }) => {
   const headingLabel = `Match Day ${matchDay.dayNumber} - ${displayDate(matchDay.stopBetTime)}`;
 
-  const [state, formAction] = useFormState(updateMyBets, undefined);
+  const [state, formAction] = useActionState(updateMyBets, undefined);
   const [statusMessage, setStatusMessage] = useState<string | undefined>("");
   const [errorMessage, setErrorMessage] = useState<string | undefined>("");
 
@@ -176,7 +176,7 @@ export const MyFutureMatchDay = ({
                         data-focus-input-prev="code-1"
                         data-focus-input-next="code-3"
                         id="code-2"
-                        className={`block h-9 w-9  rounded-lg border-2 border-gray-300 bg-white py-3 text-center text-sm font-extrabold text-gray-900 outline-none focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500 [&::-webkit-inner-spin-button]:appearance-none`}
+                        className={`block h-9 w-9 rounded-lg border-2 border-gray-300 bg-white py-3 text-center text-sm font-extrabold text-gray-900 outline-none focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500 [&::-webkit-inner-spin-button]:appearance-none`}
                         required
                         onFocus={() =>
                           onResultInputChange("", index, "secondTeam")

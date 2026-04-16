@@ -1,7 +1,8 @@
 import { NonAdminService } from "@/modules/non-admin-service";
-import { User, userJoiSchema } from "@/lib/models/user";
+import { userJoiSchema } from "@/lib/models/user";
 import { ServiceError } from "@/modules/service.error";
 import { hashPassword } from "@/tools/password";
+import { prisma } from "@/lib/prisma";
 
 export class ProfileService extends NonAdminService {
   public async updateProfile(formData: FormData): Promise<void> {
@@ -18,15 +19,16 @@ export class ProfileService extends NonAdminService {
       throw new ServiceError(error.message);
     }
 
-    const user = await User.findByIdAndUpdate(this.getUserId(), {
-      username: value.username,
-      ...(password && {
-        encryptedPassword: await hashPassword(value.password),
-      }),
-    });
-
     try {
-      await user.save();
+      await prisma.user.update({
+        where: { id: this.getUserId() },
+        data: {
+          username: value.username,
+          ...(password && {
+            encryptedPassword: await hashPassword(value.password),
+          }),
+        },
+      });
     } catch (error) {
       console.log(error);
       throw new ServiceError(`Failed to update user ${this.getUserId()}`);
