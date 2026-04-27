@@ -5,7 +5,8 @@ import { getPlayers, removePlayer } from "@/lib/actions/players";
 import { TeamParams } from "@/app/admin/teams/[teamId]/team.params";
 
 const TeamPage = async ({ params }: TeamParams) => {
-  const team = await getTeam(params.teamId);
+  const { teamId } = await params;
+  const team = await getTeam(teamId);
   const players = await getPlayers(team.id);
 
   return (

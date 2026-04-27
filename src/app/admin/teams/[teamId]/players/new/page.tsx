@@ -3,7 +3,7 @@ import PlayerForm from "@/components/admin/teams/players/playerForm";
 import { TeamParams } from "@/app/admin/teams/[teamId]/team.params";
 
 const NewPlayerPage = async ({ params }: TeamParams) => {
-  const teamId = params.teamId;
+  const { teamId } = await params;
   return (
     <div>
       <div className="relative my-4 mb-8 text-center text-3xl text-white">

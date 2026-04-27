@@ -1,4 +1,4 @@
 export interface TeamParams {
-  params: { teamId: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ teamId: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }

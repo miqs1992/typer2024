@@ -4,7 +4,8 @@ import TeamForm from "@/components/admin/teams/teamForm";
 import { TeamParams } from "@/app/admin/teams/[teamId]/team.params";
 
 const EditTeamPage = async ({ params }: TeamParams) => {
-  const team = await getTeam(params.teamId);
+  const { teamId } = await params;
+  const team = await getTeam(teamId);
 
   return (
     <div>

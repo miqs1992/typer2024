@@ -1,4 +1,4 @@
 export interface PlayerParams {
-  params: { teamId: string; playerId: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ teamId: string; playerId: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }

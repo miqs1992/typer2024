@@ -4,8 +4,8 @@ import { getPlayer } from "@/lib/actions/players";
 import { PlayerParams } from "@/app/admin/teams/[teamId]/players/[playerId]/player.params";
 
 const EditPlayerPage = async ({ params }: PlayerParams) => {
-  const teamId = params.teamId;
-  const player = await getPlayer(params.playerId);
+  const { teamId, playerId } = await params;
+  const player = await getPlayer(playerId);
   return (
     <div>
       <div className="relative my-4 mb-8 text-center text-3xl text-white">
