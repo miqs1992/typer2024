@@ -42,7 +42,8 @@ const ProfileWinnerAndKingForm = ({ profile }: FormProps) => {
           value: player.id,
           label: (
             <div className="flex gap-2">
-              <FlagIcon country={player.team.flag} /> {player.name}
+              {player.team && <FlagIcon country={player.team.flag} />}{" "}
+              {player.name}
             </div>
           ),
         };
