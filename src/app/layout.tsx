@@ -4,6 +4,7 @@ import "./globals.css";
 import { ReactNode } from "react";
 import Navigation from "@/components/navigation/navigation";
 import { auth } from "@/lib/auth";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ["latin"], weight: ["300", "400", "500"] });
 
@@ -32,6 +33,7 @@ export default async function RootLayout({
             <div className="w-full max-w-[1200px]">{children}</div>
           </main>
         </div>
+        <SpeedInsights />
       </body>
     </html>
   );
